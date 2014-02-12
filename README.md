@@ -1,4 +1,4 @@
-html5-jam
+ html5-jam
 ========
 
 HOW TO INSTALL

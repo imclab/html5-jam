@@ -13,6 +13,7 @@ module.exports = function(sequelize, DataTypes) {
     });
 
     User.hasMany(Jam);
+    Jam.hasOne(User);
 
     Jam.sync();
     

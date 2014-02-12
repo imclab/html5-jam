@@ -12,7 +12,10 @@ module.exports = function(sequelize, DataTypes) {
     });
 
     Jam.hasMany(Comment);
+    Comment.hasOne(Jam);
+
     User.hasMany(Comment);
+    Comment.hasOne(User);
 
     Comment.sync();
     
