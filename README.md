@@ -1,23 +1,23 @@
 html5-jam
 ========
 
-Stuff to install
+HOW TO INSTALL
 ============
 
 install nodejs, npm, mysql-server
 
-Database
+DATABASE
 ========
 mysql > CREATE DATABASE htmljam;
 
-Server
+SERVER
 ======
 /server$ npm install
 <br>
 start server : /server$ node server.js
 launch unit test : /server$ npm test
 
-Client
+CLIENT
 ======
 $ npm install -g bower
 <br>

@@ -11,7 +11,7 @@ module.exports.init = function(app, config, security, errors) {
 	 *	Get all my jams
 	 */
 	app.get('/jams', security.authenticationRequired, function (req, res, next) {
-		// get user's jams
+		// get user's organizations
 		User.find({ where: {facebook_token: req.user.facebook_token}, include: [Jam] })
 			.success(function (user) {
 				if (user == null) { return next(new errors.BadRequest('User not found')); }
