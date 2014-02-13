@@ -44,19 +44,29 @@ module.exports = {
 	},
 
 	authenticationRequired: function (req, res, next) {
-		var token = req.headers.authorization;
-		if (token != null) {
-			User.find({where: {facebook_token: decrypt(token)}}).success(function (user) {
+		// testing purpose
+		User.find({limit: 1}).success(function (user) {
 				if (user != null) {
 					req.user = user;
 					return next();
 				} else {
 					return next(new Errors.Unauthorized('User is not logged in'));
 				}
-			});
-	    } else {
-	        return next(new Errors.Unauthorized('User is not logged in'));
-	    }
+		});
+
+		// var token = req.headers.authorization;
+		// if (token != null) {
+		// 	User.find({where: {facebook_token: decrypt(token)}}).success(function (user) {
+		// 		if (user != null) {
+		// 			req.user = user;
+		// 			return next();
+		// 		} else {
+		// 			return next(new Errors.Unauthorized('User is not logged in'));
+		// 		}
+		// 	});
+	 //    } else {
+	 //        return next(new Errors.Unauthorized('User is not logged in'));
+	 //    }
 	}
 
 };

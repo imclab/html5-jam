@@ -20,7 +20,7 @@ module.exports = function(sequelize, DataTypes) {
         User.findOrCreate({ facebook_id: profile.id }, 
             { 
                 name: profile.displayName, 
-                picture_url: profile.id,
+                picture_url: 'facebook',
                 facebook_id: profile.id,
                 facebook_token: accessToken
             })
