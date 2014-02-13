@@ -6,7 +6,7 @@ define(function (require) {
 
     var ProductionLayout = Marionette.Layout.extend({
 
-        template: 'production',
+        template: 'production/production',
 
         className: 'view-wrapper',
 

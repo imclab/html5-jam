@@ -16,7 +16,7 @@ define(function (require) {
 
         itemViewContainer: '.videos-container',
 
-        template: 'recorder',
+        template: 'production/recorder',
 
         initialize: function () {
             this.collection = new Video.VideoCollection();

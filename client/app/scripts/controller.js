@@ -1,5 +1,6 @@
 /*global define*/
 define(function (require) {
+    "use strict";
 
     var Marionette = require('marionette');
     var ProductionController = require('modules/production/production_controller');
@@ -42,7 +43,6 @@ define(function (require) {
 
             this.controllers.topbar.show();
         }
-
 
     });
 

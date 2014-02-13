@@ -11,7 +11,7 @@ requirejs.config({
         'backbone.wreqr' : '../bower_components/backbone.wreqr/lib/amd/backbone.wreqr',
         backboneEventbinder : '../bower_components/backbone.eventbinder/lib/amd/backbone.eventbinder',
         'backbone.babysitter' : '../bower_components/backbone.babysitter/lib/amd/backbone.babysitter',
-	   fastclick: '../bower_components/fastclick/lib/fastclick'
+	    fastclick: '../bower_components/fastclick/lib/fastclick'
     },
     shim: {
         backbone: {

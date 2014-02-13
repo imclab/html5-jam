@@ -1,7 +1,8 @@
-define([
-	'backbone.wreqr'
-],
+/*global define*/
+define(function (require) {
+    "use strict";
 
-function (Wreqr) {
-	return new Wreqr.EventAggregator();
+    var Wreqr = require('backbone.wreqr');
+
+    return new Wreqr.EventAggregator();
 });

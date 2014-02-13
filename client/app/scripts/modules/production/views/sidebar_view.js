@@ -7,7 +7,7 @@ define(function (require) {
 
     var VideoElement = Marionette.ItemView.extend({
 
-        template: 'video_element',
+        template: 'production/video_sidebar',
 
         className: 'videoElement'
 
@@ -23,7 +23,7 @@ define(function (require) {
 
         itemViewContainer: '.videos-list',
 
-        template: 'sidebar',
+        template: 'production/sidebar',
 
         initialize: function () {
 

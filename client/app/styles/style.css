@@ -1,15 +1,7 @@
-.container {
-	height: 100%;
-
-	margin: 0 auto;
-	max-width: 700px;
-}
-
 body,
 #corpus {
 	height: 100%;
 }
-
 
 .view-wrapper {
     width: 100%;
