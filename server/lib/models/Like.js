@@ -11,10 +11,7 @@ module.exports = function(sequelize, DataTypes) {
     });
 
     Jam.hasMany(Like);
-    Like.hasOne(Jam);
-
     User.hasMany(Like);
-    Like.hasOne(User);
 
     Like.sync();
     
