@@ -8,7 +8,6 @@ module.exports.init = function(app, config, security, errors) {
 	var Video = app.get('models').Video;
 	var Comment = app.get('models').Comment;
 	var Like = app.get('models').Like;
-	var Note = app.get('models').Note;
 
 
 	/**
@@ -48,28 +47,28 @@ module.exports.init = function(app, config, security, errors) {
 
 
 	/**
-	 *	Get jam details
+	 *	Update jam
 	 */
-	app.get('/jams/:jamId', security.authenticationRequired, function (req, res, next) {
+	app.put('/jams/:jamId', security.authenticationRequired, function (req, res, next) {
+		var postData = req.body;
+	
 		// get jam
-		Jam.find({
-			where: Sequelize.and(
-				{ id: req.params.jamId }, 
-				Sequelize.or(
-					{ privacy: 0 }, 
-					{ userId: req.user.id }
-				)
-			),
-			include: [Comment, { model: Like, attributes: ['id'] }, Video]
-		}) 
+		Jam.find({ 
+			where: {
+				id: req.params.jamId,
+				userId: req.user.id
+			} 
+		})
 		.success(function (jam) {
-			if (jam == null ) { return next(new errors.BadRequest('Jam not found')); }
+			if (jam == null) { return next(new errors.BadRequest('Jam not found')); }
 
-			// get owner
-			User.find({ where: { id: jam.userId }, attributes: ['id', 'name', 'picture_url', 'facebook_id', 'createdAt'] })
-			.success(function (user) {
-				jam.dataValues.user = user;
-				res.send(jam);
+			jam.name = postData.name || jam.name;
+			jam.description = postData.description || jam.description;
+			jam.privacy = postData.privacy || jam.privacy;
+			
+			jam.save(['name', 'description', 'privacy'])
+			.success(function () {
+				res.send(200);
 			})
 			.error(function (error) {
 				return next(new errors.Error(error, 'Server error'));
@@ -82,35 +81,83 @@ module.exports.init = function(app, config, security, errors) {
 
 
 	/**
-	 *	Add Video to jam
+	 *	Delete jam
 	 */
-	 app.post('/jams/:jamId/videos', security.authenticationRequired, function (req, res, next) {
-		var postData = req.body;
+	 app.delete('/jams/:jamId', security.authenticationRequired, function (req, res, next) {
 
-		// check data
-		if (!postData.video || postData.video.length == 0) {
-			return next(new errors.BadRequest('Missing fields'));
-		}
-
-		// get jam
+		// get Jam
 		Jam.find({ 
-			where: Sequelize.and(
-				{ id: req.params.jamId }, 
-				Sequelize.or(
-					{ privacy: 0 }, 
-					{ userId: req.user.id }
-				)
-			) 
+			where: { 
+				id: req.params.jamId,
+				userId: req.user.id
+			}
 		}).success(function (jam) {
 			if (jam == null) { return next(new errors.BadRequest('Jam not found')); }
 
-			// create video
-			Video.create({description: postData.description, instrument: postData.instrument, userId: req.user.id })
-			.success(function (newVideo) {
-				// TODO : save video file on the server
-				jam.addVideos(newVideo)
-				.success(function () {
-					res.send(200);
+			// delete likes
+			Like.destroy({
+				jamId: jam.id
+			});
+
+			// delete comments
+			Comment.destroy({
+				jamId: jam.id
+			});
+
+			// delete jam
+			jam.destroy()
+			.success(function () {
+				res.send(200);	
+			})
+			.error(function (error) {
+				return next(new errors.Error(error, 'Server error'));
+			});
+
+		})
+		.error(function (error) {
+			return next(new errors.Error(error, 'Server error'));
+		});
+	});
+
+
+	/**
+	 *	Get jam details
+	 */
+	app.get('/jams/:jamId', security.authenticationRequired, function (req, res, next) {
+
+		// get jam + owner info + number of likes in one request
+		Jam.daoFactoryManager.sequelize.query('SELECT j.*, u.name as ownerName, u.facebook_id as ownerFacebookId, u.picture_url as ownerPictureUrl, count(l.id) as nbLikes'
+		+ ' FROM jams j LEFT JOIN users u ON u.id=j.userId LEFT JOIN likes l ON l.jamId=j.id'
+		+ ' WHERE j.id=? AND (j.privacy=0 OR j.userId=?)'
+			, null, { raw: true }, [req.params.jamId, req.user.id])
+		.success(function (rows) {
+			if (rows == null || rows.length == 0) { return next(new errors.BadRequest('Jam not found')); }
+			var jam = rows[0];
+
+			// do I like it already ?
+			Like.count({
+				where: {
+					jamId: jam.id,
+					userId: req.user.id
+				}
+			})
+			.success(function (result) {
+				jam.doILikeIt = result > 0;
+
+				// get comments and videos
+				Jam.find({
+					where: {
+						id: req.params.jamId
+					},
+					include: [
+						{ model: Comment, attributes: ['id', 'content', 'createdAt', 'userId'] },
+					 	{ model: Video, attributes: ['id', 'createdAt', 'userId'] }
+					]
+				})
+				.success(function (result) {
+					jam.comments = result.dataValues.comments;
+					jam.videos = result.dataValues.videos;
+					res.send(jam);
 				})
 				.error(function (error) {
 					return next(new errors.Error(error, 'Server error'));
@@ -123,53 +170,7 @@ module.exports.init = function(app, config, security, errors) {
 		.error(function (error) {
 			return next(new errors.Error(error, 'Server error'));
 		});
+
 	});
-
-
-	/**
-	 *	Delete Video from jam
-	 */
-	 app.delete('/jams/:jamId/videos/:videoId', security.authenticationRequired, function (req, res, next) {
-
-		// get video
-		Video.find({ 
-			where: { 
-				id: req.params.videoId,
-				jamId: req.params.jamId
-			}
-		}).success(function (video) {
-			if (video == null) { return next(new errors.BadRequest('Video not found')); }
-
-			// check if user can delete video
-			Jam.find({
-				where: {
-					id: req.params.jamId
-				}
-			})
-			.success(function (jam) {
-				// jam owners can delete videos
-				if (jam.userId == req.user.id || video.userId == req.user.id) {
-					video.destroy()
-					.success(function () {
-						// TODO : delete file on the server
-						res.send(200);	
-					})
-					.error(function (error) {
-						return next(new errors.Error(error, 'Server error'));
-					});
-				} else {
-					if (video == null) { return next(new errors.BadRequest('You cannot delete this video')); }
-				}
-			})
-			.error(function (error) {
-				return next(new errors.Error(error, 'Server error'));
-			});
-
-		})
-		.error(function (error) {
-			return next(new errors.Error(error, 'Server error'));
-		});
-	});
-
 
 }
