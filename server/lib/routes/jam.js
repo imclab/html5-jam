@@ -28,6 +28,7 @@ module.exports.init = function(app, config, security, errors) {
 
 			Jam.create({ name: postData.name, description: postData.description, privacy: postData.privacy })
 			.success(function (newJam) {
+				Like.create({ userId: req.user.id, jamId: newJam.id });
 				user.addJam(newJam)
 				.success(function () {
 					res.send(200);
@@ -159,6 +160,39 @@ module.exports.init = function(app, config, security, errors) {
 			.error(function (error) {
 				return next(new errors.Error(error, 'Server error'));
 			});
+		})
+		.error(function (error) {
+			return next(new errors.Error(error, 'Server error'));
+		});
+
+	});
+
+
+	/**
+	 *	Get jam's feeds
+	 */
+	app.get('/feeds', security.authenticationRequired, function (req, res, next) {
+
+		var pagination = req.query.pagination || 20;
+		if (pagination <= 0) { pagination = 20; }
+		var page = req.query.page || 1;
+		if (page <= 0) { page = 1; }
+
+		// get comments + user info
+		Comment.daoFactoryManager.sequelize.query('SELECT j.*, u.name as ownerName, u.facebook_id as ownerFacebookId, u.picture_url as ownerPictureUrl, count(l.id) as nbLikes'
+		+ ' FROM jams j LEFT JOIN users u ON u.id=j.userId JOIN likes l ON l.jamId=j.id'
+		+ ' WHERE j.privacy=0 GROUP BY j.id ORDER BY nbLikes DESC, j.createdAt DESC LIMIT ' + (page - 1) * pagination + ',' + page * pagination
+			, null, { raw: true }, [req.user.id])
+		.success(function (rows) {
+			if (rows == null || rows.length == 0 || rows[0].name == null) { return next(new errors.BadRequest('No results')); }
+			
+			var result = {
+				pagination: pagination,
+				page: page,
+				lastPage: Math.ceil(rows.length / pagination),
+				jams: rows
+			}
+			res.send(result);
 		})
 		.error(function (error) {
 			return next(new errors.Error(error, 'Server error'));

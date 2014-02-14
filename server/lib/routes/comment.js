@@ -12,8 +12,10 @@ module.exports.init = function(app, config, security, errors) {
 	 */
 	app.get('/jams/:jamId/comments', security.authenticationRequired, function (req, res, next) {
 
-		var pagination = req.query.pagination | 20;
-		var page = req.query.page | 1;
+		var pagination = req.query.pagination || 20;
+		if (pagination <= 0) { pagination = 20; }
+		var page = req.query.page || 1;
+		if (page <= 0) { page = 1; }
 
 		// get comments + user info
 		Comment.daoFactoryManager.sequelize.query('SELECT c.id, c.content, c.createdAt, c.userId, u.name as ownerName, u.facebook_id as ownerFacebookId, u.picture_url as ownerPictureUrl'

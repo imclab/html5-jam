@@ -2,7 +2,6 @@
 var express = require('express');
 var colors = require('colors');
 var passport = require('passport');
-var swagger = require("swagger-node-express");
 var config = require('./config');
 var security = require('./lib/security');
 var errors = require('./lib/errors');
