@@ -37,7 +37,7 @@ module.exports.init = function(app, config, security, errors) {
 			.success(function (newVideo) {
 
 				// save file on disk
-				utils.writeFileToDisk(newVideo.id + '.mpg', req.files, function (err) {
+				utils.writeFileToDisk(newVideo.id + '.webm', req.files, function (err) {
 					if (err) {
 						return next(new errors.Error(err, 'Server error'));
 					} else {
@@ -88,7 +88,7 @@ module.exports.init = function(app, config, security, errors) {
 			.success(function (videos) {
 				if (videos == null || videos.length == 0) { return next(new errors.BadRequest('Video not found')); }
 
-				utils.readFileFromDisk(req.params.videoId + '.mpg', function (error, file) {
+				utils.readFileFromDisk(req.params.videoId + '.webm', function (error, file) {
 					if (error) {
 						return next(new errors.BadRequest('Video not found'));
 					} else {
@@ -132,7 +132,7 @@ module.exports.init = function(app, config, security, errors) {
 				if (jam.userId == req.user.id || video.userId == req.user.id) {
 					video.destroy()
 					.success(function () {
-						utils.deleteFileFromDisk(req.params.videoId + '.mpg', function (error) {
+						utils.deleteFileFromDisk(req.params.videoId + '.webm', function (error) {
 							if (error) {
 								return next(new errors.BadRequest('Video not found'));
 							} else {
