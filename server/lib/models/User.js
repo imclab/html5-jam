@@ -8,6 +8,9 @@ module.exports = function(sequelize, DataTypes) {
         picture_url: DataTypes.STRING,
         facebook_id: DataTypes.STRING,
         facebook_token: DataTypes.STRING,
+        vignette_one: DataTypes.INTEGER,
+        vignette_two: DataTypes.INTEGER,
+        vignette_three: DataTypes.INTEGER
     },
     {
     	tableName: 'users'
@@ -20,7 +23,7 @@ module.exports = function(sequelize, DataTypes) {
         User.findOrCreate({ facebook_id: profile.id }, 
             { 
                 name: profile.displayName, 
-                picture_url: profile.id,
+                picture_url: 'facebook',
                 facebook_id: profile.id,
                 facebook_token: accessToken
             })

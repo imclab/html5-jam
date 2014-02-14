@@ -37,5 +37,6 @@ ehthumbs.db
 Thumbs.db
 
 public/
+uploads/
 node_modules/
 config.js

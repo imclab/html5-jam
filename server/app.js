@@ -19,7 +19,9 @@ var enableCORS = function(req, res, next) {
 var app = express();
 app.configure(function () {
     app.use(express.cookieParser());
-    app.use(express.bodyParser());
+    app.use(express.json());
+	app.use(express.urlencoded());
+    app.use(express.limit('10mb'));
     app.use(enableCORS);
     app.use(passport.initialize());
     app.use(app.router);

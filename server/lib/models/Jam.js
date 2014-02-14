@@ -6,7 +6,7 @@ module.exports = function(sequelize, DataTypes) {
     {
         name: DataTypes.STRING,
         description: DataTypes.STRING,
-        private: DataTypes.BOOLEAN
+        privacy: { type: DataTypes.BOOLEAN, defaultValue: false }
     },
     {
         tableName: 'jams'

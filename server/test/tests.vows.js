@@ -31,6 +31,11 @@ suite.setHeader('Authorization', '123456')
     .expect(200)
     .export(module);
 
+/**
+*   Jams
+*/
+
+
 // /**
 // *   Organizations
 // */
