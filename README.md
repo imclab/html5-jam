@@ -8,14 +8,16 @@ install nodejs, npm, mysql-server
 
 Database
 ========
-mysql > CREATE DATABASE htmljam;
+create database: mysql > CREATE DATABASE htmljam;
+mysql > USE DATABASE htmljam;
+populate with test data : mysql > SOURCE ./test/test_data.sql;
 
 Server
 ======
 /server$ npm install
 <br>
-start server : /server$ node server.js
-launch unit test : /server$ npm test
+start server : html5-jam/server$ node server.js
+launch unit test : html5-jam/server$ npm test
 
 Client
 ======
@@ -25,7 +27,7 @@ $ npm install -g grunt
 <br>
 $ npm install -g grunt-cli
 <br>
-/client$ npm install | bower install
+html5-jam/client$ npm install | bower install
 <br>
-start client : /client$ grunt serve
+start client : html5-jam/client$ grunt serve
  

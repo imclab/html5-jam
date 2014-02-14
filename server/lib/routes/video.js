@@ -1,5 +1,6 @@
 "use strict";
 var Sequelize = require('sequelize');
+var utils = require('../utils');
 
 module.exports.init = function(app, config, security, errors) {
 	
@@ -14,7 +15,7 @@ module.exports.init = function(app, config, security, errors) {
 		var postData = req.body;
 
 		// check data
-		if (!postData.video || postData.video.length == 0) {
+		if (!req.files || req.files.length == 0) {
 			return next(new errors.BadRequest('Missing fields'));
 		}
 
@@ -30,20 +31,27 @@ module.exports.init = function(app, config, security, errors) {
 		}).success(function (jam) {
 			if (jam == null) { return next(new errors.BadRequest('Jam not found')); }
 
-			// create video
-			Video.create({description: postData.description, instrument: postData.instrument, userId: req.user.id })
-			.success(function (newVideo) {
-				// TODO : save video file on the server
-				jam.addVideos(newVideo)
-				.success(function () {
-					res.send(200);
-				})
-				.error(function (error) {
+			// save file on disk
+			utils.writeFileToDisk('bob', req.files, function (error) {
+				if (error) {
 					return next(new errors.Error(error, 'Server error'));
-				});
-			})
-			.error(function (error) {
-				return next(new errors.Error(error, 'Server error'));
+				} else {
+					// create video
+					Video.create({description: postData.description, instrument: postData.instrument, userId: req.user.id })
+					.success(function (newVideo) {
+						// add relation
+						jam.addVideos(newVideo)
+						.success(function () {
+							res.send(200);
+						})
+						.error(function (error) {
+							return next(new errors.Error(error, 'Server error'));
+						});
+					})
+					.error(function (error) {
+						return next(new errors.Error(error, 'Server error'));
+					});
+				}
 			});
 		})
 		.error(function (error) {

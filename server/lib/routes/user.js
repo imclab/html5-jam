@@ -42,6 +42,39 @@ module.exports.init = function(app, config, security, errors) {
 
 
 	/**
+	*	Update user's vignette
+	*/
+	app.post('/users/:userId/vignettes', security.authenticationRequired, function (req, res, next) {
+		var postData = req.body;
+	
+		// get user
+		User.find({ 
+			where: {
+				id: req.user.id
+			} 
+		})
+		.success(function (user) {
+			if (user == null) { return next(new errors.BadRequest('User not found')); }
+
+			user.vignette_one = postData.vignette_one || user.vignette_one;
+			user.vignette_two = postData.vignette_two || user.vignette_two;
+			user.vignette_three = postData.vignette_three || user.vignette_three;
+			
+			user.save(['vignette_one', 'vignette_two', 'vignette_three'])
+			.success(function () {
+				res.send(200);
+			})
+			.error(function (error) {
+				return next(new errors.Error(error, 'Server error'));
+			});
+		})
+		.error(function (error) {
+			return next(new errors.Error(error, 'Server error'));
+		});
+	});
+
+
+	/**
 	*	Delete account
 	*/
 	app.delete('/users/:userId', security.authenticationRequired, function (req, res, next) {

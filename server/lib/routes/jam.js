@@ -131,7 +131,7 @@ module.exports.init = function(app, config, security, errors) {
 		+ ' WHERE j.id=? AND (j.privacy=0 OR j.userId=?)'
 			, null, { raw: true }, [req.params.jamId, req.user.id])
 		.success(function (rows) {
-			if (rows == null || rows.length == 0) { return next(new errors.BadRequest('Jam not found')); }
+			if (rows == null || rows.length == 0 || rows[0].id == null) { return next(new errors.BadRequest('Jam not found')); }
 			var jam = rows[0];
 
 			// do I like it already ?
@@ -144,19 +144,12 @@ module.exports.init = function(app, config, security, errors) {
 			.success(function (result) {
 				jam.doILikeIt = result > 0;
 
-				// get comments and videos
-				Jam.find({
-					where: {
-						id: req.params.jamId
-					},
-					include: [
-						{ model: Comment, attributes: ['id', 'content', 'createdAt', 'userId'] },
-					 	{ model: Video, attributes: ['id', 'createdAt', 'userId'] }
-					]
-				})
-				.success(function (result) {
-					jam.comments = result.dataValues.comments;
-					jam.videos = result.dataValues.videos;
+				Jam.daoFactoryManager.sequelize.query('SELECT v.id, v.description, v.instrument, v.createdAt, v.userId, u.name as ownerName, u.facebook_id as ownerFacebookId, u.picture_url as ownerPictureUrl'
+				+ ' FROM videos v LEFT JOIN users u ON u.id=v.userId'
+				+ ' WHERE v.jamId=? ORDER BY v.createdAt DESC'
+					, null, { raw: true }, [req.params.jamId])
+				.success(function (rows) {					
+					jam.videos = rows;
 					res.send(jam);
 				})
 				.error(function (error) {

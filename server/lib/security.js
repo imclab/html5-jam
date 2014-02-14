@@ -1,8 +1,7 @@
 "use strict";
-var express = require('express');
 var passport = require('passport');
-var crypto = require('crypto');
 var FacebookStrategy = require('passport-facebook').Strategy;
+var utils = require('./utils');
 var config = require('../config');
 var Errors = null;
 var User = null;
@@ -40,7 +39,7 @@ module.exports = {
 	},
 
 	authenticationSuccessful: function (req, res) {
-		res.redirect(config.client.loginSuccessUrl + config.client.port + '?token=' + encrypt(req.user.facebook_token));
+		res.redirect(config.client.loginSuccessUrl + config.client.port + '?token=' + utils.encrypt(req.user.facebook_token));
 	},
 
 	authenticationRequired: function (req, res, next) {
@@ -56,7 +55,7 @@ module.exports = {
 
 		// var token = req.headers.authorization;
 		// if (token != null) {
-		// 	User.find({where: {facebook_token: decrypt(token)}}).success(function (user) {
+		// 	User.find({where: {facebook_token: utils.decrypt(token)}}).success(function (user) {
 		// 		if (user != null) {
 		// 			req.user = user;
 		// 			return next();
@@ -72,12 +71,3 @@ module.exports = {
 };
 
 
-function encrypt(data) {
-	var cipher = crypto.createCipher(config.crypto.algorithm, config.crypto.key);  
-	return cipher.update(data, 'utf8', 'hex') + cipher.final('hex');
-}
-
-function decrypt(data) {
-	var decipher = crypto.createDecipher(config.crypto.algorithm, config.crypto.key);
-	return decipher.update(data, 'hex', 'utf8') + decipher.final('utf8');
-}
