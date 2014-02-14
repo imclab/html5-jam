@@ -5,17 +5,11 @@ define(function (require) {
     var Backbone = require('backbone');
 
     var JamModel = Backbone.Model.extend({
-
+        /* URL : /jam/:cid */
         defaults: {
             videos: {},
-            admin: undefined,
-            name: ""
-        },
-
-        initialize: function () {
-
+            name: ''
         }
-
     });
 
     var JamCollection = Backbone.Collection.extend({

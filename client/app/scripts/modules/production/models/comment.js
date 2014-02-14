@@ -18,7 +18,7 @@ define(function (require) {
     });
 
     return {
-        Comment: Comment,
+        CommentModel: Comment,
         CommentCollection: CommentCollection
     };
 

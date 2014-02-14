@@ -1,0 +1,28 @@
+.container {
+    width: 70%;
+    float: left;
+}
+
+.recorder {
+    width: 100%;
+}
+
+.selected_list {
+    width: 100%;
+    background-color: yellow;
+    display: inline-block;
+}
+
+.sidebar {
+    float: left;
+    width: 15%;
+    height: 100%;
+    background-color: #F60;
+}
+
+.comments {
+    width: 15%;
+    height: 100%;
+    float: left;
+    background-color: red;
+}

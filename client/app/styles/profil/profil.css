@@ -1,0 +1,12 @@
+.content {
+    width: 20%;
+    height: 100%;
+    float: left;
+}
+
+.jamlist {
+    width: 80%;
+    height: 100%;
+    float: left;
+}
+

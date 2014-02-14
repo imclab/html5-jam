@@ -7,16 +7,12 @@
 	top: 0;
 }
 
-.username {
+.topbar .username {
 	display: inline;
 	vertical-align: middle;
 }
 
-.newProjectBtn,
-.melodyBtn,
-.settingsBtn,
-.logoutBtn {
-	width: 20px;
+.topbar .btn {
 	height: 100%;
 
 	float: right;
