@@ -7,6 +7,7 @@ module.exports.init = function(app, config, security, errors) {
 	var Jam = app.get('models').Jam;
 	var Comment = app.get('models').Comment;
 	var Video = app.get('models').Video;
+	var Friend = app.get('models').Friend;
 
 
 	/**
@@ -28,7 +29,7 @@ module.exports.init = function(app, config, security, errors) {
 					{ 
 						userId: req.user.id 
 					}) 
-				}] 
+				}]
 			})
 			.success(function (user) {
 				if (user == null) { return next(new errors.BadRequest('User not found')); }

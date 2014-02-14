@@ -20,15 +20,13 @@ module.exports.init = function(app, config, security, errors) {
 		// get comments + user info
 		Comment.daoFactoryManager.sequelize.query('SELECT c.id, c.content, c.createdAt, c.userId, u.name as ownerName, u.facebook_id as ownerFacebookId, u.picture_url as ownerPictureUrl'
 		+ ' FROM comments c LEFT JOIN users u ON u.id=c.userId LEFT JOIN jams j ON c.jamId=j.id'
-		+ ' WHERE c.jamId=? AND (j.privacy=0 OR j.userId=?) ORDER BY c.createdAt DESC LIMIT ' + (page - 1) * pagination + ',' + page * pagination
+		+ ' WHERE c.jamId=? AND (j.privacy=0 OR j.userId=?) ORDER BY c.createdAt DESC LIMIT ' + (page == 1 ? 0 : ((page - 1) * pagination + 1)) + ',' + pagination
 			, null, { raw: true }, [req.params.jamId, req.user.id])
 		.success(function (rows) {
-			if (rows == null || rows.length == 0 || rows[0].id == null) { return next(new errors.BadRequest('No results')); }
 			
 			var result = {
 				pagination: pagination,
 				page: page,
-				lastPage: Math.ceil(rows.length / pagination),
 				comments: rows
 			}
 			res.send(result);
