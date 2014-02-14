@@ -19,7 +19,7 @@ module.exports.init = function(app, config, security, errors) {
 				where: { 
 					id: req.params.userId 
 				}, 
-				attributes: ['name', 'picture_url', 'facebook_id', 'createdAt'], 
+				attributes: ['name', 'picture_url', 'facebook_id', 'createdAt', 'vignette_one', 'vignette_two', 'vignette_three'], 
 				include: [{ 
 					model: Jam, 
 					where: Sequelize.or({ 

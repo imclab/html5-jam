@@ -1,4 +1,5 @@
 "use strict";
+var express = require('express');
 var Sequelize = require('sequelize');
 var utils = require('../utils');
 
@@ -11,7 +12,7 @@ module.exports.init = function(app, config, security, errors) {
 	/**
 	 *	Add Video to jam
 	 */
-	 app.post('/jams/:jamId/videos', security.authenticationRequired, function (req, res, next) {
+	 app.post('/jams/:jamId/videos', express.multipart(), security.authenticationRequired, function (req, res, next) {
 		var postData = req.body;
 
 		// check data
@@ -31,14 +32,15 @@ module.exports.init = function(app, config, security, errors) {
 		}).success(function (jam) {
 			if (jam == null) { return next(new errors.BadRequest('Jam not found')); }
 
-			// save file on disk
-			utils.writeFileToDisk('bob', req.files, function (error) {
-				if (error) {
-					return next(new errors.Error(error, 'Server error'));
-				} else {
-					// create video
-					Video.create({description: postData.description, instrument: postData.instrument, userId: req.user.id })
-					.success(function (newVideo) {
+			// create video
+			Video.create({description: postData.description, instrument: postData.instrument, userId: req.user.id })
+			.success(function (newVideo) {
+
+				// save file on disk
+				utils.writeFileToDisk(newVideo.id + '.mpg', req.files, function (err) {
+					if (err) {
+						return next(new errors.Error(err, 'Server error'));
+					} else {
 						// add relation
 						jam.addVideos(newVideo)
 						.success(function () {
@@ -47,11 +49,56 @@ module.exports.init = function(app, config, security, errors) {
 						.error(function (error) {
 							return next(new errors.Error(error, 'Server error'));
 						});
-					})
-					.error(function (error) {
-						return next(new errors.Error(error, 'Server error'));
-					});
+					}
+				});
+			})
+			.error(function (error) {
+				return next(new errors.Error(error, 'Server error'));
+			});
+		})
+		.error(function (error) {
+			return next(new errors.Error(error, 'Server error'));
+		});
+	});
+
+
+	/**
+	 * 	Get video stream
+	 */
+	app.get('/jams/:jamId/videos/:videoId', security.authenticationRequired, function (req, res, next) {
+
+		// get jam
+		Jam.find({ 
+			where: Sequelize.and(
+				{ id: req.params.jamId }, 
+				Sequelize.or(
+					{ privacy: 0 }, 
+					{ userId: req.user.id }
+				)
+			) 
+		})
+		.success(function (jam) {
+			if (jam == null) { return next(new errors.BadRequest('Jam not found')); }
+
+			jam.getVideos({
+				where: {
+					id: req.params.videoId
 				}
+			})
+			.success(function (videos) {
+				if (videos == null || videos.length == 0) { return next(new errors.BadRequest('Video not found')); }
+
+				utils.readFileFromDisk(req.params.videoId + '.mpg', function (error, file) {
+					if (error) {
+						return next(new errors.BadRequest('Video not found'));
+					} else {
+						res.writeHead(200, {'Content-Type': 'video/mpeg' });
+						res.end(file, 'binary');
+					}
+				});
+			})
+			.error(function (error) {
+				return next(new errors.Error(error, 'Server error'));
 			});
 		})
 		.error(function (error) {
@@ -85,8 +132,13 @@ module.exports.init = function(app, config, security, errors) {
 				if (jam.userId == req.user.id || video.userId == req.user.id) {
 					video.destroy()
 					.success(function () {
-						// TODO : delete file on the server
-						res.send(200);	
+						utils.deleteFileFromDisk(req.params.videoId + '.mpg', function (error) {
+							if (error) {
+								return next(new errors.BadRequest('Video not found'));
+							} else {
+								res.send(200);	
+							}
+						})
 					})
 					.error(function (error) {
 						return next(new errors.Error(error, 'Server error'));

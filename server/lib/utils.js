@@ -9,11 +9,15 @@ String.prototype.replaceAll = function (find, replace) {
 module.exports = {
 
 	writeFileToDisk: function (fileName, data, callback) {
-		console.log(data)
-		var filePath = __dirname.replaceAll('lib', '') + "uploads/videos/" + fileName;
-		fs.writeFile(filePath, data, function (err) {
-			callback(err);
-		});
+		fs.writeFile(__dirname.replaceAll('lib', '') + 'uploads/videos/' + fileName, data, callback);
+	},
+
+	readFileFromDisk: function (fileName, callback) {
+		fs.readFile(__dirname.replaceAll('lib', '') + 'uploads/videos/' + fileName, callback);
+	},
+
+	deleteFileFromDisk: function (fileName, callback) {
+		fs.unlink(__dirname.replaceAll('lib', '') + 'uploads/videos/' + fileName, callback);
 	},
 
 	encrypt: function (data) {

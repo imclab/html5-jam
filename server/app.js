@@ -2,6 +2,7 @@
 var express = require('express');
 var colors = require('colors');
 var passport = require('passport');
+var swagger = require("swagger-node-express");
 var config = require('./config');
 var security = require('./lib/security');
 var errors = require('./lib/errors');
@@ -19,7 +20,9 @@ var enableCORS = function(req, res, next) {
 var app = express();
 app.configure(function () {
     app.use(express.cookieParser());
-    app.use(express.bodyParser());
+    app.use(express.json());
+	app.use(express.urlencoded());
+    app.use(express.limit('10mb'));
     app.use(enableCORS);
     app.use(passport.initialize());
     app.use(app.router);
