@@ -17,7 +17,17 @@ Server
 /server$ npm install
 <br>
 start server : html5-jam/server$ node server.js
-launch unit test : html5-jam/server$ npm test
+launch unit tests : html5-jam/server$ npm test
+
+Server APIs Documentation
+======
+
+install redis-server
+html5-jam/server/docs$ npm install
+<br>
+start docs server : html5-jam/server/docs$ npm start
+visit http://localhost:5000
+
 
 Client
 ======
