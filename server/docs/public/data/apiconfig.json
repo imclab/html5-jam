@@ -1,0 +1,9 @@
+{
+    "htmljam": {
+        "name": "HTML Jam API",
+        "protocol": "http",
+	    "headers": {
+            "Accept": "application/json"
+	    }
+    }
+}
