@@ -30,6 +30,7 @@ app.configure(function () {
 
 // production variables
 app.configure('production', function () {
+	config.db.enableLogging = false;
 });
 
 // setup models

@@ -5,7 +5,8 @@ var config = require('../config');
 // init Sequelize db connection
 var sequelize = new Sequelize(config.db.name, config.db.user, config.db.password, {
     dialect: config.db.dialect,
-    port: config.db.port
+    port: config.db.port,
+    logging: config.db.enableLogging
 });
 
 sequelize.authenticate()

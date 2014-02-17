@@ -6,6 +6,7 @@ var config = require('../config');
 var utils = require('../lib/utils');
 
 // start server
+config.db.enableLogging = false;
 var app = require('../app');
 
 // global Settings

@@ -8,7 +8,7 @@ module.exports.init = function(app, config, security, errors) {
 
 
 	/**
-	*	Get a user's friends
+	*	Get a user's friends list
 	*/
 	app.get('/users/:userId/friends', security.authenticationRequired, function (req, res, next) {
 
