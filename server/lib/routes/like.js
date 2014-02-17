@@ -42,12 +42,11 @@ module.exports.init = function(app, config, security, errors) {
 	/**
 	 *	Delete like from jam
 	 */
-	 app.delete('/jams/:jamId/likes/:likeId', security.authenticationRequired, function (req, res, next) {
+	 app.delete('/jams/:jamId/likes', security.authenticationRequired, function (req, res, next) {
 
 		// get like
 		Like.find({ 
 			where: { 
-				id: req.params.likeId,
 				jamId: req.params.jamId,
 				userId: req.user.id
 			}

@@ -17,7 +17,7 @@ module.exports.init = function (app, config, security, errors) {
 	*	Am I logged in ? Returns user information
 	*/
 	app.get('/me', security.authenticationRequired, function (req, res, next) {
-		req.user.token = '';
+		req.user.facebook_token = null;
 	    res.send(req.user);
 	});
 

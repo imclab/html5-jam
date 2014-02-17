@@ -50,7 +50,6 @@ module.exports.init = function(app, config, security, errors) {
 				{ id: req.user.id }
 			) 
 		}).success(function (users) {
-			console.log(users)
 			if (users == null || users.length != 2) { return next(new errors.BadRequest('User not found')); }
 
 			// add relationship
@@ -71,14 +70,12 @@ module.exports.init = function(app, config, security, errors) {
 	/**
 	 *	Unfollow user
 	 */
-	 app.post('/users/:userId/unfollow', security.authenticationRequired, function (req, res, next) {
+	 app.delete('/users/:userId/follow', security.authenticationRequired, function (req, res, next) {
 
 		// get Friend
 		Friend.destroy({
-			where: {
 				userId: req.user.id,
 				friendId: req.params.userId
-			}
 		}).success(function () {
 			res.send(200);
 		})

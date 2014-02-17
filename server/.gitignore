@@ -37,6 +37,9 @@ ehthumbs.db
 Thumbs.db
 
 public/
-uploads/
+uploads/*
+!uploads/videos
+uploads/videos/*
+!uploads/videos/100.webm
 node_modules/
 config.js

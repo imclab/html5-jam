@@ -16,7 +16,7 @@ module.exports.init = function(app, config, security, errors) {
 		var postData = req.body;
 
 		// check data
-		if (!req.files || req.files.length == 0) {
+		if (!req.files || Object.keys(req.files).length === 0 || req.files.length == 0) {
 			return next(new errors.BadRequest('Missing fields'));
 		}
 

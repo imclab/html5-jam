@@ -43,9 +43,9 @@ module.exports.init = function(app, config, security, errors) {
 
 
 	/**
-	*	Update user's vignette
+	*	Update user
 	*/
-	app.post('/users/:userId/vignettes', security.authenticationRequired, function (req, res, next) {
+	app.put('/users/:userId', security.authenticationRequired, function (req, res, next) {
 		var postData = req.body;
 	
 		// get user

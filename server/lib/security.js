@@ -44,28 +44,28 @@ module.exports = {
 
 	authenticationRequired: function (req, res, next) {
 		// testing purpose
-		User.find({limit: 1}).success(function (user) {
-				if (user != null) {
-					req.user = user;
-					return next();
-				} else {
-					return next(new Errors.Unauthorized('User is not logged in'));
-				}
-		});
-
-		// var token = req.headers.authorization;
-		// if (token != null) {
-		// 	User.find({where: {facebook_token: utils.decrypt(token)}}).success(function (user) {
+		// User.find({where: {id: 100}}).success(function (user) {
 		// 		if (user != null) {
 		// 			req.user = user;
 		// 			return next();
 		// 		} else {
 		// 			return next(new Errors.Unauthorized('User is not logged in'));
 		// 		}
-		// 	});
-	 //    } else {
-	 //        return next(new Errors.Unauthorized('User is not logged in'));
-	 //    }
+		// });
+
+		var token = req.headers.authorization;
+		if (token != null) {
+			User.find({where: {facebook_token: utils.decrypt(token)}}).success(function (user) {
+				if (user != null) {
+					req.user = user;
+					return next();
+				} else {
+					return next(new Errors.Unauthorized('User is not logged in'));
+				}
+			});
+	    } else {
+	        return next(new Errors.Unauthorized('User is not logged in'));
+	    }
 	}
 
 };

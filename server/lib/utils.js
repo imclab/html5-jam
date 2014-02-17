@@ -1,5 +1,8 @@
 "use strict";
 var fs = require('fs');
+var crypto = require('crypto');
+var config = require('../config');
+
 
 String.prototype.replaceAll = function (find, replace) {
 	var str = this;
