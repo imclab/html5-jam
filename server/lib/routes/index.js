@@ -8,7 +8,7 @@ module.exports.init = function(app, config, security, errors) {
 	});
 
 	// init routes
-	var routes = ['authentication', 'jam', 'user', 'comment', 'like', 'video', 'friend'];
+	var routes = ['authentication', 'jam', 'user', 'comment', 'like', 'video', 'friend', 'note'];
 
 	for (var i = 0; i < routes.length; i++) {
 		require('./' + routes[i] + '.js').init(app, config, security, errors);

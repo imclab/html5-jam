@@ -177,3 +177,14 @@ suite.discuss('Unfollow a user...')
     .del('/users/80/follow')
     .expect(200)
     .export(module);
+
+
+/**
+*   Notes
+*/
+suite.discuss('Note video...')
+    .setHeader('Authorization', encryptedToken)
+    .post('/jams/100/videos/100/note')
+    .expect(400)
+    .export(module);
+    

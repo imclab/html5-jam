@@ -21,14 +21,14 @@ module.exports.init = function(app, config, security, errors) {
 		}
 
 		// get jam
-		Jam.find({ 
+		Jam.find({
 			where: Sequelize.and(
-				{ id: req.params.jamId }, 
+				{ id: req.params.jamId },
 				Sequelize.or(
-					{ privacy: 0 }, 
+					{ privacy: 0 },
 					{ userId: req.user.id }
 				)
-			) 
+			)
 		}).success(function (jam) {
 			if (jam == null) { return next(new errors.BadRequest('Jam not found')); }
 
