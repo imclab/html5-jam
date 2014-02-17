@@ -16,7 +16,7 @@ populate with test data : mysql > SOURCE ./test/test_data.sql;
 
 Server
 ======
-/server$ npm install
+html5-jam/server$ npm install
 <br>
 start server : html5-jam/server$ node server.js
 <br>
@@ -43,5 +43,5 @@ $ npm install -g grunt-cli
 <br>
 html5-jam/client$ npm install | bower install
 <br>
-start client : html5-jam/client$ grunt serve
+start client : html5-jam/client$ grunt server
  
