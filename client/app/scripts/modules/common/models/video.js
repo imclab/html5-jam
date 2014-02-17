@@ -26,8 +26,6 @@ define(function (require) {
             this.set({
                 _cid: this.cid
             });
-
-            console.log("test :", this.get('_cid'));
         }
 
     });

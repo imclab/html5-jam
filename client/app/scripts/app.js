@@ -1,21 +1,22 @@
-define([
-    "underscore",
-    "backbone",
-    "marionette",
-    "fastclick",
-    "controller"
-],
+/*global define*/
+/*global window*/
+define(function (require) {
+    "use strict";
 
-function (_, Backbone, Marionette, FastClick, AppController) {
+    var _ = require('underscore');
+    var Backbone = require('backbone');
+    var Marionette = require('marionette');
+    var AppController = require('controller');
 
     var App = new Backbone.Marionette.Application();
 
     var AppRouter = Marionette.AppRouter.extend({
 
         appRoutes: {
-            ''                  : 'showIndex',
-            '/jam/:jamId'       : 'showJam',
-            '/profil/:profilId' : 'showProfil'
+            'jam/(:jamId)'     : 'showJam',
+            'profil/(:profilId)' : 'showProfil',
+            'friends/'          : 'showFriends',
+            ''                 : 'showIndex'
         }
 
     });
@@ -23,12 +24,7 @@ function (_, Backbone, Marionette, FastClick, AppController) {
     // Define the regions
     App.addRegions({
         topbar: '#topbar',
-        production: '#production'
-    });
-
-    // FastClick
-    App.addInitializer(function () {
-        FastClick.attach(document.body);
+        corpus: '#corpus'
     });
 
     App.addInitializer(function () {
@@ -56,12 +52,11 @@ function (_, Backbone, Marionette, FastClick, AppController) {
         new AppRouter({
             controller: new AppController({
                 regions: {
-                    production: App.production,
+                    corpus: App.corpus,
                     topbar: App.topbar
                 }
             })
         });
-
     });
 
     // Return the instantiated app (there should only be one)

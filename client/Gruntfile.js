@@ -10,7 +10,6 @@ var lrSnippet = require('grunt-contrib-livereload/lib/utils').livereloadSnippet;
 var mountFolder = function (connect, dir) {
     return connect.static(require('path').resolve(dir));
 };
-var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
 
 var date = Date.now();
 
@@ -22,14 +21,14 @@ module.exports = function (grunt) {
 
     grunt.initConfig({
         // configurable paths
-        wiki: {
+        jam: {
             app: 'app',
             dist: 'dist',
             build: 'build'
         },
         watch: {
             compass: {
-                files: ['<%= wiki.app %>/styles/{,*/}*css'],
+                files: ['<%= jam.app %>/styles/{,*/}*css'],
                 tasks: ['clean:css', 'compass:server', 'cssmin:server', 'autoprefixer:server']
             },
             livereload: {
@@ -37,16 +36,16 @@ module.exports = function (grunt) {
                     livereload: '<%= connect.options.livereload %>'
                 },
                 files: [
-                    '<%= wiki.app %>/*.html',
-                    '<%= wiki.app %>/templates/*.html',
-                    '.tmp/styles/{,*/}*.css',
-                    '{.tmp,<%= wiki.app %>}/scripts/**/*.js',
-                    '<%= wiki.app %>/images/{,*/,*/*/}*.{png,jpg,jpeg,gif,webp,svg}'
+                    '<%= jam.app %>/*.html',
+                    '<%= jam.app %>/templates/**/*.html',
+                    '.tmp/styles/*.css',
+                    '{.tmp,<%= jam.app %>}/scripts/**/*.js',
+                    '<%= jam.app %>/images/{,*/,*/*/}*.{png,jpg,jpeg,gif,webp,svg}'
                 ]
             },
             jst: {
                 files: [
-                    '<%= wiki.app %>/templates/*.html'
+                    '<%= jam.app %>/templates/*.html'
                 ],
                 tasks: ['jst']
             }
@@ -58,27 +57,10 @@ module.exports = function (grunt) {
                 // change this to '0.0.0.0' to access the server from outside
                 hostname: '0.0.0.0'
             },
-            proxies : [
-                {
-                    context: '/api',
-                    host: '0.0.0.0',
-                    port: 1337,
-                    https: false,
-                    changeOrigin: true
-                },
-                {
-                    context: '/w',
-                    host: 'fr.wikipedia.org',
-                    port: 80,
-                    https: false,
-                    changeOrigin: true
-                }
-            ],
             livereload: {
                 options: {
                     middleware: function (connect) {
                         return [
-                            proxySnippet,
                             lrSnippet,
                             mountFolder(connect, '.tmp'),
                             mountFolder(connect, 'app')
@@ -91,14 +73,14 @@ module.exports = function (grunt) {
                     base: [
                         '.tmp',
                         'test',
-                        '<%= wiki.app %>'
+                        '<%= jam.app %>'
                     ]
                 }
             },
             dist: {
                 options: {
                     open: true,
-                    base: '<%= wiki.dist %>',
+                    base: '<%= jam.dist %>',
                     livereload: false
                 }
             }
@@ -109,8 +91,8 @@ module.exports = function (grunt) {
                     dot: true,
                     src: [
                         '.tmp',
-                        '<%= wiki.dist %>/*',
-                        '!<%= wiki.dist %>/.git*'
+                        '<%= jam.dist %>/*',
+                        '!<%= jam.dist %>/.git*'
                     ]
                 }]
             },
@@ -123,8 +105,8 @@ module.exports = function (grunt) {
             },
             all: [
                 'Gruntfile.js',
-                '<%= wiki.app %>/scripts/{,*/}*.js',
-                '!<%= wiki.app %>/scripts/vendor/*',
+                '<%= jam.app %>/scripts/{,*/}*.js',
+                '!<%= jam.app %>/scripts/vendor/*',
                 'test/spec/{,*/}*.js'
             ]
         },
@@ -152,9 +134,9 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     // cwd: '.tmp/styles/',
-                    cwd: '<%= wiki.dist %>/styles',
+                    cwd: '<%= jam.dist %>/styles',
                     src: '{,*/}*.css',
-                    dest: '<%= wiki.dist %>/styles/'
+                    dest: '<%= jam.dist %>/styles/'
                     // dest: '.tmp/styles/'
                 }]
             }
@@ -178,7 +160,7 @@ module.exports = function (grunt) {
                     name: '../bower_components/almond/almond',
                     almond: true,
                     baseUrl: '.tmp/scripts',
-                    out: '<%= wiki.dist %>/scripts/main.js',
+                    out: '<%= jam.dist %>/scripts/main.js',
                     //include: ['main0'],
                     //insertRequire: ['main0'],
                     optimize: 'none',
@@ -197,42 +179,42 @@ module.exports = function (grunt) {
         },
         'bower-install': {
             app: {
-                html: '<%= wiki.app %>/index.html',
-                ignorePath: '<%= wiki.app %>/'
+                html: '<%= jam.app %>/index.html',
+                ignorePath: '<%= jam.app %>/'
             }
         },
         rev: {
             dist: {
                 files: {
                     src: [
-                        '<%= wiki.dist %>/scripts/{,*/}*.js',
-                        '<%= wiki.dist %>/styles/{,*/}*.css',
-                        '<%= wiki.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp}',
+                        '<%= jam.dist %>/scripts/{,*/}*.js',
+                        '<%= jam.dist %>/styles/{,*/}*.css',
+                        '<%= jam.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp}',
                     ]
                 }
             },
         },
         useminPrepare: {
             options: {
-                dest: '<%= wiki.dist %>'
+                dest: '<%= jam.dist %>'
             },
-            html: '<%= wiki.app %>/index.html'
+            html: '<%= jam.app %>/index.html'
         },
         usemin: {
             options: {
-                assetsDirs: ['<%= wiki.dist %>']
+                assetsDirs: ['<%= jam.dist %>']
             },
-            html: ['<%= wiki.dist %>/{,*/}*.html', '.tmp/scripts/templates.js'],
-            //css: ['<%= wiki.dist %>/styles/{,*/}*.css']
+            html: ['<%= jam.dist %>/{,*/}*.html', '.tmp/scripts/templates.js'],
+            //css: ['<%= jam.dist %>/styles/{,*/}*.css']
             css: ['.tmp/styles/{,*/}*.css']
         },
         imagemin: {
             dist: {
                 files: [{
                     expand: true,
-                    cwd: '<%= wiki.app %>/images',
+                    cwd: '<%= jam.app %>/images',
                     src: '{,*/}*.{png,jpg,jpeg}',
-                    dest: '<%= wiki.dist %>/images'
+                    dest: '<%= jam.dist %>/images'
                 }]
             }
         },
@@ -240,19 +222,19 @@ module.exports = function (grunt) {
             dist: {
                 files: [{
                     expand: true,
-                    cwd: '<%= wiki.app %>/images',
+                    cwd: '<%= jam.app %>/images',
                     src: '{,*/}*.svg',
-                    dest: '<%= wiki.dist %>/images'
+                    dest: '<%= jam.dist %>/images'
                 }]
             }
         },
         compass: {
             options: {
-                sassDir: '<%= wiki.app %>/styles',
+                sassDir: '<%= jam.app %>/styles',
                 cssDir: '.tmp/styles',
-                imagesDir: '<%= wiki.app %>/images',
-                javascriptsDir: '<%= wiki.app %>/scripts',
-                fontsDir: '<%= wiki.app %>/styles/fonts',
+                imagesDir: '<%= jam.app %>/images',
+                javascriptsDir: '<%= jam.app %>/scripts',
+                fontsDir: '<%= jam.app %>/styles/fonts',
                 importPath: 'app/bower_components',
                 relativeAssets: true,
                 debugInfo: false
@@ -274,16 +256,16 @@ module.exports = function (grunt) {
             server: {
                 files: {
                     '.tmp/styles/main.css': [
-                        '<%= wiki.app %>/styles/*.css',
+                        '<%= jam.app %>/styles/{,*/}*.css',
                         '.tmp/styles/*.css'
                     ]
                 }
             },
             dist: {
                 files: {
-                    '<%= wiki.dist %>/styles/main.css': [
-                        '<%= wiki.app %>/styles/{,*/}*.css',
-                        '.tmp/styles/{,*/}*.css'
+                    '<%= jam.dist %>/styles/main.css': [
+                        '<%= jam.app %>/styles/**/*.css',
+                        '.tmp/styles/**/*.css'
                     ]
                 }
             }
@@ -305,9 +287,9 @@ module.exports = function (grunt) {
                 },
                 files: [{
                     expand: true,
-                    cwd: '<%= wiki.app %>',
+                    cwd: '<%= jam.app %>',
                     src: '*.html',
-                    dest: '<%= wiki.dist %>'
+                    dest: '<%= jam.dist %>'
                 }]
             }
         },
@@ -322,18 +304,18 @@ module.exports = function (grunt) {
                     prefix: '<!--@@Replace in build-->'
                 },
                 files: {
-                    '<%= wiki.dist %>/index.html': ['<%= wiki.dist %>/index.html']
+                    '<%= jam.dist %>/index.html': ['<%= jam.dist %>/index.html']
                 }
             },
             appcache: {
                 options: {
                     variables: {
-                        '<html lang="en">': '<html lang="en" manifest="' + date + '.wiki.appcache">'
+                        '<html lang="en">': '<html lang="en" manifest="' + date + '.jam.appcache">'
                     },
                     prefix: '<!--@@Add appcache-->'
                 },
                 files: {
-                    '<%= wiki.dist %>/index.html': ['<%= wiki.dist %>/index.html']
+                    '<%= jam.dist %>/index.html': ['<%= jam.dist %>/index.html']
                 }
             }
         },
@@ -343,7 +325,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     dot: true,
-                    cwd: '<%= wiki.app %>',
+                    cwd: '<%= jam.app %>',
                     dest: '.tmp/',
                     src: [
                         'scripts/**/*.js',
@@ -355,8 +337,8 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     dot: true,
-                    cwd: '<%= wiki.app %>',
-                    dest: '<%= wiki.dist %>',
+                    cwd: '<%= jam.app %>',
+                    dest: '<%= jam.dist %>',
                     src: [
                         '*.{ico,png,txt}',
                         '*.htaccess',
@@ -371,14 +353,14 @@ module.exports = function (grunt) {
             styles: {
                 expand: true,
                 dot: true,
-                cwd: '<%= wiki.app %>/styles',
+                cwd: '<%= jam.app %>/styles',
                 dest: '.tmp/styles/',
                 src: '{,*/}*.css'
             }
         },
         bower: {
             all: {
-                rjsConfig: '<%= wiki.app %>/scripts/main.js'
+                rjsConfig: '<%= jam.app %>/scripts/main.js'
             }
         },
         jst: {
@@ -387,17 +369,17 @@ module.exports = function (grunt) {
             },
             compile: {
                 files: {
-                    '.tmp/scripts/templates.js': ['<%= wiki.app %>/templates/*.html']
+                    '.tmp/scripts/templates.js': ['<%= jam.app %>/templates/*.html']
                 }
             }
         },
         modernizr: {
-            devFile: '<%= wiki.app %>/bower_components/modernizr/modernizr.js',
-            outputFile: '<%= wiki.dist %>/scripts/vendor/modernizr.js',
+            devFile: '<%= jam.app %>/bower_components/modernizr/modernizr.js',
+            outputFile: '<%= jam.dist %>/scripts/vendor/modernizr.js',
             files: [
-                '<%= wiki.dist %>/scripts/{,*/}*.js',
-                '<%= wiki.dist %>/styles/{,*/}*.css',
-                '!<%= wiki.dist %>/scripts/vendor/*'
+                '<%= jam.dist %>/scripts/{,*/}*.js',
+                '<%= jam.dist %>/styles/{,*/}*.css',
+                '!<%= jam.dist %>/scripts/vendor/*'
             ],
             extensibility: {
                 'prefixed': true
@@ -419,7 +401,7 @@ module.exports = function (grunt) {
         uglify: {
             dist: {
                 files: {
-                    '<%= wiki.dist %>/scripts/main.js': ['<%= wiki.dist %>/scripts/main.js']
+                    '<%= jam.dist %>/scripts/main.js': ['<%= jam.dist %>/scripts/main.js']
                 }
             }
         },
@@ -428,8 +410,8 @@ module.exports = function (grunt) {
                 basePath: 'dist'
             },
             dist: {
-                dest: '<%= wiki.dist%>/' + date + '.wiki.appcache',
-                cache: '<%= wiki.dist %>/{*.html,images/**/*,scripts/**/*,styles/**/*}',
+                dest: '<%= jam.dist%>/' + date + '.jam.appcache',
+                cache: '<%= jam.dist %>/{*.html,images/**/*,scripts/**/*,styles/**/*}',
                 network: ['rre/rest', 'http://www.google-analytics.com/']
             }
         },
@@ -458,7 +440,6 @@ module.exports = function (grunt) {
 
         grunt.task.run([
             'clean:server',
-            'configureProxies',
             'compass:server',
             'createTemplateJs',
             'concurrent:server',
