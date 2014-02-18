@@ -5,7 +5,7 @@ define(function (require) {
     var Backbone = require('backbone');
     var Marionette = require('marionette');
     var vent = require('modules/common/vent');
-    var TopBar = require('modules/topbar/views/topbar');
+    var TopBar = require('modules/topbar/views/topbar_view');
     var User = require('modules/common/models/user');
 
 

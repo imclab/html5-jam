@@ -7,7 +7,7 @@ define(function (require) {
     var TopBarController = require('modules/topbar/topbar_controller');
     var FriendlistController = require('modules/friendlist/friendlist_controller');
     var ProfilController = require('modules/profil/profil_controller');
-    var AuthenticationController = require('modules/common/controllers/authentication_controller');
+    var AuthenticationController = require('modules/authentication/authentication_controller');
 
     var User = require('modules/common/models/user');
 
@@ -21,18 +21,16 @@ define(function (require) {
             this.attributes.models.user = new User({ username: 'JeSuisUnChat' });
 
             this._createTopbarController();
-
-            var t = new AuthenticationController();
-            // t._eraseCookie('__auth');
-            // t.createAuthenticationCookie('tchatchatcha');
-            // t.checkForCookie();
-            t.requestFacebookAuth();
         },
 
         _initializeAttributes: function () {
             this.controllers = {};
             this.attributes = {};
             this.attributes.models = {};
+        },
+
+        showLogin: function () {
+            this._createAuthenticationController();
         },
 
         showIndex: function () {
@@ -55,6 +53,20 @@ define(function (require) {
 
         showFriends: function () {
             this._createFriendlistController();
+        },
+
+        _createAuthenticationController: function () {
+            if (!this.controllers.authentication) {
+                options = options || {};
+
+                options.region = this.regions.corpus;
+                options.user = this.attributes.models.user;
+
+                this.controllers.authentication = new AuthenticationController(options);
+                this.controllers.authentication.show();
+            } else {
+                this.controllers.authentication.show();
+            }
         },
 
         _createProductionController: function (options) {
