@@ -37,7 +37,7 @@ define(function (require) {
         },
 
         show: function () {
-            BaseController.prototype.show.call(this);
+            this.getLayout().render();
         },
 
         getLayout: function () {

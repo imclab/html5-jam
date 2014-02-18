@@ -39,6 +39,14 @@ define(function (require) {
             if (options.user) {
                 this.attributes.models.user = options.user;
             }
+
+
+
+            // var test = new Jam.JamModel({name: 'coucouJam231'});
+            // test.url = '/api';
+            // test.fetch();
+
+            // console.log(test);
         },
 
         show: function () {

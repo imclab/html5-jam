@@ -11,6 +11,8 @@ var mountFolder = function (connect, dir) {
     return connect.static(require('path').resolve(dir));
 };
 
+var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
+
 var date = Date.now();
 
 module.exports = function (grunt) {
@@ -57,10 +59,23 @@ module.exports = function (grunt) {
                 // change this to '0.0.0.0' to access the server from outside
                 hostname: '0.0.0.0'
             },
+            proxies : [
+                {
+                    context: '/api',
+                    host: '0.0.0.0',
+                    port: 3000,
+                    https: false,
+                    changeOrigin: true,
+                    rewrite: {
+                        '^/api': ''
+                    }
+                }
+            ],
             livereload: {
                 options: {
                     middleware: function (connect) {
                         return [
+                            proxySnippet,
                             lrSnippet,
                             mountFolder(connect, '.tmp'),
                             mountFolder(connect, 'app')
@@ -440,6 +455,7 @@ module.exports = function (grunt) {
 
         grunt.task.run([
             'clean:server',
+            'configureProxies',
             'compass:server',
             'createTemplateJs',
             'concurrent:server',

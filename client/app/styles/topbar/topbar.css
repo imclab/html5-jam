@@ -1,4 +1,4 @@
-.topbar {
+#topbar {
 	width: 100%;
 	height: 30px;
 
@@ -7,12 +7,12 @@
 	top: 0;
 }
 
-.topbar .username {
+#topbar .username {
 	display: inline;
 	vertical-align: middle;
 }
 
-.topbar .btn {
+#topbar .btn {
 	height: 100%;
 
 	float: right;

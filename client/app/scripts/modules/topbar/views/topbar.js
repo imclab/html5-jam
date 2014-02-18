@@ -9,7 +9,7 @@ define(function (require) {
 
         template: 'topbar/topbar',
 
-        className: 'topbar',
+        el: '#topbar',
 
         events: {
             'click .newProjectBtn' : 'toNewProject',

@@ -13,10 +13,10 @@ define(function (require) {
     var AppRouter = Marionette.AppRouter.extend({
 
         appRoutes: {
-            'jam/(:jamId)'     : 'showJam',
+            'jam/(:jamId)'       : 'showJam',
             'profil/(:profilId)' : 'showProfil',
-            'friends/'          : 'showFriends',
-            ''                 : 'showIndex'
+            'friends/'           : 'showFriends',
+            ''                   : 'showIndex'
         }
 
     });
@@ -33,7 +33,8 @@ define(function (require) {
 
     // Override Marionette's route to fetch templates from the JST object
     App.addInitializer(function () {
-        var JST = window.JST = window.JST || {};
+        window.JST = window.JST || {};
+        var JST = window.JST;
         console.log('[JST] init');
 
         Marionette.Renderer.render = function (template, data) {
