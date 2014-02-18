@@ -68,7 +68,7 @@ define(function (require) {
             if (!this.controllers.topbar) {
                 options = options || {};
 
-                options.region = this.regions.topbar;
+                // options.region = this.regions.topbar;
                 options.user = this.attributes.models.user;
 
                 this.controllers.topbar = new TopBarController(options);

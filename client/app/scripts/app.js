@@ -23,7 +23,7 @@ define(function (require) {
 
     // Define the regions
     App.addRegions({
-        topbar: '#topbar',
+        // topbar: '#topbar',
         corpus: '#corpus'
     });
 
@@ -53,8 +53,8 @@ define(function (require) {
         new AppRouter({
             controller: new AppController({
                 regions: {
-                    corpus: App.corpus,
-                    topbar: App.topbar
+                    // topbar: App.topbar,
+                    corpus: App.corpus
                 }
             })
         });
