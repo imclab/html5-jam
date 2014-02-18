@@ -9,39 +9,58 @@ define(function (require) {
 
         initialize: function (options) {
             this._initializeAttributes();
+
+            this.auth.user = options.user || new User();
         },
 
         _initializeAttributes: function () {
             this.auth = {};
-            this.auth.cookie = {};
         },
 
-        getFacebookAuth: function () {
+        requestFacebookAuth: function () {
             // On fecth l'addresse /api/auth/facebook
-            this.auth.user.fetch({
-                url: '/api/auth/facebook'
+            $.ajax({
+                type: "GET",
+                url: "/api/auth/facebook",
+                data: {}
+            }).done(function (msg) {
+                console.log('Message : ', msg);
+            }).fail(function (jqXHR, msg) {
+                console.log('[AuthenticationController > requestFacebookAuth] Error with ajax GET : ', msg);
             });
         },
 
-        checkForCookie: function () {
-            this.auth.cookie.full = this._getCookie('__auth');
-            // this.auth.cookie.auth = ;
-            // this.auth.cookie.date = ;
+        isAuthentified: function (success, error) {
+            var auth_token = this._checkForAuthenticationCookie();
 
-            console.log("Mon cookie : ", );
+            if (!auth_token) {
+                // Not authentified
+                error();
+            } else {
+                // Verified the cookie
+                // Faire la requete
+            }
+        },
+
+        _checkForAuthenticationCookie: function () {
+            return this._getCookie('__auth');
         },
 
         createAuthenticationCookie: function (sValue) {
-            this._setCookie('__auth', sValue);
+            // For one year
+            this._setCookie('__auth', sValue, 365);
         },
 
-        _setCookie: function (sName, sValue) {
+        _setCookie: function (sName, sValue, days) {
             var today = new Date();
-            expires = new Date();
+            var expires = new Date();
 
-            expires.setTime(today.getTime() + (365*24*60*60*1000));
+            expires.setTime(today.getTime() + (days*24*60*60*1000));
+            document.cookie = sName + "=" + sValue + "; expires=" + expires.toGMTString();
+        },
 
-            document.cookie = sName + "=" + encodeURIComponent(sValue) + ";expires=" + expires.toGMTString();
+        _eraseCookie: function (sName) {
+            this._setCookie(sName, "", -1);
         },
 
         _getCookie: function (sName) {

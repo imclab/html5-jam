@@ -7,6 +7,7 @@ define(function (require) {
     var TopBarController = require('modules/topbar/topbar_controller');
     var FriendlistController = require('modules/friendlist/friendlist_controller');
     var ProfilController = require('modules/profil/profil_controller');
+    var AuthenticationController = require('modules/common/controllers/authentication_controller');
 
     var User = require('modules/common/models/user');
 
@@ -20,6 +21,12 @@ define(function (require) {
             this.attributes.models.user = new User({ username: 'JeSuisUnChat' });
 
             this._createTopbarController();
+
+            var t = new AuthenticationController();
+            // t._eraseCookie('__auth');
+            // t.createAuthenticationCookie('tchatchatcha');
+            // t.checkForCookie();
+            t.requestFacebookAuth();
         },
 
         _initializeAttributes: function () {
