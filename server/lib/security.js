@@ -39,7 +39,7 @@ module.exports = {
 	},
 
 	authenticationSuccessful: function (req, res) {
-		res.redirect(config.client.loginSuccessUrl + config.client.port + '?token=' + utils.encrypt(req.user.facebook_token));
+		res.redirect(config.client.loginSuccessUrl + config.client.port + '#?token=' + utils.encrypt(req.user.facebook_token));
 	},
 
 	authenticationRequired: function (req, res, next) {

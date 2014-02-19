@@ -35,6 +35,7 @@
 	height: 20px;
 	border: solid 1px #000;
 	border-radius: 5px;
+	padding: 0;
 	float: left;
 	text-align: center;
 }

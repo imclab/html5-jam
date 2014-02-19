@@ -17,6 +17,12 @@ define(function (require) {
             'click .profilBtn' : 'toProfil'
         },
 
+        initialize: function () {
+            if (this.$el.hasClass('hidden')) {
+                this.$el.removeClass('hidden');
+            }
+        },
+
         toFriendList: function () {
             vent.trigger('topbar:friends');
         },

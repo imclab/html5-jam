@@ -16,6 +16,7 @@ define(function (require) {
             'jam/(:jamId)'       : 'showJam',
             'profil/(:profilId)' : 'showProfil',
             'friends/'           : 'showFriends',
+            ':identityToken'     : 'getIdentityToken',
             ''                   : 'showIndex'
         }
 
