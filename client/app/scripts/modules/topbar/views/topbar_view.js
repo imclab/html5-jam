@@ -9,12 +9,18 @@ define(function (require) {
 
         template: 'topbar/topbar',
 
-        className: 'topbar',
+        el: '#topbar',
 
         events: {
             'click .newProjectBtn' : 'toNewProject',
             'click .friendlistBtn' : 'toFriendList',
             'click .profilBtn' : 'toProfil'
+        },
+
+        initialize: function () {
+            if (this.$el.hasClass('hidden')) {
+                this.$el.removeClass('hidden');
+            }
         },
 
         toFriendList: function () {

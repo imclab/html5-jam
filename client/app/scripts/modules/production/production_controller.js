@@ -65,17 +65,18 @@ define(function (require) {
         },
 
         _initializeAttributes: function () {
+            this.views = {};
             this.attributes = {};
             this.attributes.recorderBlob = undefined;
+            this.attributes.recorderPreview = undefined;
             this.attributes.selectedIds = {};
+            this.attributes.models = {};
+
             this.attributes.recorder = {
                 audio: undefined,
                 video: undefined,
                 isRecording: false,
             };
-            this.attributes.models = {};
-
-            this.views = {};
         },
 
         _bindEvents: function () {
@@ -127,7 +128,6 @@ define(function (require) {
         },
 
         save: function () {
-
             if (!this.attributes.models.jam) {
                 console.log("[Production_controller.js > save] ERROR : No Jam loaded");
             } else {
@@ -153,19 +153,27 @@ define(function (require) {
         },
 
         _initializeMediaCapture: function () {
-            var preview = document.getElementById('preview');
-            preview.muted = true;
 
-            var self = this;
+            if (!this.attributes.recorderBlob) {
+                this.attributes.recorderPreview = document.getElementById('preview');
+                this.attributes.recorderPreview.muted = true;
 
-            navigator.getUserMedia({audio: true, video: true}, function (media) {
-                preview.src = window.URL.createObjectURL(media);
-                preview.play();
+                var self = this;
 
-                self._setRecorderBlob(media);
-            }, function () {
-                console.log("[Production_controller.js > _initializeMediaCapture] ERROR : Failed to get the blob.");
-            });
+                navigator.getUserMedia({audio: true, video: true}, function (media) {
+                    self.attributes.recorderPreview.src = window.URL.createObjectURL(media);
+                    self.attributes.recorderPreview.play();
+
+                    self._setRecorderBlob(media);
+                }, function () {
+                    console.log("[Production_controller.js > _initializeMediaCapture] ERROR : Failed to get the blob.");
+                });
+            } else {
+                this.attributes.recorderPreview = document.getElementById('preview');
+                this.attributes.recorderPreview.muted = true;
+                this.attributes.recorderPreview.src = window.URL.createObjectURL(this.attributes.recorderBlob);
+                this.attributes.recorderPreview.play();
+            }
         },
 
         _initializeRecordRTC: function () {

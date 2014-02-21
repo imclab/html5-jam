@@ -3,17 +3,14 @@ define(function (require) {
     "use strict";
 
     var Backbone = require('backbone');
+    var Marionette = require('marionette');
     var vent = require('modules/common/vent');
-    var TopBar = require('modules/topbar/views/topbar');
-    var BaseController    = require('modules/common/controllers/base_controller');
+    var TopBar = require('modules/topbar/views/topbar_view');
     var User = require('modules/common/models/user');
 
 
-    var TopbarController = BaseController.extend({
-
+    var TopbarController = Marionette.Controller.extend({
         initialize: function (options) {
-            BaseController.prototype.initialize.call(this, options);
-
             this._initializeAttributes();
             this._bindEvents();
 
@@ -37,10 +34,10 @@ define(function (require) {
         },
 
         show: function () {
-            BaseController.prototype.show.call(this);
+            this.getView().render();
         },
 
-        getLayout: function () {
+        getView: function () {
             return new TopBar({model: this.attributes.models.user});
         },
 

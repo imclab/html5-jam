@@ -3,33 +3,60 @@ define(function (require) {
     "use strict";
 
     var Marionette = require('marionette');
+
     var ProductionController = require('modules/production/production_controller');
     var TopBarController = require('modules/topbar/topbar_controller');
     var FriendlistController = require('modules/friendlist/friendlist_controller');
     var ProfilController = require('modules/profil/profil_controller');
+    var LoginController = require('modules/login/login_controller');
 
     var User = require('modules/common/models/user');
+    var AuthManager = require('modules/common/auth_manager');
+
+    var Cook = require('modules/common/cookie_manager')();
 
     var MainController = Marionette.Controller.extend({
 
         initialize: function (options) {
             this.regions = options.regions || {};
-
             this._initializeAttributes();
 
-            this.attributes.models.user = new User({ username: 'JeSuisUnChat' });
+            Cook.flush();
 
-            this._createTopbarController();
+            this.handleLogin();
         },
 
         _initializeAttributes: function () {
             this.controllers = {};
             this.attributes = {};
             this.attributes.models = {};
+            this.attributes.authmanager = new AuthManager();
+        },
+
+        getIdentityToken: function (identityToken) {
+            var token = identityToken.replace('?token=', '');
+            this.attributes.authmanager.onServerResponse(token);
+        },
+
+        handleLogin: function () {
+            var client = this.attributes.authmanager.handleConnection();
+
+            if (!client) {
+                this._createLoginController();
+            } else {
+                this.attributes.models.user = new User({ usrId : client.usr_id });
+                //this.attributes.models.user.fetch();
+                this._createTopbarController();
+                this._createProductionController();
+            }
+        },
+
+        showLogin: function () {
+            this._createLoginController();
         },
 
         showIndex: function () {
-            this._createProductionController();
+            //this._createProductionController();
         },
 
         showJam: function (jamId) {
@@ -50,6 +77,17 @@ define(function (require) {
             this._createFriendlistController();
         },
 
+        _createLoginController: function (options) {
+            if (!this.controllers.login) {
+                options = options || {};
+
+                this.controllers.login = new LoginController(options);
+                this.controllers.login.show();
+            } else {
+                this.controllers.login.show();
+            }
+        },
+
         _createProductionController: function (options) {
             if (!this.controllers.production) {
                 options = options || {};
@@ -68,7 +106,7 @@ define(function (require) {
             if (!this.controllers.topbar) {
                 options = options || {};
 
-                options.region = this.regions.topbar;
+                // options.region = this.regions.topbar;
                 options.user = this.attributes.models.user;
 
                 this.controllers.topbar = new TopBarController(options);
@@ -108,5 +146,4 @@ define(function (require) {
     });
 
     return MainController;
-
 });
