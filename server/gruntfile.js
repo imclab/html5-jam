@@ -31,7 +31,6 @@ module.exports = function(grunt) {
 
                 // extra options
                 options: {
-                    'builtin-classes': true,
                     'warnings': ['-no_doc', '-dup_member', '-link_ambiguous'],
                     'external': ['XMLHttpRequest']
                 }
@@ -48,5 +47,6 @@ module.exports = function(grunt) {
 
     //Default task(s).
     grunt.registerTask('default', ['jshint']);
+    grunt.registerTask('docs', ['jsduck']);  
 
 };

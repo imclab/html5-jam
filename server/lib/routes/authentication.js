@@ -10,6 +10,7 @@ module.exports.init = function (app) {
 
     /**
     *	Facebook Login
+    *    @param: {Object} [cfg] an object
     */
     app.get('/auth/facebook', passport.authenticate('facebook'));
 	

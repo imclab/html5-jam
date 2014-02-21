@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">&quot;use strict&quot;;
+
+var authorization = require(&#39;./middlewares/authorization&#39;);
+var users = require(&#39;../controllers/users&#39;);
+
+
+module.exports.init = function (app) {
+
+
+<span id='global-property-'>	/**
+</span>	*	Am I logged in ? Returns user information
+	*/
+	app.get(&#39;/me&#39;, authorization.requiresAuthentication, users.getLoggedInUser);
+	
+
+<span id='global-property-'>	/**
+</span>	*	Get a user profile
+	*/
+	app.get(&#39;/users/:userId&#39;, authorization.requiresAuthentication, users.getUserProfile);
+
+
+<span id='global-property-'>	/**
+</span>	*	Update user
+	*/
+	app.put(&#39;/users/:userId&#39;, authorization.requiresAuthentication, users.updateUser);
+
+
+<span id='global-property-'>	/**
+</span>	*	Delete account
+	*/
+	app.delete(&#39;/users/:userId&#39;, authorization.requiresAuthentication, users.deleteAccount);
+
+
+<span id='global-property-'>	/**
+</span>	*	Get a user&#39;s friends list
+	*/
+	app.get(&#39;/users/:userId/friends&#39;, authorization.requiresAuthentication, users.getFriendsList);
+
+
+<span id='global-property-'>	/**
+</span>	 *	Follow user
+	 */
+	 app.post(&#39;/users/:userId/follow&#39;, authorization.requiresAuthentication, users.followUser);
+
+
+<span id='global-property-'>	/**
+</span>	 *	Unfollow user
+	 */
+	 app.delete(&#39;/users/:userId/follow&#39;, authorization.requiresAuthentication, users.unfollowUser);
+
+
+};</pre>
+</body>
+</html>
