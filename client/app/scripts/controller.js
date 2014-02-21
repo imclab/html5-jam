@@ -21,8 +21,6 @@ define(function (require) {
             this.regions = options.regions || {};
             this._initializeAttributes();
 
-            Cook.flush();
-
             this.handleLogin();
         },
 
