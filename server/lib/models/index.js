@@ -9,4 +9,4 @@ module.exports.init = function(db) {
 	    module.exports[model] = db.import(__dirname + '/' + model);
 	});
 
-}
+};
