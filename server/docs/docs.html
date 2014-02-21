@@ -1,0 +1,59 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1" />
+
+    <title>HTML Jam Docs</title>
+
+  	<meta name="description" content="">
+
+
+</head>
+<body>
+
+ 	<!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <script src="./jquery.min.js"></script>
+    <script src="./docs.json"></script>
+	<script>
+		var bodyElement = $('body');
+
+		for (var i in docs.endpoints) {
+			var endpoint = docs.endpoints[i];
+			bodyElement.append('<h1>' + endpoint.name + '</h1><hr/>');
+
+			for (var j in endpoint.methods) {
+				var content = '';
+				var method = endpoint.methods[j];
+				content += '<h3 style="color: black;">' + method.MethodName + '&nbsp;&nbsp;&nbsp;<i style="font-weight: normal; float: right; color: black">' + (method.Synopsis != null ? method.Synopsis : '') + '</i></h3>';
+				content += '<b style="color: blue;">' + method.HTTPMethod + ' ' + method.URI + '</b>';
+				if (method.RequiresOAuth == 'Y') {
+					content += '&nbsp;&nbsp;&nbsp;<u>Requires Authorization header</u>';
+				}
+
+				if (method.parameters != null) {
+					content += '<ul>';
+					for (var k in method.parameters) {
+						var param = method.parameters[k];
+						content += '<li><b style="color: ' + (param.Required == 'Y' ? 'red' : 'green') + '">' + param.Name + '</b>&nbsp;&nbsp;&nbsp;(' + (param.Description == null ? ' ' : param.Description ) + ')&nbsp;&nbsp;&nbsp;<i>Default value : ' + (param.Default == null ? ' ' : param.Default) + '</i></li>';
+					}
+					content += '</ul>';
+				}
+
+				content += '<hr/>';
+				bodyElement.append(content);
+			}
+		}
+
+	</script>
+
+</body>
+</html>

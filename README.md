@@ -22,17 +22,6 @@ start server : html5-jam/server$ node server.js
 <br>
 launch unit tests : html5-jam/server$ npm test
 
-Server APIs Documentation
-======
-install redis-server
-<br>
-html5-jam/server/docs$ npm install
-<br>
-start docs server : html5-jam/server/docs$ npm start
-<br>
-visit http://localhost:5000
-
-
 Client
 ======
 $ npm install -g bower
