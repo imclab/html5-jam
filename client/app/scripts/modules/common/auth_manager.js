@@ -1,6 +1,7 @@
 /*global define*/
 define(function (require) {
 
+    var $ = require('jquery');
     var Const = require('modules/common/constants');
     var User = require('modules/common/models/user');
     var CookieManager = require('modules/common/cookie_manager');
@@ -17,6 +18,16 @@ define(function (require) {
             onServerResponse: function (key) {
                 console.log("onServerResponse : ", key);
                 this.setAuthenticationCookie(key);
+            },
+
+            configureAjaxRequest: function (key) {
+                $.ajaxSetup({
+                    headers: {
+                        'Authorization' : key
+                    }
+                });
+
+                new User().fetch({ url: '/coucou' });
             },
 
             isConnected: function () {

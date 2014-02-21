@@ -32,7 +32,7 @@ define(function (require) {
         },
 
         sync: function (method, collection, options) {
-            var jam_url = '/jams/all';
+            var jam_url = '/jams';
 
             _.extend(options, {url: jam_url});
 
