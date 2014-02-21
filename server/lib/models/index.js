@@ -1,9 +1,12 @@
 "use strict";
-var db = require('../initDB');
 
-// load models
-var models = ['User', 'Jam', 'Video', 'Like', 'Comment', 'Note', 'Friend'];
+module.exports.init = function(db) {
 
-models.forEach(function (model) {
-    module.exports[model] = db.import(__dirname + '/' + model);
-});
+	// load models
+	var models = ['User', 'Jam', 'Video', 'Like', 'Comment', 'Note', 'Friend'];
+
+	models.forEach(function (model) {
+	    module.exports[model] = db.import(__dirname + '/' + model);
+	});
+
+}

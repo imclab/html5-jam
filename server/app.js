@@ -1,9 +1,9 @@
 "use strict";
+
 var express = require('express');
 var colors = require('colors');
 var passport = require('passport');
 var config = require('./config');
-var security = require('./lib/security');
 var errors = require('./lib/errors');
 
 // enable CORS
@@ -15,7 +15,7 @@ var enableCORS = function(req, res, next) {
     next();
 };
 
-// configure server
+// configure express server
 var app = express();
 app.configure(function () {
     app.use(express.cookieParser());
@@ -28,19 +28,22 @@ app.configure(function () {
 	app.use(errors.dispatch);
 });
 
-// production variables
+// production configuration
 app.configure('production', function () {
 	config.db.enableLogging = false;
 });
 
+// setup database
+var db = require('./lib/db');
+
 // setup models
-app.set('models', require('./lib/models'));
+require('./lib/models').init(db);
 
 // setup security
-security.initialize(app, errors);
+require('./lib/security').init();
 
 // setup routes
-require('./lib/routes').init(app, config, security, errors);
+require('./lib/routes').init(app);
 
 // start server
 app.listen(config.server.port);

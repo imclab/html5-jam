@@ -379,7 +379,7 @@ var docs = {
         {
           "MethodName": "Give a note to a video",
           "HTTPMethod": "POST",
-          "URI": "/jams/:jamId/videos/:videoId/note",
+          "URI": "/jams/:jamId/videos/:videoId/notes",
           "RequiresOAuth": "Y",
           "parameters": [
             {

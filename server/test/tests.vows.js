@@ -184,7 +184,7 @@ suite.discuss('Unfollow a user...')
 */
 suite.discuss('Note video...')
     .setHeader('Authorization', encryptedToken)
-    .post('/jams/100/videos/100/note')
+    .post('/jams/100/videos/100/notes')
     .expect(400)
     .export(module);
     

@@ -1,6 +1,6 @@
 "use strict";
 
-module.exports.init = function(app, config, security, errors) {
+module.exports.init = function (app) {
 
 	// serve app
 	app.get('/', function (req, res, next) {
@@ -8,10 +8,10 @@ module.exports.init = function(app, config, security, errors) {
 	});
 
 	// init routes
-	var routes = ['authentication', 'jam', 'user', 'comment', 'like', 'video', 'friend', 'note'];
+	var routes = ['authentication', 'jams', 'users', 'comments', 'likes', 'videos'];
 
 	for (var i = 0; i < routes.length; i++) {
-		require('./' + routes[i] + '.js').init(app, config, security, errors);
+		require('./' + routes[i] + '.js').init(app);
 	}
 
 }

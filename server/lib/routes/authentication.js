@@ -1,24 +1,27 @@
 "use strict";
-module.exports.init = function (app, config, security, errors) {
+
+var passport = require('passport');
+var config = require('../../config');
+var Utils = require('../utils');
+
+
+module.exports.init = function (app) {
     
+
     /**
-    *	Login
+    *	Facebook Login
     */
-    app.get('/auth/facebook', security.authenticate());
+    app.get('/auth/facebook', passport.authenticate('facebook'));
 	
 
     /**
-    *	OAuth Callback
+    *	Facebook OAuth Callback
     */
-	app.get('/auth/facebook/callback', security.authenticationCallback(), security.authenticationSuccessful);
-
-
-	/**
-	*	Am I logged in ? Returns user information
-	*/
-	app.get('/me', security.authenticationRequired, function (req, res, next) {
-		req.user.facebook_token = null;
-	    res.send(req.user);
+	app.get('/auth/facebook/callback', passport.authenticate('facebook', { 
+		failureRedirect: config.client.loginFailedUrl + config.client.port 
+	}), function (req, res) {
+		res.redirect(config.client.loginSuccessUrl + config.client.port + '#?token=' + Utils.encrypt(req.user.facebook_token));
 	});
+
 
 }

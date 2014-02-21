@@ -18,23 +18,5 @@ module.exports = function(sequelize, DataTypes) {
 
     User.sync();
 
-    User.login = function (profile, accessToken, callback) {
-        // find or create AngelPal account
-        User.findOrCreate({ facebook_id: profile.id }, 
-            { 
-                name: profile.displayName, 
-                picture_url: 'facebook',
-                facebook_id: profile.id,
-                facebook_token: accessToken
-            })
-            .success(function (user, created) {
-                return callback(false, user);
-            })
-            .error(function (error) {
-                return callback(error, false);
-            });
-    };
-
-
     return User;
 };
