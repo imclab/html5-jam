@@ -20,8 +20,7 @@ module.exports.init = function (app) {
 	app.get('/auth/facebook/callback', passport.authenticate('facebook', { 
 		failureRedirect: config.client.loginFailedUrl + config.client.port 
 	}), function (req, res) {
-        res.cookie('jam_token', Utils.encrypt(req.user.facebook_token), { maxAge: 900000, httpOnly: false })
-		res.redirect(config.client.loginSuccessUrl + config.client.port);
+		res.redirect(config.client.loginSuccessUrl + config.client.port + '#?token=' + Utils.encrypt(req.user.facebook_token));
 	});
 
 
