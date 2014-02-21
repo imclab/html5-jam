@@ -135,6 +135,13 @@ var docs = {
           "HTTPMethod": "GET",
           "URI": "/auth/facebook",
           "RequiresOAuth": "N"
+        },
+        {
+          "MethodName": "Logout",
+          "Synopsis": "",
+          "HTTPMethod": "POST",
+          "URI": "/logout",
+          "RequiresOAuth": "N"
         }
       ]
     },

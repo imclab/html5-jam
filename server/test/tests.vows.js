@@ -32,11 +32,11 @@ suite.get('/bobby')
 suite.get('/me')
     .expect(401)
     .export(module);
-suite.setHeader('Authorization', utils.encrypt('654321'))
+suite.setHeader('Cookie', 'jam_token=' +  utils.encrypt('654321'))
     .get('/me')
     .expect(401)
     .export(module);
-suite.setHeader('Authorization', encryptedToken)
+suite.setHeader('Cookie', 'jam_token=' + encryptedToken)
     .get('/me')
     .expect(200)
     .expect('should respond with user\'s profile', function (err, res, body) {
@@ -50,12 +50,12 @@ suite.setHeader('Authorization', encryptedToken)
 /**
 *   Jams
 */
-suite.setHeader('Authorization', encryptedToken)
+suite.setHeader('Cookie', 'jam_token=' + encryptedToken)
     .post('/jams')
     .expect(400)
     .export(module);
 // suite.discuss('Creating jam...')
-//     .setHeader('Authorization', encryptedToken)
+//     .setHeader('Cookie', encryptedToken)
 //     .post('/jams', {data : { name: "john"}})
 //     .expect(200)
 //     .export(module);
@@ -64,12 +64,12 @@ suite.discuss('Updating jam...')
         outgoing.body = '{ name: "jam de la mort 2", description: "woohoo braaa" }';
         return outgoing;
     })
-    .setHeader('Authorization', encryptedToken)
+    .setHeader('Cookie', 'jam_token=' + encryptedToken)
     .put('/jams/100')
     .expect(200)
     .export(module);
 suite.discuss('Get jam details...')
-    .setHeader('Authorization', encryptedToken)
+    .setHeader('Cookie', 'jam_token=' + encryptedToken)
     .get('/jams/100')
     .expect(200)
     .expect('should respond with jam\'s details', function (err, res, body) {
@@ -80,7 +80,7 @@ suite.discuss('Get jam details...')
      })
     .export(module);
 suite.discuss('Get feeds...')
-    .setHeader('Authorization', encryptedToken)
+    .setHeader('Cookie', 'jam_token=' + encryptedToken)
     .get('/feeds')
     .expect(200)
     .expect('should respond with feed of jams', function (err, res, body) {
@@ -94,12 +94,12 @@ suite.discuss('Get feeds...')
 *   Videos
 */
 suite.discuss('Add empty video...')
-    .setHeader('Authorization', encryptedToken)
+    .setHeader('Cookie', 'jam_token=' + encryptedToken)
     .post('/jams/100/videos')
     .expect(400)
     .export(module);
 suite.discuss('Get video stream...')
-    .setHeader('Authorization', encryptedToken)
+    .setHeader('Cookie', 'jam_token=' + encryptedToken)
     .get('/jams/100/videos/100')
     .expect(200)
     .export(module);
@@ -109,7 +109,7 @@ suite.discuss('Get video stream...')
 *   Users
 */
 suite.discuss('Get a user\'s profile...')
-    .setHeader('Authorization', encryptedToken)
+    .setHeader('Cookie', 'jam_token=' + encryptedToken)
     .get('/users/100')
     .expect(200)
     .expect('should respond with the profile of a user', function (err, res, body) {
@@ -119,7 +119,7 @@ suite.discuss('Get a user\'s profile...')
      })
     .export(module);
 suite.discuss('Updating user...')
-    .setHeader('Authorization', encryptedToken)
+    .setHeader('Cookie', 'jam_token=' + encryptedToken)
     .put('/users/100')
     .expect(200)
     .export(module);
@@ -129,7 +129,7 @@ suite.discuss('Updating user...')
 *   Comments
 */
 suite.discuss('Get a jam\'s comments...')
-    .setHeader('Authorization', encryptedToken)
+    .setHeader('Cookie', 'jam_token=' + encryptedToken)
     .get('/jams/100/comments')
     .expect(200)
     .expect('should respond with the comments of a jam', function (err, res, body) {
@@ -138,7 +138,7 @@ suite.discuss('Get a jam\'s comments...')
      })
     .export(module);
 suite.discuss('Post empty comment...')
-    .setHeader('Authorization', encryptedToken)
+    .setHeader('Cookie', 'jam_token=' + encryptedToken)
     .post('/jams/100/comments')
     .expect(400)
     .export(module);
@@ -148,12 +148,12 @@ suite.discuss('Post empty comment...')
 *   Likes
 */
 suite.discuss('Like a jam...')
-    .setHeader('Authorization', encryptedToken)
+    .setHeader('Cookie', 'jam_token=' + encryptedToken)
     .post('/jams/100/likes')
     .expect(200)
     .export(module);
 suite.discuss('Dislike a jam...')
-    .setHeader('Authorization', encryptedToken)
+    .setHeader('Cookie', 'jam_token=' + encryptedToken)
     .del('/jams/100/likes')
     .expect(200)
     .export(module);
@@ -163,17 +163,17 @@ suite.discuss('Dislike a jam...')
 *   Friends
 */
 suite.discuss('Follow himself...')
-    .setHeader('Authorization', encryptedToken)
+    .setHeader('Cookie', 'jam_token=' + encryptedToken)
     .post('/users/100/follow')
     .expect(400)
     .export(module);
 suite.discuss('Follow a user...')
-    .setHeader('Authorization', encryptedToken)
+    .setHeader('Cookie', 'jam_token=' + encryptedToken)
     .post('/users/80/follow')
     .expect(200)
     .export(module);
 suite.discuss('Unfollow a user...')
-    .setHeader('Authorization', encryptedToken)
+    .setHeader('Cookie', 'jam_token=' + encryptedToken)
     .del('/users/80/follow')
     .expect(200)
     .export(module);
@@ -183,7 +183,7 @@ suite.discuss('Unfollow a user...')
 *   Notes
 */
 suite.discuss('Note video...')
-    .setHeader('Authorization', encryptedToken)
+    .setHeader('Cookie', 'jam_token=' + encryptedToken)
     .post('/jams/100/videos/100/notes')
     .expect(400)
     .export(module);

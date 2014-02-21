@@ -22,9 +22,8 @@ exports.requiresAuthentication = function(req, res, next) {
 	// });
 	// return;
 
-	var token = req.headers.authorization;
-	if (token != null) {
-		users.getUserByToken(Utils.decrypt(token), function (user, err) {
+	if (req.cookies != null && req.cookies.jam_token != null) {
+		users.getUserByToken(Utils.decrypt(req.cookies.jam_token), function (user, err) {
 			if (err || user == null) {
 				return next(new Errors.Unauthorized('User is not logged in'));
 			} else {

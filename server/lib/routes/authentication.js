@@ -20,8 +20,18 @@ module.exports.init = function (app) {
 	app.get('/auth/facebook/callback', passport.authenticate('facebook', { 
 		failureRedirect: config.client.loginFailedUrl + config.client.port 
 	}), function (req, res) {
-		res.redirect(config.client.loginSuccessUrl + config.client.port + '#?token=' + Utils.encrypt(req.user.facebook_token));
+        res.cookie('jam_token', Utils.encrypt(req.user.facebook_token), { maxAge: 900000, httpOnly: false })
+		res.redirect(config.client.loginSuccessUrl + config.client.port);
 	});
+
+
+    /**
+    *   Logout
+    */
+    app.post('/logout', function (req, res) {
+        res.clearCookie('jam_token');
+        res.send(200);
+    });
 
 
 }

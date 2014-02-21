@@ -11,14 +11,14 @@ var enableCORS = function(req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', config.client.baseUrl + config.server.port);
     res.setHeader('Access-Control-Allow-Origin', config.client.baseUrl + config.client.port);
     res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With, Set-Cookie');
     next();
 };
 
 // configure express server
 var app = express();
 app.configure(function () {
-    app.use(express.cookieParser());
+	app.use(express.cookieParser());
     app.use(express.json());
 	app.use(express.urlencoded());
     app.use(express.limit('10mb'));
