@@ -1,29 +1,44 @@
-/*global define*/
-define(function (require) {
+/*global define:false escape:false */
+define(function () {
 
     var CookieManager = function () {
 
         return {
-            set: function (sName, sValue, days) {
-                var today = new Date();
-                var expires = new Date();
 
-                expires.setTime(today.getTime() + (days * 24 * 60 * 60 * 1000));
-                document.cookie = sName + "=" + decodeURIComponent(sValue) + "; expires=" + expires.toGMTString();
+            set : function (name, value, expires, path, domain, secure) {
+                expires = (expires !== undefined) ? expires : null;
+                path = (path !== undefined) ? path : "/";
+                domain = (domain !== undefined) ? domain : null;
+                secure = (secure !== undefined) ? secure : false;
+
+                document.cookie = name.trim() + "=" + encodeURIComponent(value) + ((expires === null) ? "" : ("; expires=" + expires.toGMTString())) + ((path === null) ? "" : ("; path=" + path)) + ((domain === null) ? "" : ("; domain=" + domain)) + ((secure === true) ? "; secure" : "");
             },
 
-            remove: function (sName) {
-                this.set(sName, "", -1);
-            },
+            get : function(name) {
+                var arg = name.trim() + "=",
+                alen = arg.length,
+                clen = document.cookie.length,
+                i = 0,
+                j = 0;
 
-            get: function (sName) {
-                var regularExp = new RegExp("(?:; )?" + sName + "=([^;]*);?");
-
-                if (regularExp.test(document.cookie)) {
-                    return decodeURIComponent(RegExp['$1']);
+                while (i < clen) {
+                    j = i + alen;
+                    if (document.cookie.substring(i, j) == arg) {
+                        return this.getCookieVal(j);
+                    }
+                    i = document.cookie.indexOf(" ", i) + 1;
+                    if (i === 0) {
+                        break;
+                    }
                 }
 
                 return null;
+            },
+
+            remove : function (name, path) {
+                path = path || "/";
+                // console.log("[Cookie Manager] delete ", name, path);
+                document.cookie = name.trim() + "=" + "; expires=Thu, 01-Jan-70 00:00:01 GMT; path=" + path;
             },
 
             flush: function () {
@@ -32,16 +47,22 @@ define(function (require) {
                     var cookie = cookies[i];
 
                     var eqIndex = cookie.indexOf("=");
-                    var sname = eqIndex > -1 ? cookie.substr(0, eqIndex) : cookie;
-                    sname = sname.trim();
-                    if(sname !== "language_libon" && sname !== "LOGINCOUNTRY"){
-                        this.remove(sname);
-                    }
+                    var name = eqIndex > -1 ? cookie.substr(0, eqIndex) : cookie;
+                    name = name.trim();
+                    CookieManager.remove(name);
                 }
+            },
+
+            getCookieVal : function(offset) {
+                var endstr = document.cookie.indexOf(";", offset);
+                if(endstr == -1) {
+                    endstr = document.cookie.length;
+                }
+
+                return unescape(document.cookie.substring(offset, endstr));
             }
         };
-
-    };
+    }();
 
     return CookieManager;
 

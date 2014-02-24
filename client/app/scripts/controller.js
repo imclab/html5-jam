@@ -13,7 +13,7 @@ define(function (require) {
     var User = require('modules/common/models/user');
     var AuthManager = require('modules/common/auth_manager');
 
-    var Cook = require('modules/common/cookie_manager')();
+    var Cook = require('modules/common/cookie_manager');
 
     var MainController = Marionette.Controller.extend({
 
@@ -21,19 +21,13 @@ define(function (require) {
             this.regions = options.regions || {};
             this._initializeAttributes();
 
-            this.handleLogin();
-        },
+            /* TODO : remove that */
+            this.attributes.authmanager.setAuthenticationCookie('millesabords');
 
-        _initializeAttributes: function () {
-            this.controllers = {};
-            this.attributes = {};
-            this.attributes.models = {};
-            this.attributes.authmanager = new AuthManager();
-        },
+            var test = new User({ username: 'plouf' });
+            test.fetch({ url : '/api' });
+            /* /TODO */
 
-        getIdentityToken: function (identityToken) {
-            var token = identityToken.replace('?token=', '');
-            this.attributes.authmanager.onServerResponse(token);
         },
 
         handleLogin: function () {
@@ -42,11 +36,26 @@ define(function (require) {
             if (!client) {
                 this._createLoginController();
             } else {
-                this.attributes.models.user = new User({ usrId : client.usr_id });
+                this.attributes.models.user = new User({ username: "Guigui" });
                 //this.attributes.models.user.fetch();
                 this._createTopbarController();
                 this._createProductionController();
             }
+
+            $.ajax({
+                url: '/api/me',
+                method: 'GET',
+                success: function (xhr) {
+                    console.log("Response : ", xhr);
+                },
+                error: function () {
+                    console.log("Not Connected");
+                }
+            });
+        },
+
+        handleToken: function (tokenId) {
+            this.attributes.authmanager.setAuthenticationCookie(tokenId);
         },
 
         showLogin: function () {
@@ -58,11 +67,17 @@ define(function (require) {
         },
 
         showJam: function (jamId) {
-            // Get the project
-            // Launch the productionController
+
+            if (this.attributes.authmanager.isConnected()) {
+                this.attributes.models.user = this.attributes.models.user || this.attributes.authmanager.getUser();
+            } else {
+
+            }
+
             this._createProductionController({
                 jam_id: jamId
             });
+
         },
 
         showProfil: function (profilId) {
@@ -119,6 +134,7 @@ define(function (require) {
                 options = options || {};
 
                 options.region = this.regions.corpus;
+                options.user = this.attributes.models.user;
 
                 this.controllers.friendlist = new FriendlistController(options);
                 this.controllers.friendlist.show();
@@ -139,6 +155,13 @@ define(function (require) {
             } else {
                 this.controllers.profil.show();
             }
+        },
+
+        _initializeAttributes: function () {
+            this.controllers = {};
+            this.attributes = {};
+            this.attributes.models = {};
+            this.attributes.authmanager = new AuthManager();
         }
 
     });
