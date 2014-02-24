@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">&quot;use strict&quot;;
+
+var passport = require(&#39;passport&#39;);
+var config = require(&#39;../../config&#39;);
+var Utils = require(&#39;../utils&#39;);
+
+
+module.exports.init = function (app) {
+    
+
+<span id='global-method-'>    /**
+</span>    *	Facebook Login
+    *    @param: {Object} [cfg] an object
+    */
+    app.get(&#39;/auth/facebook&#39;, passport.authenticate(&#39;facebook&#39;));
+	
+
+<span id='global-property-'>    /**
+</span>    *	Facebook OAuth Callback
+    */
+	app.get(&#39;/auth/facebook/callback&#39;, passport.authenticate(&#39;facebook&#39;, { 
+		failureRedirect: config.client.loginFailedUrl + config.client.port 
+	}), function (req, res) {
+		res.redirect(config.client.loginSuccessUrl + config.client.port + &#39;#?token=&#39; + Utils.encrypt(req.user.facebook_token));
+	});
+
+
+<span id='global-property-'>    /**
+</span>    *   Logout
+    */
+    app.post(&#39;/logout&#39;, function (req, res) {
+        res.clearCookie(&#39;jam_token&#39;);
+        res.send(200);
+    });
+
+
+}
+</pre>
+</body>
+</html>
