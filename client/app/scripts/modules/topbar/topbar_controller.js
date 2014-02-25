@@ -8,17 +8,12 @@ define(function (require) {
     var TopBar = require('modules/topbar/views/topbar_view');
     var User = require('modules/common/models/user');
 
+    var AppData = require('modules/common/app_data');
 
     var TopbarController = Marionette.Controller.extend({
         initialize: function (options) {
             this._initializeAttributes();
             this._bindEvents();
-
-            if (options.user) {
-                this.attributes.models.user = options.user;
-            } else {
-                this.attributes.models.user = new User({username: "Nobody"});
-            }
         },
 
         _initializeAttributes: function () {
@@ -30,7 +25,6 @@ define(function (require) {
             this.listenTo(vent, 'topbar:friends', this.toFriendList);
             this.listenTo(vent, 'topbar:profil', this.toProfil);
             this.listenTo(vent, 'topbar:newproject', this.toNewProject);
-
         },
 
         show: function () {
@@ -38,7 +32,7 @@ define(function (require) {
         },
 
         getView: function () {
-            return new TopBar({model: this.attributes.models.user});
+            return new TopBar();
         },
 
         toFriendList: function () {
@@ -46,7 +40,7 @@ define(function (require) {
         },
 
         toProfil: function () {
-            this.navigate('profil/' + this.attributes.models.user.cid);
+            this.navigate('profil/' + AppData.user.cid);
         },
 
         toNewProject: function () {

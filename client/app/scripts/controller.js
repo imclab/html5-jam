@@ -4,6 +4,7 @@ define(function (require) {
 
     var Marionette = require('marionette');
     var Backbone = require('backbone');
+    var vent = require('modules/common/vent');
 
     var ProductionController = require('modules/production/production_controller');
     var TopBarController = require('modules/topbar/topbar_controller');
@@ -16,6 +17,8 @@ define(function (require) {
 
     var Cook = require('modules/common/cookie_manager');
 
+    var AppData = require('modules/common/app_data');
+
     var MainController = Marionette.Controller.extend({
 
         initialize: function (options) {
@@ -23,11 +26,17 @@ define(function (require) {
             this._initializeAttributes();
 
             Cook.flush();
+
+            AppData.user = new User({ username: 'wait' });
+
+            this.listenTo(vent, 'authentication:success', function (mod) {
+                AppData.user.set('username', mod);
+            });
         },
 
         handleConnection: function () {
-            if (this.attributes.authmanager.isConnected() || this.attributes.models.user) {
-                this.attributes.models.user = this.attributes.models.user || this.attributes.authmanager.getUser();
+            if (this.attributes.authmanager.isConnected()) {
+
             } else {
                 Backbone.history.navigate('login/', true);
             }
@@ -87,7 +96,7 @@ define(function (require) {
                 options = options || {};
 
                 options.region = this.regions.corpus;
-                options.user = this.attributes.models.user;
+                options.user = AppData.user;
 
                 this.controllers.production = new ProductionController(options);
                 this.controllers.production.show();
@@ -101,7 +110,7 @@ define(function (require) {
                 options = options || {};
 
                 // options.region = this.regions.topbar;
-                options.user = this.attributes.models.user;
+                options.user = AppData.user;
 
                 this.controllers.topbar = new TopBarController(options);
                 this.controllers.topbar.show();
@@ -115,7 +124,7 @@ define(function (require) {
                 options = options || {};
 
                 options.region = this.regions.corpus;
-                options.user = this.attributes.models.user;
+                options.user = AppData.user;
 
                 this.controllers.friendlist = new FriendlistController(options);
                 this.controllers.friendlist.show();
@@ -129,7 +138,7 @@ define(function (require) {
                 options = options || {};
 
                 options.region = this.regions.corpus;
-                options.user = this.attributes.models.user;
+                options.user = AppData.user;
 
                 this.controllers.profil = new ProfilController(options);
                 this.controllers.profil.show();

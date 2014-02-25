@@ -5,7 +5,7 @@ define(function (require) {
 	var User = Backbone.Model.extend({
 
 		defaults: {
-			username: "anonymous"
+			username: "Keyser Soze"
 		},
 
         parse: function (response) {

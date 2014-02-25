@@ -5,9 +5,13 @@ define(function (require) {
     var Marionette = require('marionette');
     var vent = require('modules/common/vent');
 
+    var AppData = require('modules/common/app_data');
+
     var TopBar = Marionette.ItemView.extend({
 
         template: 'topbar/topbar',
+
+        model: AppData.user,
 
         el: '#topbar',
 
@@ -21,6 +25,9 @@ define(function (require) {
             if (this.$el.hasClass('hidden')) {
                 this.$el.removeClass('hidden');
             }
+
+this.model = AppData.user;
+
 
             this.listenTo(this.model, 'change:username', this.render);
         },

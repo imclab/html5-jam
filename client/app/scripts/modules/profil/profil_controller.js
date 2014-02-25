@@ -10,18 +10,14 @@ define(function (require) {
     var Jam = require('modules/common/models/jam');
     var JamView = require('modules/common/views/jam_view');
 
+    var AppData = require('modules/common/app_data');
+
     var ProfilController = BaseController.extend({
         initialize: function (options) {
             BaseController.prototype.initialize.call(this, options);
 
             this._initializeAttributes();
             this._bindEvents();
-
-            if (options.user) {
-                this.attributes.models.user = options.user;
-            } else {
-                this.attributes.models.user = new User({username: 'Coucou'});
-            }
         },
 
         show: function () {
@@ -36,7 +32,7 @@ define(function (require) {
             var profilLayout = new ProfilLayout();
 
             this.listenTo(profilLayout, 'show', function () {
-                this.views.content = new ProfilView({model: this.attributes.models.user});
+                this.views.content = new ProfilView({model: AppData.user});
                 this.views.jamlist = new JamView();
 
                 profilLayout.content.show(this.views.content);

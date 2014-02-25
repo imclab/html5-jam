@@ -19,6 +19,8 @@ define(function (require) {
     var User = require('modules/common/models/user');
     var Jam = require('modules/common/models/jam');
 
+    var AppData = require('modules/common/app_data');
+
     var RecorderController = BaseController.extend({
 
         initialize: function (options) {
@@ -34,10 +36,6 @@ define(function (require) {
                 this.fetch(options.jam_id);
 
                 console.log("[JAM:" + options.jam_id + "] Fetching from server : jam.cid=" + this.attributes.models.jam.cid);
-            }
-
-            if (options.user) {
-                this.attributes.models.user = options.user;
             }
         },
 
@@ -261,7 +259,7 @@ define(function (require) {
         addComments: function (str) {
             // On ajoute le nouveau commentaire aux anciens
             var newComment = new Comment.CommentModel({
-                username: this.attributes.models.user.get('username'),
+                username: AppData.user.get('username'),
                 comment: str
             });
             this.views.comments.collection.add(newComment);
