@@ -3,6 +3,7 @@ define(function (require) {
     "use strict";
 
     var Marionette = require('marionette');
+    var Backbone = require('backbone');
 
     var ProductionController = require('modules/production/production_controller');
     var TopBarController = require('modules/topbar/topbar_controller');
@@ -21,41 +22,20 @@ define(function (require) {
             this.regions = options.regions || {};
             this._initializeAttributes();
 
-            /* TODO : remove that */
-            this.attributes.authmanager.setAuthenticationCookie('millesabords');
-
-            var test = new User({ username: 'plouf' });
-            test.fetch({ url : '/api' });
-            /* /TODO */
-
+            Cook.flush();
         },
 
-        handleLogin: function () {
-            var client = this.attributes.authmanager.handleConnection();
-
-            if (!client) {
-                this._createLoginController();
+        handleConnection: function () {
+            if (this.attributes.authmanager.isConnected() || this.attributes.models.user) {
+                this.attributes.models.user = this.attributes.models.user || this.attributes.authmanager.getUser();
             } else {
-                this.attributes.models.user = new User({ username: "Guigui" });
-                //this.attributes.models.user.fetch();
-                this._createTopbarController();
-                this._createProductionController();
+                Backbone.history.navigate('login/', true);
             }
-
-            $.ajax({
-                url: '/api/me',
-                method: 'GET',
-                success: function (xhr) {
-                    console.log("Response : ", xhr);
-                },
-                error: function () {
-                    console.log("Not Connected");
-                }
-            });
         },
 
         handleToken: function (tokenId) {
-            this.attributes.authmanager.setAuthenticationCookie(tokenId);
+            this.attributes.authmanager.setAuthenticationCookie(tokenId.replace('?token=', ''));
+            Backbone.history.navigate('/', true);
         },
 
         showLogin: function () {
@@ -63,17 +43,13 @@ define(function (require) {
         },
 
         showIndex: function () {
-            //this._createProductionController();
+            this.handleConnection();
+            this._createTopbarController();
+            this._createProductionController();
         },
 
         showJam: function (jamId) {
-
-            if (this.attributes.authmanager.isConnected()) {
-                this.attributes.models.user = this.attributes.models.user || this.attributes.authmanager.getUser();
-            } else {
-
-            }
-
+            this.handleConnection();
             this._createProductionController({
                 jam_id: jamId
             });
@@ -81,12 +57,17 @@ define(function (require) {
         },
 
         showProfil: function (profilId) {
+
+            this.whoAmI();
+
+            this.handleConnection();
             this._createProfilController({
                 profil_id: profilId
             });
         },
 
         showFriends: function () {
+            this.handleConnection();
             this._createFriendlistController();
         },
 

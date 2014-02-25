@@ -1,6 +1,6 @@
 /*global define*/
 define(function () {
     return {
-        COOKIE_AUTH: '__auth'
+        COOKIE_AUTH: 'jam_token'
     };
 });

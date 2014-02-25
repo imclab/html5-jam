@@ -21,6 +21,8 @@ define(function (require) {
             if (this.$el.hasClass('hidden')) {
                 this.$el.removeClass('hidden');
             }
+
+            this.listenTo(this.model, 'change:username', this.render);
         },
 
         toFriendList: function () {

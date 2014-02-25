@@ -39,7 +39,9 @@ define(function (require) {
             },
 
             getUser: function () {
-                return new User({ username: 'JesuisunHiboux' });
+                var usr = new User();
+                usr.fetch();
+                return usr;
             }
         };
     };
