@@ -25,6 +25,8 @@ define(function (require) {
                     },
                     error: function (xhr) {
                         console.log("Authentication FAILED : ", xhr);
+                        CookieManager.remove(Const.COOKIE_AUTH);
+                        vent.trigger('authentication:fail');
                     }
                 });
             },

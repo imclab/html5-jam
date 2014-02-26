@@ -41,6 +41,10 @@ define(function (require) {
                     }
                 });
             });
+
+            this.listenTo(vent, 'authentication:fail', function () {
+                Backbone.history.navigate('login/', true);
+            });
         },
 
         handleConnection: function () {
