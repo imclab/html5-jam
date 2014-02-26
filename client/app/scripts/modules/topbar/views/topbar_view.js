@@ -5,6 +5,8 @@ define(function (require) {
     var Marionette = require('marionette');
     var vent = require('modules/common/vent');
 
+    var AppData = require('modules/common/app_data');
+
     var TopBar = Marionette.ItemView.extend({
         
         el: '#topbar',
@@ -28,12 +30,10 @@ define(function (require) {
                 this.$el.removeClass('hidden');
             }
 
-            this.listenToOnce(vent, 'appdata:user:fetched', this.actualize);
-        },
-
-        actualize: function () {
-            this.render();
-            // console.log("Render again : ", this.model);
+            this.listenTo(vent, 'user:fetching:end', function () {
+                this.model = AppData.user;
+                this.render();
+            });
         },
 
         toFriendList: function () {

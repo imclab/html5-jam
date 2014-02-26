@@ -4,7 +4,6 @@ define(function (require) {
     var $ = require('jquery');
     var vent = require('modules/common/vent');
     var Const = require('modules/common/constants');
-    var User = require('modules/common/models/user');
     var CookieManager = require('modules/common/cookie_manager');
 
     var AuthManager = function () {
@@ -15,29 +14,19 @@ define(function (require) {
                 return this.isConnected();
             },
 
-            isConnected: function () {
-                var auth_cookie_val = this.checkAuthenticationCookie();
-
-                if (!auth_cookie_val) {
-                    // No auth cookie found
-                    return;
-                }
-
+            authenticationRequest: function () {
                 // Check if the user exist
                 $.ajax({
                     url: '/api/me',
                     method: 'GET',
                     success: function (response) {
-                        // Return UserID by the trigger
-                        console.log("Authentification SUCCED : ", response);
+                        console.log("Authentification SUCCEED : ", response);
                         vent.trigger('authentication:success', response.id);
                     },
                     error: function (xhr) {
-                        console.log("Authentification FAILED : ", xhr);
+                        console.log("Authentication FAILED : ", xhr);
                     }
                 });
-
-                return auth_cookie_val;
             },
 
             checkAuthenticationCookie: function () {

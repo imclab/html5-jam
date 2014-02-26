@@ -9,11 +9,25 @@ define(function (require) {
         defaults: {
             createdAt: '',
             description: '',
-            id: 0,
             name: '',
             privacy: false,
             updatedAt: '',
             userId: 0
+        },
+
+        sync: function (method, model, options) {
+
+            console.log('Method : ', method);
+
+            if (method === 'create') {
+                // Create a jam
+                options.url = '/api/jams';
+            } else if (method === 'update') {
+                // Update a jam
+                options.url = '/api/jams/' + model.id;
+            }
+
+            return Backbone.sync(method, model, options);
         }
 
     });

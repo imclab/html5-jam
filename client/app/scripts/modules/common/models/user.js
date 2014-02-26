@@ -1,23 +1,21 @@
 define(function (require) {
 
-	var Backbone = require('backbone');
+    var Backbone = require('backbone');
 
-	var User = Backbone.Model.extend({
+    var User = Backbone.Model.extend({
 
-		defaults: {
+        defaults: {
             createdAt: '',
             facebook_id: '',
-            id: 0,
             jams: [],
             name: '',
             picture_url: '',
             vignette_one: null,
             vignette_three: null,
             vignette_two: null
-		}
+	    }
 
-	});
+    });
 
-	return User;
-
+    return User;
 });

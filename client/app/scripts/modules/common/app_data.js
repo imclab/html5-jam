@@ -2,8 +2,7 @@
 define(function () {
 
     var App = {
-        user: undefined,
-        jams: []
+        user: undefined
     };
 
     return App;

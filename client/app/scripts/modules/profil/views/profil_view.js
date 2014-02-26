@@ -5,6 +5,8 @@ define(function (require) {
     var Marionette = require('marionette');
     var vent = require('modules/common/vent');
 
+    var AppData = require('modules/common/app_data');
+
     var ProfilView = Marionette.ItemView.extend({
 
         getTemplate: function () {
@@ -16,13 +18,11 @@ define(function (require) {
         },
 
         initialize: function () {
-            this.listenToOnce(vent, 'appdata:user:fetched', this.actualize);
-        },
-
-        actualize: function () {
-            this.render();
+            this.listenTo(vent, 'user:fetching:end', function () {
+                this.model = AppData.user;
+                this.render();
+            });
         }
-
     });
 
     return ProfilView;

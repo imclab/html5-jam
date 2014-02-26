@@ -263,8 +263,20 @@ define(function (require) {
                 comment: str
             });
             this.views.comments.collection.add(newComment);
-        }
+        },
 
+        buff: function () {
+            var doudou = new Jam({
+                name: 'Abraham',
+                description: 'Lincoln',
+                userId: 100,
+                id: 101
+            });
+
+            console.log('Mon truc : ', doudou);
+
+            doudou.save();
+        }
     });
 
     return RecorderController;

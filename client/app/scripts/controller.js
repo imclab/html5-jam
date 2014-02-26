@@ -27,32 +27,49 @@ define(function (require) {
 
             Cook.flush();
 
-            this.listenTo(vent, 'authentication:success', function (_id) {
+            this.listenToOnce(vent, 'authentication:success', function (_id) {
                 // Fetch the User by UserID
+                AppData.user = new User();
                 AppData.user.fetch({
-                    url: 'api/users/100', // +_id,
+                    url: 'api/users/' + _id,
                     success: function () {
-                        vent.trigger('appdata:user:fetched');
+                        vent.trigger('user:fetching:end');
+                    },
+                    error: function () {
+                        // L'utilisateur n'existe pas dans la BDD
+                        // Besoin de creer un profil
                     }
                 });
             });
         },
 
         handleConnection: function () {
-
             if (!AppData.user) {
-                if (this.attributes.authmanager.isConnected()) {
-                    // Si l'utilisateur est connecte, on instancie AppData.user
-                    AppData.user = new User();
+
+                if (this.attributes.authmanager.checkAuthenticationCookie()) {
+                    this.attributes.authmanager.authenticationRequest();
                 } else {
+                    // Pas de cookie found
                     Backbone.history.navigate('login/', true);
                 }
+
             }
         },
 
         handleToken: function (tokenId) {
             this.attributes.authmanager.setAuthenticationCookie(tokenId.replace('?token=', ''));
-            Backbone.history.navigate('profil/', true);
+
+            this.listenToOnce(vent, 'user:fetching:end', function () {
+                // AppData.user is created and fetched
+                Backbone.history.navigate('profil/', true);
+            });
+
+            this.attributes.authmanager.authenticationRequest(function (response) {
+                console.log("Authentification SUCCEED : ", response);
+                vent.trigger('authentication:success', response.id);
+            }, function (xhr) {
+                console.log("Authentication FAILED : ", xhr);
+            });
         },
 
         showLogin: function () {
