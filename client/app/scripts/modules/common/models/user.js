@@ -5,20 +5,16 @@ define(function (require) {
 	var User = Backbone.Model.extend({
 
 		defaults: {
-			username: "Keyser Soze"
-		},
-
-        parse: function (response) {
-            return {
-                username: response.name
-            };
-        },
-
-        sync: function (method, model, options) {
-            _.extend(options, {url: '/api/me'});
-
-            return Backbone.sync.apply(this, arguments);
-        }
+            createdAt: '',
+            facebook_id: '',
+            id: 0,
+            jams: [],
+            name: '',
+            picture_url: '',
+            vignette_one: null,
+            vignette_three: null,
+            vignette_two: null
+		}
 
 	});
 

@@ -28,8 +28,9 @@ define(function (require) {
                     url: '/api/me',
                     method: 'GET',
                     success: function (response) {
+                        // Return UserID by the trigger
                         console.log("Authentification SUCCED : ", response);
-                        vent.trigger('authentication:success', response.name);
+                        vent.trigger('authentication:success', response.id);
                     },
                     error: function (xhr) {
                         console.log("Authentification FAILED : ", xhr);

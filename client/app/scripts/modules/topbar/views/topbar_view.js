@@ -5,14 +5,8 @@ define(function (require) {
     var Marionette = require('marionette');
     var vent = require('modules/common/vent');
 
-    var AppData = require('modules/common/app_data');
-
     var TopBar = Marionette.ItemView.extend({
-
-        template: 'topbar/topbar',
-
-        model: AppData.user,
-
+        
         el: '#topbar',
 
         events: {
@@ -21,15 +15,25 @@ define(function (require) {
             'click .profilBtn' : 'toProfil'
         },
 
+        getTemplate: function () {
+            if (this.model) {
+                return 'topbar/topbar';
+            } else {
+                return 'topbar/topbar_empty';
+            }
+        },
+
         initialize: function () {
             if (this.$el.hasClass('hidden')) {
                 this.$el.removeClass('hidden');
             }
 
-this.model = AppData.user;
+            this.listenToOnce(vent, 'appdata:user:fetched', this.actualize);
+        },
 
-
-            this.listenTo(this.model, 'change:username', this.render);
+        actualize: function () {
+            this.render();
+            // console.log("Render again : ", this.model);
         },
 
         toFriendList: function () {

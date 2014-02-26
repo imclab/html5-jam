@@ -37,7 +37,6 @@ define(function (require) {
     App.addInitializer(function () {
         window.JST = window.JST || {};
         var JST = window.JST;
-        console.log('[JST] init');
 
         Marionette.Renderer.render = function (template, data) {
             template = "templates/" + template + ".html";

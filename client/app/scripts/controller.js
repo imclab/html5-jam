@@ -27,24 +27,32 @@ define(function (require) {
 
             Cook.flush();
 
-            AppData.user = new User({ username: 'wait' });
-
-            this.listenTo(vent, 'authentication:success', function (mod) {
-                AppData.user.set('username', mod);
+            this.listenTo(vent, 'authentication:success', function (_id) {
+                // Fetch the User by UserID
+                AppData.user.fetch({
+                    url: 'api/users/100', // +_id,
+                    success: function () {
+                        vent.trigger('appdata:user:fetched');
+                    }
+                });
             });
         },
 
         handleConnection: function () {
-            if (this.attributes.authmanager.isConnected()) {
 
-            } else {
-                Backbone.history.navigate('login/', true);
+            if (!AppData.user) {
+                if (this.attributes.authmanager.isConnected()) {
+                    // Si l'utilisateur est connecte, on instancie AppData.user
+                    AppData.user = new User();
+                } else {
+                    Backbone.history.navigate('login/', true);
+                }
             }
         },
 
         handleToken: function (tokenId) {
             this.attributes.authmanager.setAuthenticationCookie(tokenId.replace('?token=', ''));
-            Backbone.history.navigate('/', true);
+            Backbone.history.navigate('profil/', true);
         },
 
         showLogin: function () {
@@ -54,11 +62,12 @@ define(function (require) {
         showIndex: function () {
             this.handleConnection();
             this._createTopbarController();
-            this._createProductionController();
+            this._createProfilController();
         },
 
         showJam: function (jamId) {
             this.handleConnection();
+            this._createTopbarController();
             this._createProductionController({
                 jam_id: jamId
             });
@@ -66,10 +75,8 @@ define(function (require) {
         },
 
         showProfil: function (profilId) {
-
-            this.whoAmI();
-
             this.handleConnection();
+            this._createTopbarController();
             this._createProfilController({
                 profil_id: profilId
             });
@@ -77,6 +84,7 @@ define(function (require) {
 
         showFriends: function () {
             this.handleConnection();
+            this._createTopbarController();
             this._createFriendlistController();
         },
 
@@ -113,8 +121,6 @@ define(function (require) {
                 options.user = AppData.user;
 
                 this.controllers.topbar = new TopBarController(options);
-                this.controllers.topbar.show();
-            } else {
                 this.controllers.topbar.show();
             }
         },

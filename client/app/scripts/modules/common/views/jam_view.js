@@ -4,7 +4,7 @@ define(function (require) {
 
     var Marionette = require('marionette');
 
-    var Jam = require('modules/common/models/jam');
+    var JamCollection = require('modules/common/collections/jams');
 
     var JamView = Marionette.ItemView.extend({
         className: 'jam-element',
@@ -17,7 +17,7 @@ define(function (require) {
         itemView: JamView,
 
         initialize: function () {
-            this.collection = new Jam.JamCollection();
+            this.collection = new JamCollection();
         }
 
     });

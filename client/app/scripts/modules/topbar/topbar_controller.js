@@ -32,7 +32,7 @@ define(function (require) {
         },
 
         getView: function () {
-            return new TopBar();
+            return new TopBar({ model : AppData.user });
         },
 
         toFriendList: function () {

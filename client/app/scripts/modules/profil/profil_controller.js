@@ -3,11 +3,12 @@ define(function (require) {
     'use strict';
 
     var BaseController = require('modules/common/controllers/base_controller');
+    var vent = require('modules/common/vent');
 
     var ProfilLayout = require('modules/profil/views/profil_layout');
     var ProfilView = require('modules/profil/views/profil_view');
     var User = require('modules/common/models/user');
-    var Jam = require('modules/common/models/jam');
+    var JamModel = require('modules/common/models/jam');
     var JamView = require('modules/common/views/jam_view');
 
     var AppData = require('modules/common/app_data');
@@ -18,14 +19,21 @@ define(function (require) {
 
             this._initializeAttributes();
             this._bindEvents();
+
+            this.listenToOnce(vent, 'appdata:user:fetched', this.getAllJams);
+        },
+
+        getAllJams: function () {
+            this.views.jamlist.collection.add(AppData.user.get('jams'));
+            console.log(AppData.user.get('jams'));
         },
 
         show: function () {
             BaseController.prototype.show.call(this);
 
-            this.views.jamlist.collection.add(new Jam.JamModel({name: 'ba'}));
-            this.views.jamlist.collection.add(new Jam.JamModel({name: 'dfgfdgfgd'}));
-            this.views.jamlist.collection.add(new Jam.JamModel({name: 'bsad'}));
+            if (AppData.user) {
+                this.views.jamlist.collection.add(AppData.user.get('jams'));
+            }
         },
 
         getLayout: function () {
