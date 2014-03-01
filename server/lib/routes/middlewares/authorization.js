@@ -12,14 +12,14 @@ var users = require('../../controllers/users');
 exports.requiresAuthentication = function(req, res, next) {
 
     // testing purpose
-	// User.find({where: {id: 100}}).success(function (user) {
-	// 		if (user != null) {
-	// 			req.user = user;
-	// 			return next();
-	// 		} else {
-	// 			return next(new Errors.Unauthorized('User is not logged in'));
-	// 		}
-	// });
+ //    users.getUserById(100, function (user, err) {
+ //    	if (user != null) {
+	// 		req.user = user;
+	// 		return next();
+	// 	} else {
+	// 		return next(new Errors.Unauthorized('User is not logged in'));
+	// 	}
+ //    });
 	// return;
 
 	if (req.cookies != null && req.cookies.jam_token != null) {
