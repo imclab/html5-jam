@@ -9,6 +9,8 @@ define(function (require) {
         defaults: {
             cover: '../images/offlinecontent/thumb_example.png',
             userId: 101,
+            video_blob: '',
+            audio_blob: '',
             _cid: ''
         },
 
