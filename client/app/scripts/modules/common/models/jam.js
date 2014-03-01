@@ -16,7 +16,6 @@ define(function (require) {
         },
 
         sync: function (method, model, options) {
-
             console.log('Method : ', method);
 
             if (method === 'create') {
@@ -24,6 +23,9 @@ define(function (require) {
                 options.url = '/api/jams';
             } else if (method === 'update') {
                 // Update a jam
+                options.url = '/api/jams/' + model.id;
+            } else if (method === 'delete') {
+                // Remove a jam
                 options.url = '/api/jams/' + model.id;
             }
 

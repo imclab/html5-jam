@@ -14,7 +14,8 @@ define(function (require) {
             sidebar: '.sidebar',
             recorder: '.recorder',
             comments: '.comments',
-            selected_list: '.selected_list'
+            selected_list: '.selected_list',
+            videos_list: '.videos_list'
         }
 
     });

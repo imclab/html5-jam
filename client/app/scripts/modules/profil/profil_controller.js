@@ -19,6 +19,10 @@ define(function (require) {
 
             this._initializeAttributes();
             this._bindEvents();
+
+            this.listenTo(vent, 'user:fetching:end', function () {
+                this.views.jamlist.collection.add(AppData.user.get('jams'));
+            });
         },
 
         getAllJams: function () {
@@ -31,10 +35,6 @@ define(function (require) {
 
             if (AppData.user) {
                 this.views.jamlist.collection.add(AppData.user.get('jams'));
-            } else {
-                this.listenToOnce(vent, 'user:fetching:end', function () {
-                    this.views.jamlist.collection.add(AppData.user.get('jams'));
-                });
             }
         },
 

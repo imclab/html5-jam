@@ -13,10 +13,12 @@ define(function (require) {
     var SideBarView = require('modules/production/views/sidebar_view');
     var CommentsView = require('modules/production/views/comments_view');
     var SelectedListView = require('modules/production/views/selected_video_view');
+    var VideosListView = require('modules/production/views/jam_videos_list');
 
-    var Comment = require('modules/production/models/comment');
-    var Video = require('modules/common/models/video');
-    var User = require('modules/common/models/user');
+    var CommentModel = require('modules/production/models/comment');
+    var CommentCollection = require('modules/production/collections/comments');
+    var VideoModel = require('modules/common/models/video');
+    var VideoCollection = require('modules/common/collections/videos');
     var Jam = require('modules/common/models/jam');
 
     var AppData = require('modules/common/app_data');
@@ -30,18 +32,35 @@ define(function (require) {
 
             this._initializeAttributes();
             this._bindEvents();
+        },
+
+        onShow: function () {
+            // Common area
+            console.log('[ProductionController > onShow] ' + this.attributes.type);
+        },
+
+        show: function (options) {
 
             if (options.jam_id) {
                 // Existing project :
-                this.fetch(options.jam_id);
-
-                console.log("[JAM:" + options.jam_id + "] Fetching from server : jam.cid=" + this.attributes.models.jam.cid);
+                this.attributes.jamId = options.jam_id;
             }
-        },
 
-        show: function () {
-            BaseController.prototype.show.call(this);
-            this._initializeMediaCapture();
+            switch (options.type) {
+            case 'edit':
+                this.getJamFromServer();
+                BaseController.prototype.show.call(this);
+                break;
+            case 'show':
+                this.getJamFromServer();
+                BaseController.prototype.show.call(this);
+                this._initializeMediaCapture();
+                break;
+            case 'create':
+                BaseController.prototype.show.call(this);
+                this._initializeMediaCapture();
+                break;
+            }
         },
 
         getLayout: function () {
@@ -52,11 +71,13 @@ define(function (require) {
                 this.views.sidebar = new SideBarView();
                 this.views.comments = new CommentsView();
                 this.views.selected_list = new SelectedListView();
+                this.views.videos_list = new VideosListView();
 
                 productionLayout.recorder.show(this.views.recorder);
                 productionLayout.sidebar.show(this.views.sidebar);
                 productionLayout.comments.show(this.views.comments);
                 productionLayout.selected_list.show(this.views.selected_list);
+                productionLayout.videos_list.show(this.views.videos_list);
             });
 
             return productionLayout;
@@ -78,7 +99,6 @@ define(function (require) {
         },
 
         _bindEvents: function () {
-
             this.listenTo(vent, 'recorder:play', this.playAllSelected);
             this.listenTo(vent, 'recorder:stop', this.stop);
             this.listenTo(vent, 'recorder:record', this.record);
@@ -98,23 +118,33 @@ define(function (require) {
             });
         },
 
-        fetch: function (jam_id) {
+        getJamFromServer: function () {
             // If it's not a new project
             // Need to :
             //          get the jam from the server with the jam_id
             //          get all the video from the jam
             //          get all the comments
+            var self = this;
 
-            this.attributes.models.jam = new Jam.JamModel({
-                id: jam_id
+            this.attributes.models.jam = new Jam();
+            this.attributes.models.videos = new VideoCollection();
+            this.attributes.models.comments = new CommentCollection();
+
+            this.attributes.models.jam.fetch({
+                url: '/api/jams/' + self.attributes.jamId,
+                success: function (xhr) {
+                    console.log("[JAM:" + self.attributes.jamId + "] Fetching from server : jam.cid=" + self.attributes.models.jam.cid);
+                    console.log("[xhr]: ", xhr);
+                    self.views.videos_list.collection.add(self.attributes.models.jam.get('videos'));
+                }
             });
-            // this.attributes.models.jam.fetch({url: '/jam/'+jam_id});
-            // this.attributes.models.jam.fetch();
 
-            this.attributes.models.videos = new Video.VideoCollection({
-
+            this.attributes.models.comments.fetch({
+                url: '/api/jams/' + self.attributes.jamId + '/comments/',
+                success: function (xhr) {
+                    console.log('Comments : ', xhr);
+                }
             });
-            // this.attributes.models.videos.fetch();
         },
 
         _initializeSelectedList: function () {
@@ -133,13 +163,19 @@ define(function (require) {
                 // Save the video
                 // Add the video to the jam
                 // Reload la page
+                console.log("[Production_controller.js > save] SUCCESS : ", this.attributes.selectedIds);
+
+                // On envoit toutes les videos selectionnees au server
+                this.views.recorder.collection.save({
+                    jamId: this.attributes.jamId
+                });
             }
 
             // On reinitialise tout => refetch du jam et pas besoin de passer un objet d'une vue a l'autre
         },
 
         addNewVideo: function (options) {
-            var newModel = new Video.VideoModel(options);
+            var newModel = new VideoModel(options);
             this.views.recorder.collection.add(newModel);
             return newModel;
         },
@@ -151,7 +187,6 @@ define(function (require) {
         },
 
         _initializeMediaCapture: function () {
-
             if (!this.attributes.recorderBlob) {
                 this.attributes.recorderPreview = document.getElementById('preview');
                 this.attributes.recorderPreview.muted = true;
@@ -258,24 +293,11 @@ define(function (require) {
 
         addComments: function (str) {
             // On ajoute le nouveau commentaire aux anciens
-            var newComment = new Comment.CommentModel({
+            var newComment = new CommentModel({
                 username: AppData.user.get('username'),
                 comment: str
             });
             this.views.comments.collection.add(newComment);
-        },
-
-        buff: function () {
-            var doudou = new Jam({
-                name: 'Abraham',
-                description: 'Lincoln',
-                userId: 100,
-                id: 101
-            });
-
-            console.log('Mon truc : ', doudou);
-
-            doudou.save();
         }
     });
 
