@@ -13,7 +13,9 @@ define(function (require) {
     var AppRouter = Marionette.AppRouter.extend({
 
         appRoutes: {
-            'jam/(:jamId)'       : 'showJam',
+            'jam/:jamid/edit/'   : 'editJam',
+            'jam/:jamid'         : 'showJam',
+            'jam/'               : 'createJam',
             'profil/(:profilId)' : 'showProfil',
             'friends/'           : 'showFriends',
             'login/'             : 'showLogin',

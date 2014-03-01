@@ -25,21 +25,17 @@ define(function (require) {
             this.regions = options.regions || {};
             this._initializeAttributes();
 
-            Cook.flush();
+            // Cook.flush();
+
+            this.listenTo(vent, 'actualize:appdata', function () {
+                console.log('Coucou c\'est ici l\'init');
+                AppData.fetchUser();
+            });
 
             this.listenToOnce(vent, 'authentication:success', function (_id) {
                 // Fetch the User by UserID
-                AppData.user = new User();
-                AppData.user.fetch({
-                    url: 'api/users/' + _id,
-                    success: function () {
-                        vent.trigger('user:fetching:end');
-                    },
-                    error: function () {
-                        // L'utilisateur n'existe pas dans la BDD
-                        // Besoin de creer un profil
-                    }
-                });
+                AppData.initUser(_id);
+                AppData.fetchUser();
             });
 
             this.listenTo(vent, 'authentication:fail', function () {
@@ -86,13 +82,30 @@ define(function (require) {
             this._createProfilController();
         },
 
+        editJam: function (jamId) {
+            this.handleConnection();
+            this._createTopbarController();
+            this._createProductionController({
+                type: 'edit',
+                jam_id: jamId
+            });
+        },
+
         showJam: function (jamId) {
             this.handleConnection();
             this._createTopbarController();
             this._createProductionController({
+                type: 'show',
                 jam_id: jamId
             });
+        },
 
+        createJam: function () {
+            this.handleConnection();
+            this._createTopbarController();
+            this._createProductionController({
+                type: 'create'
+            });
         },
 
         showProfil: function (profilId) {
@@ -128,9 +141,15 @@ define(function (require) {
                 options.user = AppData.user;
 
                 this.controllers.production = new ProductionController(options);
-                this.controllers.production.show();
+                this.controllers.production.show({
+                    type: options.type,
+                    jam_id: options.jam_id
+                });
             } else {
-                this.controllers.production.show();
+                this.controllers.production.show({
+                    type: options.type,
+                    jam_id: options.jam_id
+                });
             }
         },
 

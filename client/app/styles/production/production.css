@@ -13,6 +13,12 @@
     display: inline-block;
 }
 
+.videos_list {
+    width: 100%;
+    background-color: violet;
+    display: inline-block;
+}
+
 .sidebar {
     float: left;
     width: 15%;

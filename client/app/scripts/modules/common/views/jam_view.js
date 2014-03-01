@@ -3,6 +3,7 @@ define(function (require) {
     "use strict";
 
     var Marionette = require('marionette');
+    var vent = require('modules/common/vent');
 
     var JamCollection = require('modules/common/collections/jams');
 

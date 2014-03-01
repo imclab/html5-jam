@@ -7,6 +7,8 @@ define(function (require) {
 
     var AppData = require('modules/common/app_data');
 
+    var Jam = require('modules/common/models/jam');
+
     var TopBar = Marionette.ItemView.extend({
         
         el: '#topbar',
@@ -14,7 +16,7 @@ define(function (require) {
         events: {
             'click .newProjectBtn' : 'toNewProject',
             'click .friendlistBtn' : 'toFriendList',
-            'click .profilBtn' : 'toProfil'
+            'click .profilBtn' : 'toProfil',
         },
 
         getTemplate: function () {

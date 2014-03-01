@@ -3,7 +3,8 @@ define(function (require) {
     "use strict";
 
     var Marionette = require('marionette');
-    var Video = require('modules/common/models/video');
+    var VideoModel = require('modules/common/models/video');
+    var VideoCollection = require('modules/common/collections/videos');
 
     var VideoElement = Marionette.ItemView.extend({
 
@@ -27,14 +28,14 @@ define(function (require) {
 
         initialize: function () {
 
-            this.collection = new Video.VideoCollection();
+            this.collection = new VideoCollection();
 
-            this.collection.add(new Video.VideoInfoModel({
+            this.collection.add(new VideoModel({
                 username: "Pouch",
                 comment: "Voix aigue, hihi"
             }));
 
-            this.collection.add(new Video.VideoInfoModel({
+            this.collection.add(new VideoModel({
                 username: "BogossDu60",
                 comment: "Ouai"
             }));

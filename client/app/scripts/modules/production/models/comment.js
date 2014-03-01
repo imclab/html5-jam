@@ -13,13 +13,6 @@ define(function (require) {
 
     });
 
-    var CommentCollection = Backbone.Collection.extend({
-        model: Comment
-    });
-
-    return {
-        CommentModel: Comment,
-        CommentCollection: CommentCollection
-    };
+    return Comment;
 
 });

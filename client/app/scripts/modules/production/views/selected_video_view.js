@@ -4,7 +4,7 @@ define(function (require) {
 
     var Marionette = require('marionette');
     var VideoPlayer = require('modules/common/views/player_view');
-    var Video = require('modules/common/models/video');
+    var VideoCollection = require('modules/common/collections/videos');
 
     var SelectedVideoCollection = Marionette.CollectionView.extend({
 
@@ -12,7 +12,7 @@ define(function (require) {
 
         initialize: function () {
 
-            this.collection = new Video.VideoCollection();
+            this.collection = new VideoCollection();
 
         }
 
