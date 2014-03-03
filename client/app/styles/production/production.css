@@ -1,6 +1,7 @@
 .container {
     width: 70%;
     float: left;
+    padding: 0;
 }
 
 .recorder {

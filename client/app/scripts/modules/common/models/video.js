@@ -8,7 +8,11 @@ define(function (require) {
 
         defaults: {
             cover: '../images/offlinecontent/thumb_example.png',
-            userId: 101,
+            // description: '',
+            // instrument: '',
+            // active: '',
+            // volume: '',
+
             video_blob: '',
             audio_blob: '',
             _cid: ''
@@ -22,11 +26,11 @@ define(function (require) {
 
         sync: function (method, model, options) {
             console.log('Method : ', method);
-            console.log('Model : ', model);
-            console.log('Options : ', options);
 
             if (method === 'create') {
                 options.url = '/api/jams/' + options.jamId + '/videos';
+            } else if (method === 'delete') {
+                options.url = '/api/jams/228/videos/' + this.id;
             }
 
             return Backbone.sync(method, model, options);

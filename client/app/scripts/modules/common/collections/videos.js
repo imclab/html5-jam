@@ -13,7 +13,7 @@ define(function (require) {
             console.log('Collection Save : ', this);
 
             _.each(this.models, function (elem) {
-                elem.save({}, {
+                elem.save(null, {
                     jamId: options.jamId
                 });
             });

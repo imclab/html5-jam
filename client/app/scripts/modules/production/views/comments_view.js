@@ -37,15 +37,6 @@ define(function (require) {
 
         initialize: function () {
             this.collection = new CommentCollection();
-
-            this.collection.add(new CommentModel({
-                username: 'Mamy',
-                comment: 'Coucou ! Cest mamy !'
-            }));
-
-            this.collection.add(new CommentModel({
-                comment: 'Salut mamy !'
-            }));
         }
 
     });

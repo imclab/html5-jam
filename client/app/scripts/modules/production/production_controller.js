@@ -12,7 +12,6 @@ define(function (require) {
     var RecorderView = require('modules/production/views/recorder_view');
     var SideBarView = require('modules/production/views/sidebar_view');
     var CommentsView = require('modules/production/views/comments_view');
-    var SelectedListView = require('modules/production/views/selected_video_view');
     var VideosListView = require('modules/production/views/jam_videos_list');
 
     var CommentModel = require('modules/production/models/comment');
@@ -22,6 +21,8 @@ define(function (require) {
     var Jam = require('modules/common/models/jam');
 
     var AppData = require('modules/common/app_data');
+
+    var PlayerManager = require('modules/production/player_manager');
 
     var RecorderController = BaseController.extend({
 
@@ -54,11 +55,11 @@ define(function (require) {
             case 'show':
                 this.getJamFromServer();
                 BaseController.prototype.show.call(this);
-                this._initializeMediaCapture();
+                vent.trigger('recorder:initMediaCapture');
                 break;
             case 'create':
                 BaseController.prototype.show.call(this);
-                this._initializeMediaCapture();
+                vent.trigger('recorder:initMediaCapture');
                 break;
             }
         },
@@ -70,13 +71,11 @@ define(function (require) {
                 this.views.recorder = new RecorderView();
                 this.views.sidebar = new SideBarView();
                 this.views.comments = new CommentsView();
-                this.views.selected_list = new SelectedListView();
                 this.views.videos_list = new VideosListView();
 
                 productionLayout.recorder.show(this.views.recorder);
                 productionLayout.sidebar.show(this.views.sidebar);
                 productionLayout.comments.show(this.views.comments);
-                productionLayout.selected_list.show(this.views.selected_list);
                 productionLayout.videos_list.show(this.views.videos_list);
             });
 
@@ -86,22 +85,12 @@ define(function (require) {
         _initializeAttributes: function () {
             this.views = {};
             this.attributes = {};
-            this.attributes.recorderBlob = undefined;
-            this.attributes.recorderPreview = undefined;
-            this.attributes.selectedIds = {};
             this.attributes.models = {};
 
-            this.attributes.recorder = {
-                audio: undefined,
-                video: undefined,
-                isRecording: false,
-            };
+            _.extend(this.attributes, new PlayerManager());
         },
 
         _bindEvents: function () {
-            this.listenTo(vent, 'recorder:play', this.playAllSelected);
-            this.listenTo(vent, 'recorder:stop', this.stop);
-            this.listenTo(vent, 'recorder:record', this.record);
             this.listenTo(vent, 'recorder:save', this.save);
 
             this.listenTo(vent, 'player:remove', this.remove);
@@ -111,19 +100,14 @@ define(function (require) {
             this.listenTo(vent, 'video:new', function (options) {
                 this.addSelectedId(
                     this.addNewVideo({
-                        video_blob: options.video,
-                        audio_blob: options.audio
+                        video_blob: options.video_blob,
+                        audio_blob: options.audio_blob
                     })
                 );
             });
         },
 
         getJamFromServer: function () {
-            // If it's not a new project
-            // Need to :
-            //          get the jam from the server with the jam_id
-            //          get all the video from the jam
-            //          get all the comments
             var self = this;
 
             this.attributes.models.jam = new Jam();
@@ -143,12 +127,9 @@ define(function (require) {
                 url: '/api/jams/' + self.attributes.jamId + '/comments/',
                 success: function (xhr) {
                     console.log('Comments : ', xhr);
+                    self.views.comments.collection.add(self.attributes.models.comments);
                 }
             });
-        },
-
-        _initializeSelectedList: function () {
-            this.views.selected_list.collection = this.attributes.models.videos;
         },
 
         _initializeSidebar: function () {
@@ -175,6 +156,11 @@ define(function (require) {
         },
 
         addNewVideo: function (options) {
+            options.description = 'Jackie Sharp';
+            options.instrument = 3;
+            options.active = true;
+            options.volume = 10;
+
             var newModel = new VideoModel(options);
             this.views.recorder.collection.add(newModel);
             return newModel;
@@ -186,106 +172,6 @@ define(function (require) {
             this.attributes.selectedIds[model.cid].audio = document.getElementById("audio-player-" + model.get('_cid'));
         },
 
-        _initializeMediaCapture: function () {
-            if (!this.attributes.recorderBlob) {
-                this.attributes.recorderPreview = document.getElementById('preview');
-                this.attributes.recorderPreview.muted = true;
-
-                var self = this;
-
-                navigator.getUserMedia({audio: true, video: true}, function (media) {
-                    self.attributes.recorderPreview.src = window.URL.createObjectURL(media);
-                    self.attributes.recorderPreview.play();
-
-                    self._setRecorderBlob(media);
-                }, function () {
-                    console.log("[Production_controller.js > _initializeMediaCapture] ERROR : Failed to get the blob.");
-                });
-            } else {
-                this.attributes.recorderPreview = document.getElementById('preview');
-                this.attributes.recorderPreview.muted = true;
-                this.attributes.recorderPreview.src = window.URL.createObjectURL(this.attributes.recorderBlob);
-                this.attributes.recorderPreview.play();
-            }
-        },
-
-        _initializeRecordRTC: function () {
-            this.attributes.recorder.audio = RecordRTC(this.attributes.recorderBlob, {
-                bufferSize: 16384
-            });
-
-            this.attributes.recorder.video = RecordRTC(this.attributes.recorderBlob, {
-                type: 'video'
-            });
-        },
-
-        _setRecorderBlob: function (obj) {
-            this.attributes.recorderBlob = obj;
-            this._initializeRecordRTC();
-        },
-
-        playAllSelected: function () {
-            _.each(this.attributes.selectedIds, function (key) {
-                key.video.play();
-                key.audio.play();
-            });
-        },
-
-        stop: function () {
-            _.each(this.attributes.selectedIds, function (key) {
-                if (key.video && key.audio) {
-                    key.video.pause();
-                    key.audio.pause();
-                    key.video.currentTime = 0;
-                    key.audio.currentTime = 0;
-                }
-            });
-
-            if (this.attributes.recorder.isRecording) {
-                vent.trigger('video:new', this.stopRecording());
-            }
-        },
-
-        record: function () {
-            this.playAllSelected();
-            this.startRecording({
-                video: true,
-                audio: true
-            });
-        },
-
-        startRecording: function (options) {
-            if (options) {
-                if (options.video === true) {
-                    this.attributes.recorder.video.startRecording();
-                }
-
-                if (options.audio === true) {
-                    this.attributes.recorder.audio.startRecording();
-                }
-            }
-            this.attributes.recorder.isRecording = true;
-        },
-
-        stopRecording: function () {
-            var options = {};
-
-            if (this.attributes.recorder.isRecording) {
-                this.attributes.recorder.audio.stopRecording(function (audioUrl) {
-                    // console.log("Link Audio : ", audioUrl);
-                    options.audio = audioUrl;
-                });
-                this.attributes.recorder.video.stopRecording(function (videoUrl) {
-                    // console.log("Link Video : ", videoUrl);
-                    options.video = videoUrl;
-                });
-
-                this.attributes.recorder.isRecording = false;
-            }
-
-            return options;
-        },
-
         remove: function (model) {
             this.views.recorder.collection.remove(model);
             delete this.attributes.selectedIds[model.cid];
@@ -293,10 +179,19 @@ define(function (require) {
 
         addComments: function (str) {
             // On ajoute le nouveau commentaire aux anciens
+            var self = this;
+
             var newComment = new CommentModel({
-                username: AppData.user.get('username'),
+                username: AppData.user.get('name'),
                 comment: str
             });
+            newComment.save({}, {
+                jamId: self.attributes.jamId,
+                success: function (xhr) {
+                    console.log('::success::', xhr);
+                }
+            });
+
             this.views.comments.collection.add(newComment);
         }
     });
