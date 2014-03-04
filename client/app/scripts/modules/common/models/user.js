@@ -1,27 +1,21 @@
 define(function (require) {
 
-	var Backbone = require('backbone');
+    var Backbone = require('backbone');
 
-	var User = Backbone.Model.extend({
+    var User = Backbone.Model.extend({
 
-		defaults: {
-			username: "anonymous"
-		},
+        defaults: {
+            createdAt: '',
+            facebook_id: '',
+            jams: [],
+            name: '',
+            picture_url: '',
+            vignette_one: null,
+            vignette_three: null,
+            vignette_two: null
+	    }
 
-        parse: function (response) {
-            return {
-                username: response.name
-            };
-        },
+    });
 
-        sync: function (method, model, options) {
-            _.extend(options, {url: '/api/me'});
-
-            return Backbone.sync.apply(this, arguments);
-        }
-
-	});
-
-	return User;
-
+    return User;
 });

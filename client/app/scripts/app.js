@@ -1,5 +1,6 @@
 /*global define*/
 /*global window*/
+/*global navigator*/
 define(function (require) {
     "use strict";
 
@@ -13,7 +14,9 @@ define(function (require) {
     var AppRouter = Marionette.AppRouter.extend({
 
         appRoutes: {
-            'jam/(:jamId)'       : 'showJam',
+            'jam/:jamid/edit/'   : 'editJam',
+            'jam/:jamid'         : 'showJam',
+            'jam/'               : 'createJam',
             'profil/(:profilId)' : 'showProfil',
             'friends/'           : 'showFriends',
             'login/'             : 'showLogin',
@@ -33,11 +36,14 @@ define(function (require) {
         this.root = '/';
     });
 
+    App.addInitializer(function () {
+        navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.getUserMedia;
+    });
+
     // Override Marionette's route to fetch templates from the JST object
     App.addInitializer(function () {
         window.JST = window.JST || {};
         var JST = window.JST;
-        console.log('[JST] init');
 
         Marionette.Renderer.render = function (template, data) {
             template = "templates/" + template + ".html";

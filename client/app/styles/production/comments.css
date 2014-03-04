@@ -14,3 +14,12 @@ textarea {
 
     margin-bottom: 20px;
 }
+
+.comments-element {
+    position: relative;
+}
+
+.removeComment {
+    position: absolute;
+    right: 0;
+}

@@ -15,7 +15,7 @@ exports.addVideoToJam = function (req, res, next) {
 	var postData = req.body;
 
 	// check data
-	if (!req.files || Object.keys(req.files).length === 0 || req.files.length == 0) {
+	if (!postData || !postData.video_blob || postData.video_blob.length == 0 || !postData.audio_blob || postData.audio_blob.length == 0) {
 		return next(new Errors.BadRequest('Missing fields'));
 	}
 
@@ -35,8 +35,8 @@ exports.addVideoToJam = function (req, res, next) {
 		Video.create({description: postData.description, instrument: postData.instrument, userId: req.user.id })
 		.success(function (newVideo) {
 
-			// save file on disk
-			Utils.writeFileToDisk(newVideo.id + '.webm', req.files, function (err) {
+			// save audio and video files to disk
+			Utils.writeFileToDisk(newVideo.id + '.webm', postData.video_blob, function (err) {
 				if (err) {
 					return next(new Errors.Error(err, 'Server error'));
 				} else {

@@ -221,3 +221,18 @@ exports.getUserByToken = function (token, next) {
     });
 
 };
+
+exports.getUserById = function (id, next) {
+
+	User.find({where: {id: id}}).success(function (user) {
+		if (user != null) {
+			return next(user, null);
+		} else {
+			return next(null, new Errors.BadRequest('User not found'));
+		}
+	})
+	.error(function (error) {
+		return next(null, new Errors.Error(error, 'Server error'));
+    });
+
+};

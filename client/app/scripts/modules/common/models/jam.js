@@ -7,43 +7,34 @@ define(function (require) {
     var JamModel = Backbone.Model.extend({
         /* URL : /jam/:cid */
         defaults: {
-            videos: {},
-            name: ''
-        },
-
-        parse: function (response) {
-            return {
-                videos: response.videos,
-                name: response.name
-            };
+            createdAt: '',
+            description: '',
+            name: '',
+            privacy: false,
+            updatedAt: '',
+            userId: 0
         },
 
         sync: function (method, model, options) {
-            
-        }
-    });
+            console.log('::SYNC:: Method [Jam] : ', method);
 
-    var JamCollection = Backbone.Collection.extend({
+            if (method === 'create') {
+                // Create a jam
+                options.url = '/api/jams';
+            } else if (method === 'update') {
+                // Update a jam
+                options.url = '/api/jams/' + model.id;
+            } else if (method === 'delete') {
+                // Remove a jam
+                options.url = '/api/jams/' + model.id;
+            }
 
-        model: JamModel,
-
-        parse: function (response) {
-            return response.list || [];
-        },
-
-        sync: function (method, collection, options) {
-            var jam_url = '/jams';
-
-            _.extend(options, {url: jam_url});
-
-            return Backbone.sync.apply(this, arguments);
+            return Backbone.sync(method, model, options);
         }
 
     });
 
-    return {
-        JamModel: JamModel,
-        JamCollection: JamCollection
-    };
+
+    return JamModel;
 
 });

@@ -4,7 +4,7 @@ define(function (require) {
     'use strict';
 
     var Marionette = require('marionette');
-    var Video = require('modules/common/models/video');
+    var VideoCollection = require('modules/common/collections/videos');
     var vent = require('modules/common/vent');
     var PlayerView = require('modules/common/views/player_view');
 
@@ -19,7 +19,7 @@ define(function (require) {
         template: 'production/recorder',
 
         initialize: function () {
-            this.collection = new Video.VideoCollection();
+            this.collection = new VideoCollection();
 
             this.collection.on('remove', function () {
                 console.log('Remove');
@@ -29,7 +29,8 @@ define(function (require) {
         events: {
             "click .playbtn" : "play",
             "click .stopbtn" : "stop",
-            "click .recbtn"  : "record"
+            "click .recbtn"  : "record",
+            "click .savebtn" : "save"
         },
 
         ui: {
@@ -52,6 +53,10 @@ define(function (require) {
             vent.trigger("recorder:record");
 
             this.ui.onStage.addClass('onStage');
+        },
+
+        save: function () {
+            vent.trigger("recorder:save");
         }
 
     });

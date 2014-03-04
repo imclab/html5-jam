@@ -4,12 +4,21 @@ define(function (require) {
 
     var Marionette = require('marionette');
     var vent = require('modules/common/vent');
-    var Comment = require('modules/production/models/comment');
+    var CommentModel = require('modules/production/models/comment');
+    var CommentCollection = require('modules/production/collections/comments');
 
     var CommentElement = Marionette.ItemView.extend({
         className: 'comment-element',
 
-        template: 'production/comment_element'
+        template: 'production/comment_element',
+
+        events: {
+            "click .removeComment" : "removeComm"
+        },
+
+        removeComm: function () {
+            vent.trigger('comment:remove', this.model);
+        }
     });
 
     var CommentsView = Marionette.CompositeView.extend({
@@ -35,16 +44,7 @@ define(function (require) {
         },
 
         initialize: function () {
-            this.collection = new Comment.CommentCollection();
-
-            this.collection.add(new Comment.CommentModel({
-                username: 'Mamy',
-                comment: 'Coucou ! Cest mamy !'
-            }));
-
-            this.collection.add(new Comment.CommentModel({
-                comment: 'Salut mamy !'
-            }));
+            this.collection = new CommentCollection();
         }
 
     });

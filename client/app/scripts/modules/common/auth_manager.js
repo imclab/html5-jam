@@ -2,26 +2,33 @@
 define(function (require) {
 
     var $ = require('jquery');
+    var vent = require('modules/common/vent');
     var Const = require('modules/common/constants');
-    var User = require('modules/common/models/user');
     var CookieManager = require('modules/common/cookie_manager');
 
     var AuthManager = function () {
 
         return {
+
             handleConnection: function () {
                 return this.isConnected();
             },
 
-            isConnected: function () {
-                var cookie_val = this.checkAuthenticationCookie();
-
-                if (!cookie_val) {
-                    // No auth cookie found
-                    return;
-                }
-
-                return cookie_val;
+            authenticationRequest: function () {
+                // Check if the user exist
+                $.ajax({
+                    url: '/api/me',
+                    method: 'GET',
+                    success: function (response) {
+                        console.log("Authentification SUCCEED : ", response);
+                        vent.trigger('authentication:success', response.id);
+                    },
+                    error: function (xhr) {
+                        console.log("Authentication FAILED : ", xhr);
+                        CookieManager.remove(Const.COOKIE_AUTH);
+                        vent.trigger('authentication:fail');
+                    }
+                });
             },
 
             checkAuthenticationCookie: function () {
@@ -36,12 +43,6 @@ define(function (require) {
 
             removeAuthenticationCookie: function () {
                 CookieManager.remove(Const.COOKIE_AUTH);
-            },
-
-            getUser: function () {
-                var usr = new User();
-                usr.fetch();
-                return usr;
             }
         };
     };

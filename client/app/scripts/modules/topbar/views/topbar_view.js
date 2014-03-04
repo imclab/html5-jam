@@ -5,16 +5,27 @@ define(function (require) {
     var Marionette = require('marionette');
     var vent = require('modules/common/vent');
 
+    var AppData = require('modules/common/app_data');
+
+    var Jam = require('modules/common/models/jam');
+
     var TopBar = Marionette.ItemView.extend({
-
-        template: 'topbar/topbar',
-
+        
         el: '#topbar',
 
         events: {
             'click .newProjectBtn' : 'toNewProject',
             'click .friendlistBtn' : 'toFriendList',
-            'click .profilBtn' : 'toProfil'
+            'click .profilBtn' : 'toProfil',
+            'click .username' : 'toHome'
+        },
+
+        getTemplate: function () {
+            if (this.model) {
+                return 'topbar/topbar';
+            } else {
+                return 'topbar/topbar_empty';
+            }
         },
 
         initialize: function () {
@@ -22,7 +33,10 @@ define(function (require) {
                 this.$el.removeClass('hidden');
             }
 
-            this.listenTo(this.model, 'change:username', this.render);
+            this.listenTo(vent, 'user:fetching:end', function () {
+                this.model = AppData.user;
+                this.render();
+            });
         },
 
         toFriendList: function () {
@@ -35,10 +49,13 @@ define(function (require) {
 
         toNewProject: function () {
             vent.trigger('topbar:newproject');
+        },
+
+        toHome: function () {
+            vent.trigger('topbar:home');
         }
 
     });
 
     return TopBar;
-
 });

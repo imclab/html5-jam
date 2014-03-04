@@ -4,21 +4,17 @@ define(function (require) {
 
     var Backbone = require('backbone');
 
-    var VideoInfo = Backbone.Model.extend({
-
-        defaults: {
-            cover: "../images/offlinecontent/thumb_example.png",
-            username: "Anonymous",
-            comment: "..."
-        }
-
-    });
-
     var Video = Backbone.Model.extend({
 
         defaults: {
-            video_blob: "",
-            audio_blob: "",
+            cover: '../images/offlinecontent/thumb_example.png',
+            // description: '',
+            // instrument: '',
+            // active: '',
+            // volume: '',
+
+            video_blob: '',
+            audio_blob: '',
             _cid: ''
         },
 
@@ -26,20 +22,23 @@ define(function (require) {
             this.set({
                 _cid: this.cid
             });
+        },
+
+        sync: function (method, model, options) {
+            console.log('::SYNC:: Method  [Video] : ', method);
+            console.log('::SYNC:: Options [Video] : ', options);
+
+            if (method === 'create') {
+                options.url = '/api/jams/' + options.jamId + '/videos';
+            } else if (method === 'delete') {
+                options.url = '/api/jams/' + options.jamId + '/videos/' + this.id;
+            }
+
+            return Backbone.sync(method, model, options);
         }
 
     });
 
-    var VideoCollection = Backbone.Collection.extend({
-
-        model: Video
-
-    });
-
-    return {
-        VideoInfoModel: VideoInfo,
-        VideoModel: Video,
-        VideoCollection: VideoCollection
-    };
+    return Video;
 
 });

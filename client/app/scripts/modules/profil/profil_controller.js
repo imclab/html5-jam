@@ -3,12 +3,15 @@ define(function (require) {
     'use strict';
 
     var BaseController = require('modules/common/controllers/base_controller');
+    var vent = require('modules/common/vent');
 
     var ProfilLayout = require('modules/profil/views/profil_layout');
     var ProfilView = require('modules/profil/views/profil_view');
     var User = require('modules/common/models/user');
-    var Jam = require('modules/common/models/jam');
+    var JamModel = require('modules/common/models/jam');
     var JamView = require('modules/common/views/jam_view');
+
+    var AppData = require('modules/common/app_data');
 
     var ProfilController = BaseController.extend({
         initialize: function (options) {
@@ -17,26 +20,29 @@ define(function (require) {
             this._initializeAttributes();
             this._bindEvents();
 
-            if (options.user) {
-                this.attributes.models.user = options.user;
-            } else {
-                this.attributes.models.user = new User({username: 'Coucou'});
-            }
+            this.listenTo(vent, 'user:fetching:end', function () {
+                this.views.jamlist.collection.add(AppData.user.get('jams'));
+            });
+        },
+
+        getAllJams: function () {
+            this.views.jamlist.collection.add(AppData.user.get('jams'));
+            console.log(AppData.user.get('jams'));
         },
 
         show: function () {
             BaseController.prototype.show.call(this);
 
-            this.views.jamlist.collection.add(new Jam.JamModel({name: 'ba'}));
-            this.views.jamlist.collection.add(new Jam.JamModel({name: 'dfgfdgfgd'}));
-            this.views.jamlist.collection.add(new Jam.JamModel({name: 'bsad'}));
+            if (AppData.user) {
+                this.views.jamlist.collection.add(AppData.user.get('jams'));
+            }
         },
 
         getLayout: function () {
             var profilLayout = new ProfilLayout();
 
             this.listenTo(profilLayout, 'show', function () {
-                this.views.content = new ProfilView({model: this.attributes.models.user});
+                this.views.content = new ProfilView({model: AppData.user});
                 this.views.jamlist = new JamView();
 
                 profilLayout.content.show(this.views.content);

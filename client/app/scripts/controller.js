@@ -4,17 +4,21 @@ define(function (require) {
 
     var Marionette = require('marionette');
     var Backbone = require('backbone');
+    var vent = require('modules/common/vent');
 
     var ProductionController = require('modules/production/production_controller');
     var TopBarController = require('modules/topbar/topbar_controller');
     var FriendlistController = require('modules/friendlist/friendlist_controller');
     var ProfilController = require('modules/profil/profil_controller');
     var LoginController = require('modules/login/login_controller');
+    var HomeController = require('modules/home/home_controller');
 
     var User = require('modules/common/models/user');
     var AuthManager = require('modules/common/auth_manager');
 
     var Cook = require('modules/common/cookie_manager');
+
+    var AppData = require('modules/common/app_data');
 
     var MainController = Marionette.Controller.extend({
 
@@ -22,20 +26,51 @@ define(function (require) {
             this.regions = options.regions || {};
             this._initializeAttributes();
 
-            Cook.flush();
+            // Cook.flush();
+
+            this.listenTo(vent, 'actualize:appdata', function () {
+                console.log('Coucou c\'est ici l\'init');
+                AppData.fetchUser();
+            });
+
+            this.listenToOnce(vent, 'authentication:success', function (_id) {
+                // Fetch the User by UserID
+                AppData.initUser(_id);
+                AppData.fetchUser();
+            });
+
+            this.listenTo(vent, 'authentication:fail', function () {
+                Backbone.history.navigate('login/', true);
+            });
         },
 
         handleConnection: function () {
-            if (this.attributes.authmanager.isConnected() || this.attributes.models.user) {
-                this.attributes.models.user = this.attributes.models.user || this.attributes.authmanager.getUser();
-            } else {
-                Backbone.history.navigate('login/', true);
+            if (!AppData.user) {
+
+                if (this.attributes.authmanager.checkAuthenticationCookie()) {
+                    this.attributes.authmanager.authenticationRequest();
+                } else {
+                    // Pas de cookie found
+                    Backbone.history.navigate('login/', true);
+                }
+
             }
         },
 
         handleToken: function (tokenId) {
             this.attributes.authmanager.setAuthenticationCookie(tokenId.replace('?token=', ''));
-            Backbone.history.navigate('/', true);
+
+            this.listenToOnce(vent, 'user:fetching:end', function () {
+                // AppData.user is created and fetched
+                Backbone.history.navigate('profil/', true);
+            });
+
+            this.attributes.authmanager.authenticationRequest(function (response) {
+                console.log("Authentification SUCCEED : ", response);
+                vent.trigger('authentication:success', response.id);
+            }, function (xhr) {
+                console.log("Authentication FAILED : ", xhr);
+            });
         },
 
         showLogin: function () {
@@ -45,22 +80,38 @@ define(function (require) {
         showIndex: function () {
             this.handleConnection();
             this._createTopbarController();
-            this._createProductionController();
+            this._createHomeController();
+        },
+
+        editJam: function (jamId) {
+            this.handleConnection();
+            this._createTopbarController();
+            this._createProductionController({
+                type: 'edit',
+                jam_id: jamId
+            });
         },
 
         showJam: function (jamId) {
             this.handleConnection();
+            this._createTopbarController();
             this._createProductionController({
+                type: 'show',
                 jam_id: jamId
             });
+        },
 
+        createJam: function () {
+            this.handleConnection();
+            this._createTopbarController();
+            this._createProductionController({
+                type: 'create'
+            });
         },
 
         showProfil: function (profilId) {
-
-            this.whoAmI();
-
             this.handleConnection();
+            this._createTopbarController();
             this._createProfilController({
                 profil_id: profilId
             });
@@ -68,6 +119,7 @@ define(function (require) {
 
         showFriends: function () {
             this.handleConnection();
+            this._createTopbarController();
             this._createFriendlistController();
         },
 
@@ -87,12 +139,18 @@ define(function (require) {
                 options = options || {};
 
                 options.region = this.regions.corpus;
-                options.user = this.attributes.models.user;
+                options.user = AppData.user;
 
                 this.controllers.production = new ProductionController(options);
-                this.controllers.production.show();
+                this.controllers.production.show({
+                    type: options.type,
+                    jam_id: options.jam_id
+                });
             } else {
-                this.controllers.production.show();
+                this.controllers.production.show({
+                    type: options.type,
+                    jam_id: options.jam_id
+                });
             }
         },
 
@@ -101,11 +159,9 @@ define(function (require) {
                 options = options || {};
 
                 // options.region = this.regions.topbar;
-                options.user = this.attributes.models.user;
+                options.user = AppData.user;
 
                 this.controllers.topbar = new TopBarController(options);
-                this.controllers.topbar.show();
-            } else {
                 this.controllers.topbar.show();
             }
         },
@@ -115,7 +171,7 @@ define(function (require) {
                 options = options || {};
 
                 options.region = this.regions.corpus;
-                options.user = this.attributes.models.user;
+                options.user = AppData.user;
 
                 this.controllers.friendlist = new FriendlistController(options);
                 this.controllers.friendlist.show();
@@ -129,12 +185,26 @@ define(function (require) {
                 options = options || {};
 
                 options.region = this.regions.corpus;
-                options.user = this.attributes.models.user;
+                options.user = AppData.user;
 
                 this.controllers.profil = new ProfilController(options);
                 this.controllers.profil.show();
             } else {
                 this.controllers.profil.show();
+            }
+        },
+
+        _createHomeController: function (options) {
+            if (!this.controllers.home) {
+                options = options || {};
+
+                options.region = this.regions.corpus;
+                options.user = AppData.user;
+
+                this.controllers.home = new HomeController(options);
+                this.controllers.home.show();
+            } else {
+                this.controllers.home.show();
             }
         },
 

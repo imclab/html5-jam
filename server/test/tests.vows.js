@@ -85,7 +85,7 @@ suite.discuss('Get feeds...')
     .expect(200)
     .expect('should respond with feed of jams', function (err, res, body) {
         var feeds = JSON.parse(body);
-        assert(feeds.jams.length > 0);
+        assert(feeds.jams.length >= 0);
      })
     .export(module);
 
