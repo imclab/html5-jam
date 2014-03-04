@@ -10,7 +10,15 @@ define(function (require) {
     var CommentElement = Marionette.ItemView.extend({
         className: 'comment-element',
 
-        template: 'production/comment_element'
+        template: 'production/comment_element',
+
+        events: {
+            "click .removeComment" : "removeComm"
+        },
+
+        removeComm: function () {
+            vent.trigger('comment:remove', this.model);
+        }
     });
 
     var CommentsView = Marionette.CompositeView.extend({

@@ -8,7 +8,7 @@ define(function (require) {
 
     var PlayerView = Marionette.ItemView.extend({
 
-        template: 'player/video_player',
+        template: 'common/video_player',
 
         className: 'video-player',
 

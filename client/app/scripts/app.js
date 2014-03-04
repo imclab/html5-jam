@@ -1,5 +1,6 @@
 /*global define*/
 /*global window*/
+/*global navigator*/
 define(function (require) {
     "use strict";
 
@@ -33,6 +34,10 @@ define(function (require) {
 
     App.addInitializer(function () {
         this.root = '/';
+    });
+
+    App.addInitializer(function () {
+        navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.getUserMedia;
     });
 
     // Override Marionette's route to fetch templates from the JST object

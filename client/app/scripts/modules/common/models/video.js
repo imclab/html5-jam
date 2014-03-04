@@ -25,12 +25,13 @@ define(function (require) {
         },
 
         sync: function (method, model, options) {
-            console.log('Method : ', method);
+            console.log('::SYNC:: Method  [Video] : ', method);
+            console.log('::SYNC:: Options [Video] : ', options);
 
             if (method === 'create') {
                 options.url = '/api/jams/' + options.jamId + '/videos';
             } else if (method === 'delete') {
-                options.url = '/api/jams/228/videos/' + this.id;
+                options.url = '/api/jams/' + options.jamId + '/videos/' + this.id;
             }
 
             return Backbone.sync(method, model, options);

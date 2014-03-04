@@ -1,6 +1,4 @@
 /*global define*/
-/*global navigator*/
-/*global window*/
 define(function (require) {
     'use strict';
 
@@ -28,8 +26,6 @@ define(function (require) {
 
         initialize: function (options) {
             BaseController.prototype.initialize.call(this, options);
-
-            navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.getUserMedia;
 
             this._initializeAttributes();
             this._bindEvents();
@@ -93,9 +89,10 @@ define(function (require) {
         _bindEvents: function () {
             this.listenTo(vent, 'recorder:save', this.save);
 
-            this.listenTo(vent, 'player:remove', this.remove);
+            this.listenTo(vent, 'player:remove', this.removeVideo);
 
             this.listenTo(vent, 'comment:new', this.addComments);
+            this.listenTo(vent, 'comment:remove', this.removeComment);
 
             this.listenTo(vent, 'video:new', function (options) {
                 this.addSelectedId(
@@ -119,15 +116,15 @@ define(function (require) {
                 success: function (xhr) {
                     console.log("[JAM:" + self.attributes.jamId + "] Fetching from server : jam.cid=" + self.attributes.models.jam.cid);
                     console.log("[xhr]: ", xhr);
-                    self.views.videos_list.collection.add(self.attributes.models.jam.get('videos'));
+                    self.views.videos_list.collection.add(xhr.get('videos'));
                 }
             });
 
             this.attributes.models.comments.fetch({
-                url: '/api/jams/' + self.attributes.jamId + '/comments/',
+                url: '/api/jams/' + self.attributes.jamId + '/comments',
                 success: function (xhr) {
                     console.log('Comments : ', xhr);
-                    self.views.comments.collection.add(self.attributes.models.comments);
+                    self.views.comments.collection.add(xhr.models[0].get('comments'));
                 }
             });
         },
@@ -172,19 +169,22 @@ define(function (require) {
             this.attributes.selectedIds[model.cid].audio = document.getElementById("audio-player-" + model.get('_cid'));
         },
 
-        remove: function (model) {
+        removeVideo: function (model) {
+            model.destroy({
+                jamId: this.attributes.jamId
+            });
             this.views.recorder.collection.remove(model);
             delete this.attributes.selectedIds[model.cid];
         },
 
         addComments: function (str) {
-            // On ajoute le nouveau commentaire aux anciens
             var self = this;
 
             var newComment = new CommentModel({
-                username: AppData.user.get('name'),
-                comment: str
+                ownerName: AppData.user.get('name'),
+                content: str
             });
+
             newComment.save({}, {
                 jamId: self.attributes.jamId,
                 success: function (xhr) {
@@ -193,6 +193,13 @@ define(function (require) {
             });
 
             this.views.comments.collection.add(newComment);
+        },
+
+        removeComment: function (model) {
+            model.destroy({
+                jamId: this.attributes.jamId
+            });
+            this.views.comments.collection.remove(model);
         }
     });
 

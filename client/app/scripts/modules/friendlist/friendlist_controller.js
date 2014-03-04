@@ -55,19 +55,12 @@ define(function (require) {
             this.attributes.stamps = new Stamp.StampCollection();
 
             this.views.stamplist.collection.add([
-                new Stamp.StampModel({username: 'Guillaume'}),
-                new Stamp.StampModel({username: 'Pouch'}),
                 new Stamp.StampModel({username: 'Bobby'}),
                 new Stamp.StampModel({username: 'Tamer'}),
                 new Stamp.StampModel({username: 'Piano'}),
-                new Stamp.StampModel({username: 'Coco'}),
                 new Stamp.StampModel({username: 'Plume'}),
                 new Stamp.StampModel({username: 'Marion'}),
-                new Stamp.StampModel({username: 'Thomas'}),
                 new Stamp.StampModel({username: 'Guitare'}),
-                new Stamp.StampModel({username: 'Bertrand'}),
-                new Stamp.StampModel({username: 'Colin'}),
-                new Stamp.StampModel({username: 'Saumon'}),
                 new Stamp.StampModel({username: 'Flute'}),
                 new Stamp.StampModel({username: 'Beurk'})
             ]);

@@ -1,6 +1,6 @@
 .video-player {
     position: relative;
-    width: 100px;
+    width: 150px;
     margin: 0;
     float: left;
 }
@@ -19,7 +19,7 @@
 .video-player .menu-video {
     position: absolute;
     z-index: 10;
-    left: 85%;
+    left: 90%;
 
     display: none;
 }

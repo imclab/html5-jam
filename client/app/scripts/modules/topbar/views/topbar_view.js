@@ -17,6 +17,7 @@ define(function (require) {
             'click .newProjectBtn' : 'toNewProject',
             'click .friendlistBtn' : 'toFriendList',
             'click .profilBtn' : 'toProfil',
+            'click .username' : 'toHome'
         },
 
         getTemplate: function () {
@@ -48,6 +49,10 @@ define(function (require) {
 
         toNewProject: function () {
             vent.trigger('topbar:newproject');
+        },
+
+        toHome: function () {
+            vent.trigger('topbar:home');
         }
 
     });

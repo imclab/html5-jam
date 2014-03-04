@@ -3,6 +3,7 @@ define(function (require) {
     "use strict";
 
     var Marionette = require('marionette');
+    var Backbone = require('backbone');
     var vent = require('modules/common/vent');
 
     var JamCollection = require('modules/common/collections/jams');
@@ -10,7 +11,15 @@ define(function (require) {
     var JamView = Marionette.ItemView.extend({
         className: 'jam-element',
 
-        template: 'common/jam'
+        template: 'common/jam',
+
+        events: {
+            'click .jamName' : 'redirection'
+        },
+
+        redirection: function () {
+            Backbone.history.navigate('jam/' + this.model.id, true);
+        }
     });
 
     var JamListView = Marionette.CollectionView.extend({

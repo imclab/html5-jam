@@ -1,2 +1,4 @@
-<span class="user"><%= username %></span>
-<span class="comment"><%= comment %></span>
+<div class="removeComment">x</div>
+<span class="user"><%= ownerName %></span>
+<span class="date"><%= (new Date(createdAt)).toString().replace(' GMT+0000 (GMT)', '') %></span>
+<span class="comment"><%= content %></span>

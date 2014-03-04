@@ -11,6 +11,7 @@ define(function (require) {
     var FriendlistController = require('modules/friendlist/friendlist_controller');
     var ProfilController = require('modules/profil/profil_controller');
     var LoginController = require('modules/login/login_controller');
+    var HomeController = require('modules/home/home_controller');
 
     var User = require('modules/common/models/user');
     var AuthManager = require('modules/common/auth_manager');
@@ -79,7 +80,7 @@ define(function (require) {
         showIndex: function () {
             this.handleConnection();
             this._createTopbarController();
-            this._createProfilController();
+            this._createHomeController();
         },
 
         editJam: function (jamId) {
@@ -190,6 +191,20 @@ define(function (require) {
                 this.controllers.profil.show();
             } else {
                 this.controllers.profil.show();
+            }
+        },
+
+        _createHomeController: function (options) {
+            if (!this.controllers.home) {
+                options = options || {};
+
+                options.region = this.regions.corpus;
+                options.user = AppData.user;
+
+                this.controllers.home = new HomeController(options);
+                this.controllers.home.show();
+            } else {
+                this.controllers.home.show();
             }
         },
 

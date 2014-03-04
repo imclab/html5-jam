@@ -25,6 +25,7 @@ define(function (require) {
             this.listenTo(vent, 'topbar:friends', this.toFriendList);
             this.listenTo(vent, 'topbar:profil', this.toProfil);
             this.listenTo(vent, 'topbar:newproject', this.toNewProject);
+            this.listenTo(vent, 'topbar:home', this.toHome);
         },
 
         show: function () {
@@ -45,6 +46,10 @@ define(function (require) {
 
         toNewProject: function () {
             this.navigate('jam/228');
+        },
+
+        toHome: function () {
+            this.navigate('/');
         },
 
         navigate: function (destination) {
