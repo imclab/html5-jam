@@ -20,7 +20,8 @@ exports.getUserProfile = function (req, res, next) {
 			}, 
 			attributes: ['name', 'picture_url', 'facebook_id', 'createdAt', 'vignette_one', 'vignette_two', 'vignette_three'], 
 			include: [{ 
-				model: Jam, 
+				model: Jam,
+				required: false,
 				where: Sequelize.or({ 
 					privacy: 0 
 				}, 
