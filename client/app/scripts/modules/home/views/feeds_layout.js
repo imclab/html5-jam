@@ -12,7 +12,7 @@ define(function (require) {
 
         regions: {
             feeds: '.feeds',
-            sidebar: '.sidebar'
+            menu: '.homeMenu'
         }
 
     });

@@ -9,7 +9,7 @@ define(function (require) {
     var JamCollection = require('modules/common/collections/jams');
     var JamView = require('modules/common/views/jam_view');
 
-    var FeedsView = require('modules/home/views/feeds_view');
+    var MenuView = require('modules/home/views/menu_view');
     var FeedsLayout = require('modules/home/views/feeds_layout');
 
     var AppData = require('modules/common/app_data');
@@ -41,11 +41,11 @@ define(function (require) {
             var profilLayout = new FeedsLayout();
 
             this.listenTo(profilLayout, 'show', function () {
-                this.views.sidebar = new FeedsView({model: AppData.user});
+                this.views.menu = new MenuView({model: AppData.user});
                 this.views.feeds = new JamView();
 
                 profilLayout.feeds.show(this.views.feeds);
-                profilLayout.sidebar.show(this.views.sidebar);
+                profilLayout.menu.show(this.views.menu);
             });
 
             return profilLayout;
