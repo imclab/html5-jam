@@ -1,7 +1,8 @@
-.container {
-    width: 70%;
-    float: left;
+.self-container {
     padding: 0;
+    left: 150px;
+    right: 150px;
+    position: absolute;
 }
 
 .recorder {
@@ -21,15 +22,13 @@
 }
 
 .sidebar {
-    float: left;
-    width: 15%;
-    height: 100%;
-    background-color: #F60;
+    position: absolute;
+    width: 150px;
+    /*background-color: #F60;*/
 }
 
 .comments {
-    width: 15%;
-    height: 100%;
-    float: left;
-    background-color: red;
+    float: right;
+    width: 150px;
+    /*background-color: red;*/
 }

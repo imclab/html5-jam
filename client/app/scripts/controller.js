@@ -26,7 +26,7 @@ define(function (require) {
             this.regions = options.regions || {};
             this._initializeAttributes();
 
-            // Cook.flush();
+// Cook.flush();
 
             this.listenTo(vent, 'actualize:appdata', function () {
                 console.log('Coucou c\'est ici l\'init');

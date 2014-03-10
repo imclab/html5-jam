@@ -35,11 +35,7 @@ define(function (require) {
     App.addInitializer(function () {
         this.root = '/';
     });
-
-    App.addInitializer(function () {
-        navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.getUserMedia;
-    });
-
+    
     // Override Marionette's route to fetch templates from the JST object
     App.addInitializer(function () {
         window.JST = window.JST || {};

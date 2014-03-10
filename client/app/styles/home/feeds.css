@@ -1,13 +1,10 @@
 .homeMenu {
-    width: 20%;
-    height: 100%;
-    float: left;
+    width: 200px;
+    position: absolute;
 }
 
 .feeds {
-    width: 80%;
-    height: 100%;
-    float: left;
+    margin-left: 200px;
 }
 
 

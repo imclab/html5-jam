@@ -16,8 +16,9 @@ define(function (require) {
         fetchUser: function () {
             this.user.fetch({
                 url: 'api/users/' + this.userId,
-                success: function () {
+                success: function (xhr) {
                     vent.trigger('user:fetching:end');
+                    console.log("DAUBE : ", xhr);
                 },
                 error: function () {
                     // L'utilisateur n'existe pas dans la BDD

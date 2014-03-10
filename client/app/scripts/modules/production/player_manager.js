@@ -1,4 +1,6 @@
 /*global define*/
+/*global navigator*/
+/*global window*/
 define(function (require) {
 
     var vent = require('modules/common/vent');
@@ -7,10 +9,8 @@ define(function (require) {
     var PlayerManager = function (options) {
         options = options || {};
 
-        this.recorder = options.recorder || { audio: undefined, video: undefined, isRecording: false };
+        this.recorder = options.recorder || {audio: undefined, video: undefined, isRecording: false};
         this.selectedIds = options.selectedIds || {};
-
-        console.log('Here we are : ', this);
 
         this.initialize.apply(this, arguments);
     };

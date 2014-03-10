@@ -3,6 +3,7 @@ define(function (require) {
     'use strict';
 
     var _ = require('underscore');
+    var Backbone = require('backbone');
     var BaseController = require('modules/common/controllers/base_controller');
     var vent = require('modules/common/vent');
 
@@ -102,6 +103,9 @@ define(function (require) {
                     })
                 );
             });
+
+
+            this.listenTo(vent, 'jam:create', this.createNewJam);
         },
 
         getJamFromServer: function () {
@@ -116,7 +120,19 @@ define(function (require) {
                 success: function (xhr) {
                     console.log("[JAM:" + self.attributes.jamId + "] Fetching from server : jam.cid=" + self.attributes.models.jam.cid);
                     console.log("[xhr]: ", xhr);
-                    self.views.videos_list.collection.add(xhr.get('videos'));
+
+                    var i;
+                    var __videos = xhr.get('videos');
+
+                    for (i = 0; i < __videos.length; i++) {
+                        if (__videos[i].active) {
+                            // Add to Videos_list
+                            self.views.videos_list.collection.add(__videos[i]);
+                        } else {
+                            // Add to SideBar
+                            self.views.sidebar.collection.add(__videos[i]);
+                        }
+                    }
                 }
             });
 
@@ -200,6 +216,25 @@ define(function (require) {
                 jamId: this.attributes.jamId
             });
             this.views.comments.collection.remove(model);
+        },
+
+        createNewJam: function () {
+            // CREATE JAM ::
+            //      Video list
+            //      User Infos
+            //      Comments
+            var new_jam = new Jam({
+                user_facebook_id: AppData.user.get('facebook_id'),
+                name: 'New Jam 2',
+                description: 'This is a client side jam creation TEST'
+            });
+
+            new_jam.save({}, {
+                success: function (model, response) {
+                    console.log("[Production_controller > saveJam] JAM successfully saved : ", response);
+                    Backbone.history.navigate('jam/' + new_jam.id, true);
+                }
+            });
         }
     });
 

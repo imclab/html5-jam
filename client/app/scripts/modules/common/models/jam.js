@@ -12,7 +12,8 @@ define(function (require) {
             name: '',
             privacy: false,
             updatedAt: '',
-            userId: 0
+            userId: 0,
+            ownerFacebookId: 0
         },
 
         sync: function (method, model, options) {
