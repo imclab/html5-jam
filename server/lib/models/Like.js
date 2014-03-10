@@ -11,7 +11,8 @@ module.exports = function(sequelize, DataTypes) {
     });
 
     Jam.hasMany(Like);
-    User.hasMany(Like);
+    User.hasMany(Like, {foreignKey: 'userId'});
+    Like.belongsTo(User, {foreignKey: 'userId'});
 
     Like.sync();
     
