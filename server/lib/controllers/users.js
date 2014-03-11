@@ -22,17 +22,18 @@ exports.getUserProfile = function (req, res, next) {
 			include: [{ 
 				model: Jam,
 				required: false,
-				where: Sequelize.or({ 
-					privacy: 0 
-				}, 
-				{ 
-					userId: req.user.id 
-				}) 
 			}]
 		})
 		.success(function (user) {
 			if (user == null) { return next(new Errors.BadRequest('User not found')); }
-
+			else if (user.id != req.user.id) {
+				var i = user.jams.length;
+				while (i--) {
+					if (user.jams[i].privacy != 0) {
+						user.jams.splice(i, 1);
+					}
+				}
+			}
 			res.send(user);
 		})
 		.error(function (error) {
@@ -186,7 +187,7 @@ exports.login = function (profile, accessToken, done) {
     		facebook_id: profile.id 
     	},
     	{ 
-            name: profile.displayName, 
+            name: profile.displayName,
             picture_url: 'facebook',
             facebook_id: profile.id,
             facebook_token: accessToken

@@ -11,7 +11,8 @@ module.exports = function(sequelize, DataTypes) {
         tableName: 'notes'
     });
 
-    User.hasMany(Note);
+    User.hasMany(Note, {foreignKey: 'userId'});
+    Note.belongsTo(User, {foreignKey: 'userId'});
     
     Video.hasMany(Note);
 

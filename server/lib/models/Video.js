@@ -14,7 +14,8 @@ module.exports = function(sequelize, DataTypes) {
         tableName: 'videos'
     });
 
-    User.hasMany(Video);
+    User.hasMany(Video, {foreignKey: 'userId'});
+    Video.belongsTo(User, {foreignKey: 'userId'});
 
     Jam.hasMany(Video);
 

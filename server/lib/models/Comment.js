@@ -12,7 +12,8 @@ module.exports = function(sequelize, DataTypes) {
     });
 
     Jam.hasMany(Comment);
-    User.hasMany(Comment);
+    User.hasMany(Comment, {foreignKey: 'userId'});
+    Comment.belongsTo(User, {foreignKey: 'userId'});
 
     Comment.sync();
     
