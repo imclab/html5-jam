@@ -28,7 +28,8 @@
 }
 
 .comments {
-    float: right;
+    position: absolute;
     width: 150px;
+    right: 0;
     /*background-color: red;*/
 }

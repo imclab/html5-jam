@@ -13,7 +13,6 @@ define(function (require) {
     var LoginController = require('modules/login/login_controller');
     var HomeController = require('modules/home/home_controller');
 
-    var User = require('modules/common/models/user');
     var AuthManager = require('modules/common/auth_manager');
 
     var Cook = require('modules/common/cookie_manager');
@@ -29,7 +28,7 @@ define(function (require) {
 // Cook.flush();
 
             this.listenTo(vent, 'actualize:appdata', function () {
-                console.log('Coucou c\'est ici l\'init');
+                console.log('[Controller > actualize:appdata]');
                 AppData.fetchUser();
             });
 
