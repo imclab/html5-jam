@@ -65,10 +65,10 @@ define(function (require) {
             });
 
             this.attributes.authmanager.authenticationRequest(function (response) {
-                console.log("Authentification SUCCEED : ", response);
+                console.log("[Controller > handleToken] Auth SUCCESS", response);
                 vent.trigger('authentication:success', response.id);
             }, function (xhr) {
-                console.log("Authentication FAILED : ", xhr);
+                console.log("[Controller > handleToken] Auth FAILED", xhr);
             });
         },
 

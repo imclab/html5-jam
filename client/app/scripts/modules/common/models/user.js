@@ -7,6 +7,7 @@ define(function (require) {
         defaults: {
             createdAt: '',
             facebook_id: '',
+            email: '',
             jams: [],
             name: '',
             picture_url: '',

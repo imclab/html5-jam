@@ -118,8 +118,8 @@ define(function (require) {
             this.attributes.models.jam.fetch({
                 url: '/api/jams/' + self.attributes.jamId,
                 success: function (xhr) {
-                    console.log("[JAM:" + self.attributes.jamId + "] Fetching from server : jam.cid=" + self.attributes.models.jam.cid);
-                    console.log("[xhr]: ", xhr);
+                    console.log("[ProductionController > JAM:" + self.attributes.jamId + "] Fetching from server : jam.cid=" + self.attributes.models.jam.cid);
+                    console.log("[JAM FECTCH xhr]: ", xhr);
 
                     var i;
                     var __videos = xhr.get('videos');
@@ -139,7 +139,7 @@ define(function (require) {
             this.attributes.models.comments.fetch({
                 url: '/api/jams/' + self.attributes.jamId + '/comments',
                 success: function (xhr) {
-                    console.log('Comments : ', xhr);
+                    console.log('[ProductionController > Comments]', xhr);
                     self.views.comments.collection.add(xhr.models[0].get('comments'));
                 }
             });

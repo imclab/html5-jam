@@ -20,11 +20,11 @@ define(function (require) {
                     url: '/api/me',
                     method: 'GET',
                     success: function (response) {
-                        console.log("Authentification SUCCEED : ", response);
+                        console.log("[AuthManager > authenticationRequest] SUCCESS", response);
                         vent.trigger('authentication:success', response.id);
                     },
                     error: function (xhr) {
-                        console.log("Authentication FAILED : ", xhr);
+                        console.log("[AuthManager > authenticationRequest] FAILED", xhr);
                         CookieManager.remove(Const.COOKIE_AUTH);
                         vent.trigger('authentication:fail');
                     }
