@@ -8,11 +8,10 @@ define(function (require) {
 
         defaults: {
             cover: '../images/offlinecontent/thumb_example.png',
-            // description: '',
+            description: '',
             // instrument: '',
             // active: '',
             // volume: '',
-
             video_blob: '',
             audio_blob: '',
             _cid: ''

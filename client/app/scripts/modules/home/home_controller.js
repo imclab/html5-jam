@@ -7,6 +7,7 @@ define(function (require) {
 
     var User = require('modules/common/models/user');
     var JamCollection = require('modules/common/collections/jams');
+    var JamListView = require('modules/common/views/jams_view');
     var JamView = require('modules/common/views/jam_view');
 
     var MenuView = require('modules/home/views/menu_view');
@@ -42,7 +43,9 @@ define(function (require) {
 
             this.listenTo(profilLayout, 'show', function () {
                 this.views.menu = new MenuView({model: AppData.user});
-                this.views.feeds = new JamView();
+                this.views.feeds = new JamListView({
+                    view: JamView
+                });
 
                 profilLayout.feeds.show(this.views.feeds);
                 profilLayout.menu.show(this.views.menu);

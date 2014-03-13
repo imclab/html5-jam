@@ -30,11 +30,16 @@ define(function (require) {
             "click .playbtn" : "play",
             "click .stopbtn" : "stop",
             "click .recbtn"  : "record",
-            "click .savebtn" : "save"
+            "click .savebtn" : "save",
+            "click .createbtn" : "create"
         },
 
         ui: {
             onStage: '.stageLight'
+        },
+
+        create: function () {
+            vent.trigger("jam:create");
         },
 
         play: function () {

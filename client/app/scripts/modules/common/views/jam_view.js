@@ -22,15 +22,5 @@ define(function (require) {
         }
     });
 
-    var JamListView = Marionette.CollectionView.extend({
-
-        itemView: JamView,
-
-        initialize: function () {
-            this.collection = new JamCollection();
-        }
-
-    });
-
-    return JamListView;
+    return JamView;
 });

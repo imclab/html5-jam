@@ -16,7 +16,7 @@ define(function (require) {
         fetchUser: function () {
             this.user.fetch({
                 url: 'api/users/' + this.userId,
-                success: function () {
+                success: function (xhr) {
                     vent.trigger('user:fetching:end');
                 },
                 error: function () {

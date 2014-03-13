@@ -250,7 +250,7 @@ module.exports = function (grunt) {
                 imagesDir: '<%= jam.app %>/images',
                 javascriptsDir: '<%= jam.app %>/scripts',
                 fontsDir: '<%= jam.app %>/styles/fonts',
-                importPath: 'app/bower_components',
+                importPath: 'bower_components',
                 relativeAssets: true,
                 debugInfo: false
             },
@@ -389,7 +389,7 @@ module.exports = function (grunt) {
             }
         },
         modernizr: {
-            devFile: '<%= jam.app %>/bower_components/modernizr/modernizr.js',
+            devFile: 'bower_components/modernizr/modernizr.js',
             outputFile: '<%= jam.dist %>/scripts/vendor/modernizr.js',
             files: [
                 '<%= jam.dist %>/scripts/{,*/}*.js',

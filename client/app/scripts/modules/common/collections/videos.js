@@ -10,8 +10,6 @@ define(function (require) {
         model: Video,
 
         save: function (options) {
-            console.log('Collection Save : ', this);
-
             _.each(this.models, function (elem) {
                 elem.save(null, {
                     jamId: options.jamId

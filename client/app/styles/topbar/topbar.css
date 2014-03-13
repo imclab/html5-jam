@@ -1,24 +1,34 @@
 #topbar {
 	width: 100%;
-	height: 30px;
-
-	background-color: #333;
-	color: #FFF;
-	top: 0;
+	height: 130px;
+	line-height: 130px;
 }
 
 #topbar .username {
 	display: inline;
-	vertical-align: middle;
+	float: right;
 }
 
 #topbar .btn {
-	height: 100%;
+	width: 80px;
+	display: inline-block;
+	vertical-align: middle;
+}
 
-	float: right;
-	
-	padding: 0;
+#topbar img {
+	width: 50px;
+	height: 50px;
+}
 
-	border-left: solid 2px #555;
-	border-radius: 3px;
+#topbar .topbar-logo {
+	position: absolute;
+	width: 100%;
+	top: 0;
+	text-align: center;
+	z-index: -1;
+}
+
+.username p {
+	display: inline-block;
+	line-height: 0;
 }

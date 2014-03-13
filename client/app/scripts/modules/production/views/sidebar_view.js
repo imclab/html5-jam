@@ -32,14 +32,9 @@ define(function (require) {
 
             this.collection.add(new VideoModel({
                 username: "Pouch",
-                comment: "Voix aigue, hihi"
+                description: "sidebar_view init",
+                comment: "Voix aigue"
             }));
-
-            this.collection.add(new VideoModel({
-                username: "BogossDu60",
-                comment: "Ouai"
-            }));
-
         }
 
     });

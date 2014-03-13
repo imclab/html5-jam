@@ -55,8 +55,7 @@ define(function (require) {
             this.attributes.stamps = new Stamp.StampCollection();
 
             this.views.stamplist.collection.add([
-                new Stamp.StampModel({username: 'Bobby'}),
-                new Stamp.StampModel({username: 'Tamer'}),
+                new Stamp.StampModel({username: 'Benja'}),
                 new Stamp.StampModel({username: 'Piano'}),
                 new Stamp.StampModel({username: 'Plume'}),
                 new Stamp.StampModel({username: 'Marion'}),
