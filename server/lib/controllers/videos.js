@@ -43,7 +43,7 @@ exports.addVideoToJam = function (req, res, next) {
 					// add relation
 					jam.addVideos(newVideo)
 					.success(function () {
-						res.send(200);
+						res.send(newVideo);
 					})
 					.error(function (error) {
 						return next(new Errors.Error(error, 'Server error'));
