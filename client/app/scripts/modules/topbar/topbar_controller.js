@@ -45,7 +45,7 @@ define(function (require) {
         },
 
         toNewProject: function () {
-            this.navigate('jam/228');
+            this.navigate('jam/');
         },
 
         toHome: function () {

@@ -225,14 +225,19 @@ define(function (require) {
             //      Comments
             var new_jam = new Jam({
                 user_facebook_id: AppData.user.get('facebook_id'),
-                name: 'New Jam 2',
+                name: 'TEST new Jam',
                 description: 'This is a client side jam creation TEST'
             });
 
             new_jam.save({}, {
-                success: function (model, response) {
-                    console.log("[Production_controller > saveJam] JAM successfully saved : ", response);
-                    Backbone.history.navigate('jam/' + new_jam.id, true);
+
+                success: function (model, response, options) {
+                    console.log("Success");
+                    //Backbone.history.navigate('jam/' + model.id, true);
+                },
+
+                error: function (model, xhr, options) {
+                    console.log("Error");
                 }
             });
         }
