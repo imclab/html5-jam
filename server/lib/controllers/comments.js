@@ -59,7 +59,7 @@ exports.addJamComment = function (req, res, next) {
 		// create comment
 		Comment.create({ content: postData.content, userId: req.user.id, jamId: jam.id })
 		.success(function (newComment) {
-			res.send(200);
+			res.send(newComment);
 		})
 		.error(function (error) {
 			return next(new Errors.Error(error, 'Server error'));
