@@ -45,14 +45,12 @@ define(function (require) {
 
         handleConnection: function () {
             if (!AppData.user) {
-
                 if (this.attributes.authmanager.checkAuthenticationCookie()) {
                     this.attributes.authmanager.authenticationRequest();
                 } else {
                     // Pas de cookie found
                     Backbone.history.navigate('login/', true);
                 }
-
             }
         },
 
@@ -187,9 +185,13 @@ define(function (require) {
                 options.user = AppData.user;
 
                 this.controllers.profil = new ProfilController(options);
-                this.controllers.profil.show();
+                this.controllers.profil.show({
+                    profilId: options.profil_id
+                });
             } else {
-                this.controllers.profil.show();
+                this.controllers.profil.show({
+                    profilId: options.profil_id
+                });
             }
         },
 

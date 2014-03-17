@@ -31,7 +31,7 @@ module.exports = function (grunt) {
         watch: {
             compass: {
                 files: ['<%= jam.app %>/styles/{,*/}*css'],
-                tasks: ['clean:css', 'compass:server', 'cssmin:server', 'autoprefixer:server']
+                tasks: ['clean:css', 'compass:server', 'autoprefixer:server']
             },
             livereload: {
                 options: {

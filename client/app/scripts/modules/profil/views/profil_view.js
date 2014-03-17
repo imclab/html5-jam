@@ -15,14 +15,8 @@ define(function (require) {
             } else {
                 return 'profil/profil_empty';
             }
-        },
-
-        initialize: function () {
-            this.listenTo(vent, 'user:fetching:end', function () {
-                this.model = AppData.user;
-                this.render();
-            });
         }
+
     });
 
     return ProfilView;

@@ -41,7 +41,7 @@ define(function (require) {
         },
 
         toProfil: function () {
-            this.navigate('profil/' + AppData.user.cid);
+            this.navigate('profil/' + AppData.user.get('id'));
         },
 
         toNewProject: function () {

@@ -11,6 +11,7 @@ define(function (require) {
             jams: [],
             name: '',
             picture_url: '',
+            id: null,
             vignette_one: null,
             vignette_three: null,
             vignette_two: null

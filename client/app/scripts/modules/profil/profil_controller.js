@@ -17,18 +17,10 @@ define(function (require) {
 
     var ProfilController = BaseController.extend({
         initialize: function (options) {
-
-            // Ici je recupere mes JAMS uniquement
-
             BaseController.prototype.initialize.call(this, options);
 
             this._initializeAttributes();
             this._bindEvents();
-
-            this.listenTo(vent, 'user:fetching:end', function () {
-                console.log('Profil jams', AppData.user.get('jams'));
-                this.views.jamlist.collection.add(AppData.user.get('jams'));
-            });
         },
 
         getAllJams: function () {
@@ -36,11 +28,38 @@ define(function (require) {
             console.log('[ProfilController > getAllJams]', AppData.user.get('jams'));
         },
 
-        show: function () {
+        show: function (options) {
             BaseController.prototype.show.call(this);
 
-            if (AppData.user) {
-                this.views.jamlist.collection.add(AppData.user.get('jams'));
+            var _this = this;
+
+            if (!options.profilId) {
+                if (!AppData.user) {
+                    this.listenToOnce(vent, 'user:fetching:end', function () {
+                        console.log('Profil jams', AppData.user.get('jams'));
+                        this.views.jamlist.collection.add(AppData.user.get('jams'));
+                        this.views.content.model = AppData.user;
+                        this.views.content.render();
+                    });
+                } else {
+                    this.views.content.model = AppData.user;
+                    this.views.content.render();
+                    this.views.jamlist.collection.add(AppData.user.get('jams'));
+                }
+            } else if (this.attributes.userlist[options.profilId]) {
+                this.views.content.model = this.attributes.userlist[options.profilId];
+                this.views.content.render();
+                this.views.jamlist.collection.add(this.attributes.userlist[options.profilId].get('jams'));
+            } else {
+                this.attributes.userlist[options.profilId] = new User();
+                this.attributes.userlist[options.profilId].fetch({
+                    url: 'api/users/' + options.profilId,
+                    success: function (model, response, options) {
+                        _this.views.content.model = model;
+                        _this.views.content.render();
+                        _this.views.jamlist.collection.add(model.get('jams'));
+                    }
+                });
             }
         },
 
@@ -48,7 +67,7 @@ define(function (require) {
             var profilLayout = new ProfilLayout();
 
             this.listenTo(profilLayout, 'show', function () {
-                this.views.content = new ProfilView({model: AppData.user});
+                this.views.content = new ProfilView();
                 this.views.jamlist = new JamListView({
                     view: JamView
                 });
@@ -62,7 +81,7 @@ define(function (require) {
 
         _initializeAttributes: function () {
             this.attributes = {};
-            this.attributes.models = {};
+            this.attributes.userlist = {};
             this.views = {};
         },
 
