@@ -12,7 +12,6 @@ var users = require('../../controllers/users');
 exports.requiresAuthentication = function(req, res, next) {
 
     // testing purpose
-
  //    users.getUserById(100, function (user, err) {
  //    	if (user != null) {
 	// 		req.user = user;
