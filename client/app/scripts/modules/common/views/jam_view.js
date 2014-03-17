@@ -14,7 +14,7 @@ define(function (require) {
         template: 'common/jam',
 
         events: {
-            'click .jamName' : 'redirection'
+            'click .jam' : 'redirection'
         },
 
         redirection: function () {

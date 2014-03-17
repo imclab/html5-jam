@@ -1,12 +1,17 @@
-<div class="newProjectBtn btn">Jam(temp)</div>
-<div class="profilBtn btn">Profil</div>
-<div class="friendlistBtn btn">Friends</div>
+<nav class="navbar navbar-default navbar-static-top" role="navigation">
+	<div class="container">
 
-<div class="topbar-logo">
-    <img src="images/img.png" />
-</div>
+		<a class="navbar-brand" href=""><img src="images/img.png"/>  HTML Jam</a>
 
-<div class="username">
-    <p><%= name %></p>
-    <img src="http://graph.facebook.com/<%= facebook_id %>/picture?type=square" />
-</div>
+		<button class="btn-sm btn-danger navbar-btn pull-right logout">Logout</button>
+
+		<p class="navbar-text navbar-right username">
+			<a href="#profil/" class="navbar-link">
+				<img alt="profile picture" class="img-rounded" src="http://graph.facebook.com/<%= facebook_id %>/picture?type=square" /><%= name %>
+			</a>
+		</p>
+
+		<button class="btn btn-success navbar-btn pull-left newJam">Create new Jam !</button>
+
+	</div>
+</nav>

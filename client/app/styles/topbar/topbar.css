@@ -1,34 +1,37 @@
-#topbar {
-	width: 100%;
-	height: 130px;
-	line-height: 130px;
+.navbar-brand {
+	vertical-align: top;
 }
-
-#topbar .username {
-	display: inline;
-	float: right;
-}
-
-#topbar .btn {
-	width: 80px;
-	display: inline-block;
-	vertical-align: middle;
-}
-
-#topbar img {
-	width: 50px;
+.navbar-brand img {
 	height: 50px;
+	width: 50px;
+	position: relative;
+	top: -14px;
+	padding: 5px;
 }
 
-#topbar .topbar-logo {
-	position: absolute;
-	width: 100%;
-	top: 0;
-	text-align: center;
-	z-index: -1;
+.navbar-brand:hover {
+	opacity: 0.4;
 }
 
-.username p {
-	display: inline-block;
-	line-height: 0;
+.navbar-text {
+	margin-top: 11px;
+	margin-bottom: 10px;
+}
+
+.navbar .username img {
+	height: 30px;
+	width: 30px;
+	margin-right: 10px;
+}
+
+.navbar .username:hover {
+	opacity: 0.4;
+}
+
+.navbar .username a:hover {
+	text-decoration: none;
+}
+
+.navbar .newJam {
+	margin-left: 30px;
 }

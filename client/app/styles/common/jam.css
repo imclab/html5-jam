@@ -1,6 +1,38 @@
-.jam-element {
-    width: 100%;
-    height: auto;
-    border: solid 1px #000;
-    border-radius: 2px;
+.jam {
+	padding: 20px;
+	background-color: #fff;
+	-webkit-box-shadow: 1px 3px 5px 0px rgba(50, 50, 50, 0.75);
+	-moz-box-shadow:    1px 3px 5px 0px rgba(50, 50, 50, 0.75);
+	box-shadow:         1px 3px 5px 0px rgba(50, 50, 50, 0.75);
+	cursor: pointer;
+	color: #111;
+	margin-bottom: 20px;
+}
+
+.jam:hover {
+	background-color: #e5e5ee;
+}
+
+.jamHeader {
+	line-height: 40px;
+}
+
+.jamHeader img {
+	height: 40px;
+	width: 40px;
+}
+
+.dateCreation {
+	color: #777;
+}
+
+.ownerName {
+	color: #555;
+	font-size: 1.1em;
+	margin-left: 10px;
+}
+
+.likes {
+	font-size: 2.0em;
+	color: #5e8a2f;
 }
