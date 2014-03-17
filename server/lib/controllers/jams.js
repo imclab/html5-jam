@@ -30,7 +30,7 @@ exports.createNewJam = function (req, res, next) {
 			Like.create({ userId: req.user.id, jamId: newJam.id });
 			user.addJam(newJam)
 			.success(function () {
-				res.send(200);
+				res.send(newJam);
 			})
 			.error(function (error) {
 				return next(new Errors.Error(error, 'Server error'));
@@ -66,7 +66,7 @@ exports.updateJam = function (req, res, next) {
 		
 		jam.save(['name', 'description', 'privacy'])
 		.success(function () {
-			res.send(200);
+			res.send(jam);
 		})
 		.error(function (error) {
 			return next(new Errors.Error(error, 'Server error'));

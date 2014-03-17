@@ -27,14 +27,7 @@ define(function (require) {
         template: 'production/sidebar',
 
         initialize: function () {
-
             this.collection = new VideoCollection();
-
-            this.collection.add(new VideoModel({
-                username: "Pouch",
-                description: "sidebar_view init",
-                comment: "Voix aigue"
-            }));
         }
 
     });
