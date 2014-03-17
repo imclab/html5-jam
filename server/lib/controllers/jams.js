@@ -166,7 +166,7 @@ exports.getJamFeeds = function (req, res, next) {
 	var page = req.query.page || 1;
 	if (page <= 0) { page = 1; }
 
-	// get comments + user info
+	// get  user info
 	Comment.daoFactoryManager.sequelize.query('SELECT j.*, u.name as ownerName, u.facebook_id as ownerFacebookId, u.picture_url as ownerPictureUrl, count(l.id) as nbLikes'
 	+ ' FROM jams j LEFT JOIN users u ON u.id=j.userId LEFT OUTER JOIN likes l ON l.jamId=j.id'
 	+ ' WHERE j.privacy=0 GROUP BY j.id ORDER BY nbLikes DESC, j.createdAt DESC LIMIT ' + (page == 1 ? 0 : ((page - 1) * pagination + 1)) + ',' + pagination

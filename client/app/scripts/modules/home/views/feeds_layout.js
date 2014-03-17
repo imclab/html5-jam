@@ -8,11 +8,9 @@ define(function (require) {
 
         template: 'home/feeds_layout',
 
-        className: 'feeds_layout',
-
         regions: {
             feeds: '.feeds',
-            menu: '.homeMenu'
+            menu: '.menu'
         }
 
     });

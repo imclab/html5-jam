@@ -1,7 +1,10 @@
-<img src="http://graph.facebook.com/<%= facebook_id %>/picture?type=square" />
-<p><%= name %></p>
-<p> email : <%= email %></p>
-<p> createdAt : <%= createdAt %></p>
-<p> facebook_id : <%= facebook_id %></p>
-<p> id : <%= id %></p>
-<p> picture_url : <%= picture_url %></p>
+<div class="profile">
+
+	<div class="pull-right">
+		<button class="btn btn-danger">Delete Account</button>
+	</div>
+
+	<h3><img alt="profile picture" class="img-rounded" src="http://graph.facebook.com/<%= facebook_id %>/picture?type=square" /><%= name %></h3>
+	<i>Account created <%= createdAt %></i>
+
+</div>

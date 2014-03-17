@@ -22,10 +22,10 @@ define(function (require) {
         },
 
         _bindEvents: function () {
-            this.listenTo(vent, 'topbar:friends', this.toFriendList);
-            this.listenTo(vent, 'topbar:profil', this.toProfil);
-            this.listenTo(vent, 'topbar:newproject', this.toNewProject);
-            this.listenTo(vent, 'topbar:home', this.toHome);
+            // this.listenTo(vent, 'topbar:feeds', this.toHome);
+            // this.listenTo(vent, 'topbar:username', this.toProfil);
+            // this.listenTo(vent, 'topbar:friends', this.toFriendList);
+            this.listenTo(vent, 'topbar:newJam', this.toNewProject);
         },
 
         show: function () {

@@ -14,8 +14,7 @@ define(function (require) {
         el: '#topbar',
 
         events: {
-            'click .newProjectBtn' : 'toNewProject',
-            'click .friendlistBtn' : 'toFriendList',
+            'click .newJam' : 'toNewProject',
             'click .profilBtn' : 'toProfil',
             'click .username' : 'toHome'
         },
@@ -48,7 +47,7 @@ define(function (require) {
         },
 
         toNewProject: function () {
-            vent.trigger('topbar:newproject');
+            vent.trigger('topbar:newJam');
         },
 
         toHome: function () {

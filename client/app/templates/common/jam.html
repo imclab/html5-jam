@@ -1,3 +1,22 @@
-<img src="http://graph.facebook.com/<%= ownerFacebookId %>/picture?type=square" />
-<p class='jamName'><%= name %></p>
-<p><%= description %></p>
+<div class="jam easeTransition">
+
+	<div class="jamHeader">
+		<img class="profilePic img-rounded" alt="profile picture" src="http://graph.facebook.com/<%= ownerFacebookId %>/picture?type=square" />
+		<a class="ownerName" href="#users/<%= userId %>"><%= ownerName %></a>
+		<i class="pull-right dateCreation"><%= createdAt %></i>
+	</div>
+
+	<hr/>
+
+	<h3><%= name %></h3>
+
+	<div class="socialFigures pull-right">
+		<div class="likes"><span class="glyphicon glyphicon-thumbs-up"></span> <%= nbLikes %></div>
+	</div>
+
+
+	<p><%= description %></p>
+
+
+
+</div>
