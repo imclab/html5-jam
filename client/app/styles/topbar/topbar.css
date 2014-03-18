@@ -1,31 +1,60 @@
-.navbar-brand {
-	vertical-align: top;
+.navbar {
+	background: #fcfff4; /* Old browsers */
+	background: -moz-linear-gradient(top, #fcfff4 0%, #e9e9ce 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fcfff4), color-stop(100%,#e9e9ce)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #fcfff4 0%,#e9e9ce 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #fcfff4 0%,#e9e9ce 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #fcfff4 0%,#e9e9ce 100%); /* IE10+ */
+	background: linear-gradient(to bottom, #fcfff4 0%,#e9e9ce 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfff4', endColorstr='#e9e9ce',GradientType=0 ); /* IE6-9 */
+	-webkit-box-shadow: 0px 3px 5px 0px rgba(50, 50, 50, 0.75);
+	-moz-box-shadow:    0px 3px 5px 0px rgba(50, 50, 50, 0.75);
+	box-shadow:         0px 3px 5px 0px rgba(50, 50, 50, 0.75);
 }
+
+.navbar-default .navbar-brand {
+	font-size: 1.5em;
+	vertical-align: top;
+	color: #111;
+	text-shadow: 1px 1px 2px #ccc;
+}
+
 .navbar-brand img {
-	height: 50px;
-	width: 50px;
+	height: 60px;
+	width: 60px;
 	position: relative;
-	top: -14px;
+	top: -19px;
 	padding: 5px;
 }
 
-.navbar-brand:hover {
-	opacity: 0.4;
+.navbar-default .navbar-brand:hover, .navbar-default .username:hover {
+	opacity: 0.85;
+	color: #2383c4;
+	text-shadow: none;
 }
 
 .navbar-text {
-	margin-top: 11px;
-	margin-bottom: 10px;
+	margin-top: 12px;
+	margin-bottom: 0px;
 }
+
+.navbar-default .username .navbar-link {
+	color: #333;
+	font-size: 1.1em;
+	font-weight: normal;
+	text-shadow: 1px 1px 2px #ccc;
+}
+
+.navbar-default .username:hover > a, .navbar-default .username a:hover {
+	color: #2383c4;
+	text-shadow: none;
+}
+
 
 .navbar .username img {
-	height: 30px;
-	width: 30px;
-	margin-right: 10px;
-}
-
-.navbar .username:hover {
-	opacity: 0.4;
+	height: 40px;
+	width: 40px;
+	margin-right: 6px;
 }
 
 .navbar .username a:hover {

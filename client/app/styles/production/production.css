@@ -1,34 +1,8 @@
-.self-container {
-    padding: 0;
-    left: 150px;
-    right: 150px;
-    position: absolute;
-}
-
 .recorder {
-    width: 100%;
-}
-
-.selected_list {
-    width: 100%;
-    background-color: yellow;
-    display: inline-block;
-}
-
-.videos_list {
-    width: 100%;
-    background-color: violet;
-    display: inline-block;
-}
-
-.sidebar {
-    position: absolute;
-    width: 150px;
-    /*background-color: #F60;*/
-}
-
-.comments {
-    width: 150px;
-    float: right;
-    /*background-color: red;*/
+    padding: 10px;
+    background-color: #fff;
+    -webkit-box-shadow: 1px 3px 5px 0px rgba(50, 50, 50, 0.75);
+    -moz-box-shadow:    1px 3px 5px 0px rgba(50, 50, 50, 0.75);
+    box-shadow:         1px 3px 5px 0px rgba(50, 50, 50, 0.75);
+    color: #111;
 }

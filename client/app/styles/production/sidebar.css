@@ -1,21 +1,8 @@
-.videoElement {
-	margin-bottom: 20px;
-}
-
-.thumb {
-	width: 100%;
-	height: 50px;
-	margin: 0 auto;
-	display: block;
-}
-
-.username {
-	font-weight: bold;
-	font-size: 1em;
-}
-
-.comment {
-	font-style: italic;
-	margin: 0;
-	font-size: 0.8em;
+.sidebar {
+	padding: 10px;
+    background-color: #fff;
+    -webkit-box-shadow: 1px 3px 5px 0px rgba(50, 50, 50, 0.75);
+    -moz-box-shadow:    1px 3px 5px 0px rgba(50, 50, 50, 0.75);
+    box-shadow:         1px 3px 5px 0px rgba(50, 50, 50, 0.75);
+    color: #111;
 }

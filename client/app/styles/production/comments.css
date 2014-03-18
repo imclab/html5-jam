@@ -1,25 +1,17 @@
-.comments-list span {
-    display: block;
+.comments {
+    padding: 10px;
+    background-color: #fff;
+    -webkit-box-shadow: 1px 3px 5px 0px rgba(50, 50, 50, 0.75);
+    -moz-box-shadow:    1px 3px 5px 0px rgba(50, 50, 50, 0.75);
+    box-shadow:         1px 3px 5px 0px rgba(50, 50, 50, 0.75);
+    color: #111;
 }
 
-textarea {
-    width: 100%;
-    height: 100px;
-    font-size: 0.8em;
+.comments textarea {
+   resize: none;
+   padding: 4px;
 }
 
-.sendbtn {
-    border: solid 1px #000;
-    border-radius: 2px;
-
-    margin-bottom: 20px;
-}
-
-.comments-element {
-    position: relative;
-}
-
-.removeComment {
-    position: absolute;
-    right: 0;
+.comments .sendCommentLayout textarea, .comments .sendCommentLayout button {
+    height: 60px;
 }

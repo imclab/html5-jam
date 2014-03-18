@@ -1,17 +1,18 @@
-<nav class="navbar navbar-default navbar-static-top" role="navigation">
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 	<div class="container">
 
-		<a class="navbar-brand" href=""><img src="images/img.png"/>  HTML Jam</a>
+		<a class="navbar-brand" href=""><img src="images/logo.png"/>  HTML Jam</a>
 
-		<button class="btn-sm btn-danger navbar-btn pull-right logout">Logout</button>
+		<button class="btn-xs btn-danger navbar-btn pull-right logout">Logout</button>
 
-		<p class="navbar-text navbar-right username">
+		<p class="navbar-text pull-right username">
 			<a href="#profil/" class="navbar-link">
-				<img alt="profile picture" class="img-rounded" src="http://graph.facebook.com/<%= facebook_id %>/picture?type=square" /><%= name %>
+				<img alt="profile picture" class="img-rounded" src="http://graph.facebook.com/<%= facebook_id %>/picture?type=square" />
+				<span class="hidden-xs"><%= name %></span>
 			</a>
 		</p>
 
-		<button class="btn btn-success navbar-btn pull-left newJam">Create new Jam !</button>
+		<button class="btn-sm btn-info navbar-btn pull-left newJam">Create Jam !</button>
 
 	</div>
 </nav>
