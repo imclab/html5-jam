@@ -42,6 +42,9 @@ define(function (require) {
             if (options.jam_id) {
                 // Existing project :
                 this.attributes.jamId = options.jam_id;
+            } else {
+                delete this.attributes.jamId;
+                this.attributes.models = {};
             }
 
             switch (options.type) {
@@ -151,7 +154,13 @@ define(function (require) {
 
         save: function () {
             if (!this.attributes.models.jam) {
-                console.log("[Production_controller.js > save] ERROR : No Jam loaded");
+                console.log("[Production_controller.js > save] ERROR : No Jam loaded : ", this.views.recorder.collection);
+
+                for (var i=0; i<this.views.recorder.collection.models.length; i++) {
+                    this.views.videos_list.collection.add(this.views.recorder.collection.models[i]);
+                }
+
+                this.views.recorder.collection.reset();
             } else {
                 // Actualise / create the jam
                 // Save the video
@@ -225,20 +234,17 @@ define(function (require) {
             //      Comments
             var new_jam = new Jam({
                 user_facebook_id: AppData.user.get('facebook_id'),
-                name: 'TEST new Jam',
-                description: 'This is a client side jam creation TEST'
+                name: 'Jam winner',
+                description: 'Cest coool'
             });
 
+            var onSuccess = function (model, response, options) {
+                // Tout enregistrer (les videos, les comments vont degager)
+                Backbone.history.navigate('jam/' + model.id, true);
+            };
+
             new_jam.save({}, {
-
-                success: function (model, response, options) {
-                    console.log("Success");
-                    //Backbone.history.navigate('jam/' + model.id, true);
-                },
-
-                error: function (model, xhr, options) {
-                    console.log("Error");
-                }
+                success: onSuccess
             });
         }
     });
