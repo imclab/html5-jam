@@ -1,10 +1,13 @@
 <div class="profile">
 
 	<div class="pull-right">
+	<button class="btn-xs btn-info">Follow</button>
 		<button class="btn-xs btn-danger">Delete Account</button>
 	</div>
 
 	<h3><img alt="profile picture" class="img-rounded" src="http://graph.facebook.com/<%= facebook_id %>/picture?type=square" /><%= name %></h3>
-	<i>Account created <%= createdAt %></i>
-
+	<i class="pull-right">Account created <%= createdAt %></i>
+	<div class="favorites">
+		<h4>Favorites</h4>
+	</div>
 </div>

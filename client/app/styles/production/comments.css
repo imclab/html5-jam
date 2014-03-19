@@ -5,13 +5,38 @@
     -moz-box-shadow:    1px 3px 5px 0px rgba(50, 50, 50, 0.75);
     box-shadow:         1px 3px 5px 0px rgba(50, 50, 50, 0.75);
     color: #111;
+    overflow: auto;
+    max-height: 800px;
+}
+
+.comments .sendCommentLayout {
+	margin-bottom: 10px;
 }
 
 .comments textarea {
    resize: none;
-   padding: 4px;
+   padding: 4px 8px 4px 8px;
 }
 
 .comments .sendCommentLayout textarea, .comments .sendCommentLayout button {
-    height: 60px;
+    height: 36px;
+}
+
+.comments .owner {
+	color: #2383c4;
+}
+
+.comments .date {
+	color: #777;
+}
+
+.comments .removeComment {
+	height: 20px;
+	width: 20px;
+	padding: 0px;
+	opacity: 0;
+}
+
+.comments .comment:hover > .removeComment {
+	opacity: 0.9;
 }

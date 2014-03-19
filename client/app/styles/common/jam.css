@@ -16,7 +16,7 @@
 }
 
 .jam:hover {
-	background-color: #e9e9ce;
+	background-color: #e5e5e5;
 }
 
 .jamHeader {
@@ -41,4 +41,8 @@
 .likes {
 	font-size: 2.0em;
 	color: #2383c4;
+}
+
+.likes:hover {
+	font-size: 2.5em;
 }
