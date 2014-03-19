@@ -13,6 +13,7 @@ define(function (require) {
     var CommentsView = require('modules/production/views/comments_view');
     var VideosListView = require('modules/production/views/jam_videos_list');
 
+    var Like = require('modules/common/models/like');
     var CommentModel = require('modules/production/models/comment');
     var CommentCollection = require('modules/production/collections/comments');
     var VideoModel = require('modules/common/models/video');
@@ -107,8 +108,10 @@ define(function (require) {
                 );
             });
 
-
             this.listenTo(vent, 'jam:create', this.createNewJam);
+
+            this.listenTo(vent, 'jam:like', this.likeJam);
+            this.listenTo(vent, 'jam:dislike', this.dislikeJam);
         },
 
         getJamFromServer: function () {
@@ -136,6 +139,9 @@ define(function (require) {
                             self.views.sidebar.collection.add(__videos[i]);
                         }
                     }
+
+                    self.views.recorder.model = xhr;
+                    self.views.recorder.render();
                 }
             });
 
@@ -165,7 +171,7 @@ define(function (require) {
                 // Actualise / create the jam
                 // Save the video
                 // Add the video to the jam
-                // Reload la page
+                // Reload the page
                 console.log("[Production_controller.js > save] SUCCESS : ", this.attributes.selectedIds);
 
                 // On envoit toutes les videos selectionnees au server
@@ -203,6 +209,11 @@ define(function (require) {
         },
 
         addComments: function (str) {
+            if (this.attributes.jamId == null) {
+                alert("Save the jam before adding comments !");
+                return;
+            }
+
             var self = this;
 
             var newComment = new CommentModel({
@@ -246,7 +257,29 @@ define(function (require) {
             new_jam.save({}, {
                 success: onSuccess
             });
+        },
+
+        likeJam: function (jamId) {
+            new Like({
+                jamId: jamId
+            }).save({
+                success: function (xhr) {
+                    console.log('::success::', xhr);
+                }
+            });
+        },
+
+        dislikeJam: function (jamId) {
+            new Like({
+                id: '',
+                jamId: jamId
+            }).destroy({
+                success: function (xhr) {
+                    console.log('::success::', xhr);
+                }
+            });
         }
+
     });
 
     return RecorderController;

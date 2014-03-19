@@ -6,6 +6,8 @@ define(function (require) {
     var vent = require('modules/common/vent');
 
     var User = require('modules/common/models/user');
+    var Like = require('modules/common/models/like');
+    
     var JamCollection = require('modules/common/collections/jams');
     var JamListView = require('modules/common/views/jams_view');
     var JamView = require('modules/common/views/jam_view');
@@ -57,8 +59,31 @@ define(function (require) {
         },
 
         _bindEvents: function () {
+            this.listenTo(vent, 'jam:like', this.likeJam);
+            this.listenTo(vent, 'jam:dislike', this.dislikeJam);
+        },
 
+        likeJam: function (jamId) {
+            new Like({
+                jamId: jamId
+            }).save({
+                success: function (xhr) {
+                    console.log('::success::', xhr);
+                }
+            });
+        },
+
+        dislikeJam: function (jamId) {
+            new Like({
+                id: '',
+                jamId: jamId
+            }).destroy({
+                success: function (xhr) {
+                    console.log('::success::', xhr);
+                }
+            });
         }
+
     });
 
     return HomeController;

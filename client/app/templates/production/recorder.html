@@ -1,9 +1,17 @@
-<div class="header">
-	<div class="pull-right">
-		<button class="likeButton btn-xs btn-info right"><span class="glyphicon glyphicon-music"></span>&nbsp;&nbsp;I like it !</button>
-		&nbsp;&nbsp;344
-	</div>
-	<h4><b>Titre Jam</b></h4>
+<div class="header row">
+    <div class="col-xs-8">
+    <% if (name != null) { %>
+	   <h4><b><%= name %></b></h4>
+    <% } else { %>
+        <input id="inputName"  class="form-control" type="text" placeholder="enter a name for this jam !"/>
+    <% } %>
+    </div>
+    <% if (name != null) { %>
+        <div class="col-xs-4 right">
+            <button class="likeButton btn-xs right <% if (doILikeIt) { %>btn-success<% } else { %>btn-info<% } %>"><span class="glyphicon glyphicon-music"></span>&nbsp;&nbsp;<% if (doILikeIt) { %>Unlike<% } else { %>I like it !<% } %></button>
+            &nbsp;&nbsp;<%= nbLikes %>
+        </div>
+    <% } %>
 </div>
 
 <div class="preview-container">

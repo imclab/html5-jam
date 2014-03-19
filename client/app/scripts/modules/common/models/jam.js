@@ -9,11 +9,13 @@ define(function (require) {
         defaults: {
             createdAt: '',
             description: '',
-            name: '',
+            name: null,
             privacy: false,
             updatedAt: '',
             userId: 0,
-            ownerFacebookId: 0
+            ownerFacebookId: 0,
+            nbLikes: 0,
+            doILikeIt: false
         },
 
         sync: function (method, model, options) {

@@ -46,3 +46,7 @@
 .likes:hover {
 	font-size: 2.5em;
 }
+
+.likes .green {
+	color: #13987e;
+}
