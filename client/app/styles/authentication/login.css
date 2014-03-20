@@ -1,10 +1,8 @@
 #login {
     position: fixed;
-    top: 15%;
-    left:25%;
-    width: 50%;
-    height: auto;
-    overflow: hidden;
+    top: 50px;
+    left:20%;
+    width: 60%;
     text-align: center;
     background: #fff;
     opacity: 0.9;
@@ -16,6 +14,42 @@
 
 
 #login h1 {
-	font-size: 4.0em;
+    font-family: 'Lemon';
+	font-size: 3.0em;
 	text-shadow: 2px 2px 5px #aaa;
+}
+
+#login h3 {
+    font-family: 'Lemon';
+    font-size: 1.8em;
+    text-shadow: 2px 2px 5px #aaa;
+}
+
+#login img.bigLogo {
+    height: 300px;
+    width: 300px;
+}
+
+.loginFacebook {
+    font-family: 'Lemon';
+    line-height: 50px!important;
+    padding: 8px 12px 8px 12px!important;
+    background: #8da3d4!important;
+    border-color: #8da3d4!important;
+}
+
+.loginFacebook:hover {
+    background: #ccd5e9!important;
+    border-color: #ccd5e9!important;
+}
+
+.loginFacebook span {
+    vertical-align: top;
+}
+
+.loginFacebook img {
+    vertical-align: top;
+    height: 50px;
+    width: 50px;
+    margin-right: 15px;
 }

@@ -73,3 +73,7 @@
     margin-top: 15px;
     margin-bottom: 15px;
 }
+
+.comments .comment {
+    padding: 6px;
+}
