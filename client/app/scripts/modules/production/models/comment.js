@@ -8,13 +8,8 @@ define(function (require) {
     var Comment = Backbone.Model.extend({
 
         defaults: {
-            ownerName: 'anonymous',
             content: '',
             createdAt: ''
-        },
-
-        initialize: function () {
-            this.attributes.createdAt = AppData.transformDate(this.attributes.createdAt);
         },
 
         sync: function (method, model, options) {
@@ -30,6 +25,12 @@ define(function (require) {
         }
 
     });
+
+    // override toJSON
+    Comment.prototype.toJSON = function () {
+        this.attributes.createdAt = moment(this.attributes.createdAt).fromNow();
+        return this.attributes;
+    };
 
     return Comment;
 });

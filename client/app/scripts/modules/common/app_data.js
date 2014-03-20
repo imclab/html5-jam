@@ -24,11 +24,8 @@ define(function (require) {
                     // Besoin de creer un profil
                 }
             });
-        },
-
-        transformDate: function (date) {
-            return 'chibron';
         }
+
     };
 
     return App;

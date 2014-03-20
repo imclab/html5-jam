@@ -149,7 +149,7 @@ define(function (require) {
                 url: '/api/jams/' + self.attributes.jamId + '/comments',
                 success: function (xhr) {
                     console.log('[ProductionController > Comments]', xhr);
-                    self.views.comments.collection.add(xhr.models[0].get('comments'));
+                    self.views.comments.collection.add(xhr.models[0].get('comments'), { at: 0 });
                 }
             });
         },
@@ -212,12 +212,16 @@ define(function (require) {
             if (this.attributes.jamId == null) {
                 alert("Save the jam before adding comments !");
                 return;
+            } else if (str == null || str.length == 0) {
+                return;
             }
 
             var self = this;
 
             var newComment = new CommentModel({
+                userId: AppData.user.get('id'),
                 ownerName: AppData.user.get('name'),
+                ownerFacebookId: AppData.user.get('facebook_id'),
                 content: str
             });
 
@@ -228,7 +232,8 @@ define(function (require) {
                 }
             });
 
-            this.views.comments.collection.add(newComment);
+            this.views.comments.collection.add(newComment, { at: 0 });
+            this.views.comments.ui.textarea.val('');
         },
 
         removeComment: function (model) {
@@ -245,8 +250,7 @@ define(function (require) {
             //      Comments
             var new_jam = new Jam({
                 user_facebook_id: AppData.user.get('facebook_id'),
-                name: 'Jam winner',
-                description: 'Cest coool'
+                name: 'Jam winner'
             });
 
             var onSuccess = function (model, response, options) {

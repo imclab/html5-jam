@@ -2,6 +2,10 @@
 	margin-top: 30px;
 }
 
+.feedsMenu .btn-group button.active {
+	background: #2383c4;
+}
+
 .feeds {
 	margin-top: 20px;
 }

@@ -25,7 +25,7 @@ exports.createNewJam = function (req, res, next) {
 	.success(function (user) {
 		if (user == null) { return next(new Errors.BadRequest('User not found')); }
 
-		Jam.create({ name: postData.name, description: postData.description, privacy: postData.privacy })
+		Jam.create({ name: postData.name, privacy: postData.privacy })
 		.success(function (newJam) {
 			Like.create({ userId: req.user.id, jamId: newJam.id });
 			user.addJam(newJam)
@@ -61,10 +61,9 @@ exports.updateJam = function (req, res, next) {
 		if (jam == null) { return next(new Errors.BadRequest('Jam not found')); }
 
 		jam.name = postData.name || jam.name;
-		jam.description = postData.description || jam.description;
 		jam.privacy = postData.privacy || jam.privacy;
 		
-		jam.save(['name', 'description', 'privacy'])
+		jam.save(['name', 'privacy'])
 		.success(function () {
 			res.send(jam);
 		})
@@ -137,7 +136,7 @@ exports.getJamDetails = function (req, res, next) {
 			jam.doILikeIt = result > 0;
 
 			// get jam's videos
-			Jam.daoFactoryManager.sequelize.query('SELECT v.id, v.description, v.instrument, v.createdAt, v.userId, u.name as ownerName, u.facebook_id as ownerFacebookId, u.picture_url as ownerPictureUrl, AVG(n.value) AS note'
+			Jam.daoFactoryManager.sequelize.query('SELECT v.id, v.instrument, v.createdAt, v.userId, u.name as ownerName, u.facebook_id as ownerFacebookId, u.picture_url as ownerPictureUrl, AVG(n.value) AS note'
 			+ ' FROM videos v LEFT JOIN users u ON u.id=v.userId LEFT OUTER JOIN notes n ON n.videoId=v.id'
 			+ ' WHERE v.jamId=? GROUP BY v.id ORDER BY v.createdAt DESC'
 				, null, { raw: true }, [req.params.jamId])
@@ -166,10 +165,20 @@ exports.getJamFeeds = function (req, res, next) {
 	var page = req.query.page || 1;
 	if (page <= 0) { page = 1; }
 
+	var orderBy;
+	var feedsType = req.query.feedsType || 'popular';
+	if (feedsType == 'recent') {
+		orderBy = 'j.createdAt DESC, nbLikes DESC';
+	} else if (feedsType == 'ourfavorites') {
+		orderBy = 'j.star DESC, nbLikes DESC, j.createdAt DESC';
+	} else {
+		orderBy = 'nbLikes DESC, j.createdAt DESC';
+	}
+
 	// get  user info
 	Comment.daoFactoryManager.sequelize.query('SELECT j.*, u.name as ownerName, u.facebook_id as ownerFacebookId, u.picture_url as ownerPictureUrl, count(l.id) as nbLikes'
-	+ ' FROM jams j LEFT JOIN users u ON u.id=j.userId LEFT OUTER JOIN likes l ON l.jamId=j.id'
-	+ ' WHERE j.privacy=0 GROUP BY j.id ORDER BY nbLikes DESC, j.createdAt DESC LIMIT ' + (page == 1 ? 0 : ((page - 1) * pagination + 1)) + ',' + pagination
+	+ ' FROM jams j LEFT JOIN users u ON u.id=j.userId LEFT OUTER JOIN likes l ON l.jamId=j.id ' + (feedsType == 'friendsJams' ? 'LEFT JOIN friends f ON j.userId=f.friendId' : '')
+	+ ' WHERE j.privacy=0 ' + (feedsType == 'friendsJams' ? 'AND f.userId=' + req.user.id : '') + ' GROUP BY j.id ORDER BY ' + orderBy + ' LIMIT ' + (page == 1 ? 0 : ((page - 1) * pagination + 1)) + ',' + pagination
 		, null, { raw: true }, [req.user.id])
 	.success(function (rows) {
 	

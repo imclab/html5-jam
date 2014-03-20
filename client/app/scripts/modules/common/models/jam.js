@@ -3,6 +3,7 @@ define(function (require) {
     "use strict";
 
     var Backbone = require('backbone');
+    var moment = require('moment');
 
     var JamModel = Backbone.Model.extend({
         /* URL : /jam/:cid */
@@ -36,6 +37,12 @@ define(function (require) {
         }
 
     });
+
+    // override toJSON
+    JamModel.prototype.toJSON = function() {
+        this.attributes.createdAt = moment(this.attributes.createdAt).fromNow();
+        return this.attributes;
+    };
 
 
     return JamModel;

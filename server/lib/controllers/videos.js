@@ -32,7 +32,7 @@ exports.addVideoToJam = function (req, res, next) {
 		if (jam == null) { return next(new Errors.BadRequest('Jam not found')); }
 
 		// create video
-		Video.create({description: postData.description, instrument: postData.instrument, userId: req.user.id })
+		Video.create({ instrument: postData.instrument, userId: req.user.id })
 		.success(function (newVideo) {
 
 			// save audio and video files to disk

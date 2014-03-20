@@ -5,7 +5,6 @@ define(function (require) {
     var User = Backbone.Model.extend({
 
         defaults: {
-            createdAt: '',
             facebook_id: '',
             email: '',
             jams: [],
@@ -18,6 +17,12 @@ define(function (require) {
 	    }
 
     });
+
+    // override toJSON
+    User.prototype.toJSON = function() {
+        this.attributes.createdAt = moment(this.attributes.createdAt).fromNow();
+        return this.attributes;
+    };
 
     return User;
 });

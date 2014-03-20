@@ -28,15 +28,7 @@ define(function (require) {
 
         show: function () {
             BaseController.prototype.show.call(this);
-
-            var self = this;
-
-            this.attributes.models.feeds.fetch({
-                url: '/api/feeds',
-                success: function (xhr) {
-                    self.views.feeds.collection.add(xhr.models[0].get('jams'));
-                }
-            });
+            this.showFeeds('popular');
         },
 
         getLayout: function () {
@@ -61,6 +53,12 @@ define(function (require) {
         _bindEvents: function () {
             this.listenTo(vent, 'jam:like', this.likeJam);
             this.listenTo(vent, 'jam:dislike', this.dislikeJam);
+
+            this.listenTo(vent, 'feeds:showMostPopular', this.showFeeds);
+            this.listenTo(vent, 'feeds:showMostRecent', this.showFeeds);
+            this.listenTo(vent, 'feeds:showFriendsJams', this.showFeeds);
+            this.listenTo(vent, 'feeds:showOurFavorites', this.showFeeds);
+
         },
 
         likeJam: function (jamId) {
@@ -80,6 +78,19 @@ define(function (require) {
             }).destroy({
                 success: function (xhr) {
                     console.log('::success::', xhr);
+                }
+            });
+        },
+
+        showFeeds: function (feedsType) {
+            var self = this;
+
+            this.attributes.models.feeds.fetch({
+                url: '/api/feeds/',
+                data: { type: feedsType },
+                success: function (xhr) {
+                    self.attributes.models.feeds = new JamCollection(); 
+                    self.views.feeds.collection.add(xhr.models[0].get('jams'));
                 }
             });
         }

@@ -5,8 +5,8 @@ module.exports = function(sequelize, DataTypes) {
     var Jam = sequelize.define('Jam', 
     {
         name: DataTypes.STRING,
-        description: DataTypes.STRING,
-        privacy: { type: DataTypes.BOOLEAN, defaultValue: false }
+        privacy: { type: DataTypes.BOOLEAN, defaultValue: false },
+        star: DataTypes.INTEGER
     },
     {
         tableName: 'jams'

@@ -1,12 +1,16 @@
 <div class="comment">
 
+	<div class="header">
+		<a class="owner" href="#users/<%= userId %>">
+			<img alt="profile picture" class="img-rounded" src="http://graph.facebook.com/<%= ownerFacebookId %>/picture?type=square"/>
+			&nbsp;&nbsp;<small><%= ownerName %></small>
+		</a>
+		<small class="date pull-right"><i><%= createdAt %></i></small>
+	</div>
+
 	<button class="btn-xs btn-danger pull-right removeComment"><span class="glyphicon glyphicon-remove"></span></button>
 
-	<small class="date pull-right"><i><%= createdAt %></i></small>
-
-	<a class="owner" href="#users/<%= userId %>"><small><%= ownerName %></small></a>
-
-	<p class="comment"><%= content %></p>
+	<p class="content"><%= content %></p>
 
 	<hr/>
 

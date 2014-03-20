@@ -23,7 +23,6 @@ define(function (require) {
 
     var CommentsView = Marionette.CompositeView.extend({
 
-        tagName: 'div',
         className: 'view-wrapper',
         itemView: CommentElement,
         itemViewContainer: '.comments-list',
@@ -37,14 +36,14 @@ define(function (require) {
             textarea: 'textarea'
         },
 
+        initialize: function () {
+            this.collection = new CommentCollection();
+        },
+
         sendComment: function () {
             if (this.ui.textarea.text !== "") {
                 vent.trigger('comment:new', this.ui.textarea.val());
             }
-        },
-
-        initialize: function () {
-            this.collection = new CommentCollection();
         }
 
     });
