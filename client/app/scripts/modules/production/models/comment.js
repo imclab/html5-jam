@@ -3,18 +3,20 @@ define(function (require) {
     "use strict";
 
     var Backbone = require('backbone');
-    var AppData = require('modules/common/app_data');
+    var Utils = require('modules/common/utils');
 
     var Comment = Backbone.Model.extend({
 
         defaults: {
             ownerName: 'anonymous',
             content: '',
-            createdAt: ''
+            createdAt: '',
+            userId: null
         },
 
         initialize: function () {
-            this.attributes.createdAt = AppData.transformDate(this.attributes.createdAt);
+            _.extend(this, Utils);
+            this.attributes.createdAt = this.transformDate(this.attributes.createdAt);
         },
 
         sync: function (method, model, options) {
