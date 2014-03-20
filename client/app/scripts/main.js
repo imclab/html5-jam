@@ -35,4 +35,17 @@ function ($, Backbone, App) {
         e.preventDefault();
     });
 
+    /**
+     * Home Pop-ups
+     */
+    $(document).on("click", "span[modal]", function (e) {
+        $(this.getAttribute('modal')).addClass('show');
+    });
+    $(document).on("click", "[closeModal]:not(.modalDialog div)", function (e) {
+        $(this.getAttribute('closeModal')).removeClass('show');
+    });
+    $(document).on("click", "[closeModal] div", function (e) {
+        e.stopPropagation();
+    });
+
 });

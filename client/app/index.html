@@ -34,9 +34,28 @@
 
   	<div id="corpus" class="container jumbotron"></div>
 
+    <div id="aboutDialog" class="modalDialog" closeModal="#aboutDialog">
+      <div>
+        <span title="Close" class="close" closeModal="#aboutDialog">X</span>
+        <h3>About HTML Jam</h3>
+        <hr/>
+        <p>Created by Paul Salmon and Guillaume Gouchon.</p>
+        <p>Logo by Sonia Lahcene.</p>
+      </div>
+    </div>
+
+    <div id="legalDialog" class="modalDialog" closeModal="#legalDialog">
+      <div>
+        <span title="Close" class="close" closeModal="#legalDialog">X</span>
+        <h3>Legal Content</h3>
+        <hr/>
+        <p>TODO</p>
+      </div>
+    </div>
+
     <footer class="easeTransition">
-      <a href="#">About</a>
-      <a href="#">Legal</a>
+      <span modal="#aboutDialog">About</span>
+      <span modal="#legalDialog">Legal</span>
       <a href="mailto:team.htmljam@gmail.com">Contact</a>
     </footer>
 

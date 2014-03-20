@@ -25,8 +25,6 @@ define(function (require) {
             this.regions = options.regions || {};
             this._initializeAttributes();
 
-// Cook.flush();
-
             this.listenTo(vent, 'actualize:appdata', function () {
                 console.log('[Controller > actualize:appdata]');
                 AppData.fetchUser();
@@ -59,7 +57,7 @@ define(function (require) {
 
             this.listenToOnce(vent, 'user:fetching:end', function () {
                 // AppData.user is created and fetched
-                Backbone.history.navigate('profil/', true);
+                Backbone.history.navigate('/', true);
             });
 
             this.attributes.authmanager.authenticationRequest(function (response) {
@@ -118,6 +116,14 @@ define(function (require) {
             this.handleConnection();
             this._createTopbarController();
             this._createFriendlistController();
+        },
+
+        showAboutDialog: function () {
+            console.log('ici')
+        },
+
+        showLegalDialog: function () {
+
         },
 
         _createLoginController: function (options) {

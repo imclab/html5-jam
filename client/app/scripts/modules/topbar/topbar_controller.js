@@ -8,6 +8,8 @@ define(function (require) {
     var TopBar = require('modules/topbar/views/topbar_view');
     var User = require('modules/common/models/user');
 
+    var AuthManager = require('modules/common/auth_manager');
+
     var AppData = require('modules/common/app_data');
 
     var TopbarController = Marionette.Controller.extend({
@@ -26,6 +28,7 @@ define(function (require) {
             // this.listenTo(vent, 'topbar:username', this.toProfil);
             // this.listenTo(vent, 'topbar:friends', this.toFriendList);
             this.listenTo(vent, 'topbar:newJam', this.toNewProject);
+            this.listenTo(vent, 'topbar:logout', this.logout);
         },
 
         show: function () {
@@ -50,6 +53,12 @@ define(function (require) {
 
         toHome: function () {
             this.navigate('/');
+        },
+
+        logout: function () {
+            new AuthManager().removeAuthenticationCookie();
+            Backbone.history.navigate('login/');
+            window.location.reload();
         },
 
         navigate: function (destination) {

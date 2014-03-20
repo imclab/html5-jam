@@ -16,7 +16,8 @@ define(function (require) {
         events: {
             'click .newJam' : 'toNewProject',
             'click .profilBtn' : 'toProfil',
-            'click .username' : 'toHome'
+            'click .username' : 'toHome',
+            'click .logout' : 'logout'
         },
 
         getTemplate: function () {
@@ -52,6 +53,10 @@ define(function (require) {
 
         toHome: function () {
             vent.trigger('topbar:home');
+        },
+
+        logout: function () {
+            vent.trigger('topbar:logout');
         }
 
     });
