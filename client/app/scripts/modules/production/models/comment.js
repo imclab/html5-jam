@@ -15,7 +15,6 @@ define(function (require) {
         },
 
         initialize: function () {
-            _.extend(this, Utils);
             this.attributes.createdAt = this.transformDate(this.attributes.createdAt);
         },
 
@@ -32,6 +31,8 @@ define(function (require) {
         }
 
     });
+
+    _.extend(Comment.prototype, Utils);
 
     return Comment;
 });
