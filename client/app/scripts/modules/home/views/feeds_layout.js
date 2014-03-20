@@ -32,7 +32,7 @@ define(function (require) {
         },
 
         showFriendsJams: function (e) {
-            vent.trigger('feeds:showFriendsJams', 'friends');
+            vent.trigger('feeds:showFriendsJams', 'friendsJams');
             this.selectFeedsButton(e.target);
         },
 

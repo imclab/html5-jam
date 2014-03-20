@@ -58,7 +58,6 @@ define(function (require) {
             this.listenTo(vent, 'feeds:showMostRecent', this.showFeeds);
             this.listenTo(vent, 'feeds:showFriendsJams', this.showFeeds);
             this.listenTo(vent, 'feeds:showOurFavorites', this.showFeeds);
-
         },
 
         likeJam: function (jamId) {
@@ -87,10 +86,11 @@ define(function (require) {
 
             this.attributes.models.feeds.fetch({
                 url: '/api/feeds/',
-                data: { type: feedsType },
+                data: { feedsType: feedsType },
                 success: function (xhr) {
-                    self.attributes.models.feeds = new JamCollection(); 
+                    self.views.feeds.collection = new JamCollection(); 
                     self.views.feeds.collection.add(xhr.models[0].get('jams'));
+                    self.views.feeds.render();
                 }
             });
         }
