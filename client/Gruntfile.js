@@ -40,7 +40,7 @@ module.exports = function (grunt) {
                 files: [
                     '<%= jam.app %>/*.html',
                     '<%= jam.app %>/templates/**/*.html',
-                    '.tmp/styles/*.css',
+                    '.tmp/styles/**/*.css',
                     '{.tmp,<%= jam.app %>}/scripts/**/*.js',
                     '<%= jam.app %>/images/{,*/,*/*/}*.{png,jpg,jpeg,gif,webp,svg}'
                 ]
@@ -112,7 +112,7 @@ module.exports = function (grunt) {
                 }]
             },
             server: '.tmp',
-            css: '.tmp/styles/*'
+            css: '.tmp/styles/**/*'
         },
         jshint: {
             options: {
@@ -220,8 +220,7 @@ module.exports = function (grunt) {
                 assetsDirs: ['<%= jam.dist %>']
             },
             html: ['<%= jam.dist %>/{,*/}*.html', '.tmp/scripts/templates.js'],
-            //css: ['<%= jam.dist %>/styles/{,*/}*.css']
-            css: ['.tmp/styles/{,*/}*.css']
+            css: ['<%= jam.dist %>/styles/{,*/}*.css']
         },
         imagemin: {
             dist: {
@@ -249,8 +248,8 @@ module.exports = function (grunt) {
                 cssDir: '.tmp/styles',
                 imagesDir: '<%= jam.app %>/images',
                 javascriptsDir: '<%= jam.app %>/scripts',
-                fontsDir: '<%= jam.app %>/styles/fonts',
-                importPath: 'bower_components',
+                fontsDir: '<%= jam.app %>/fonts',
+                importPath: '<%= jam.app %>/bower_components',
                 relativeAssets: true,
                 debugInfo: false
             },
@@ -272,7 +271,7 @@ module.exports = function (grunt) {
                 files: {
                     '.tmp/styles/main.css': [
                         '<%= jam.app %>/styles/{,*/}*.css',
-                        '.tmp/styles/*.css'
+                        '.tmp/styles/**/*.css'
                     ]
                 }
             },

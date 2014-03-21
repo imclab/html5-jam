@@ -33,7 +33,7 @@ define(function (require) {
         },
 
         ui: {
-            textarea: 'textarea'
+            textarea: 'input'
         },
 
         initialize: function () {

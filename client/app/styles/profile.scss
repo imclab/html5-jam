@@ -1,0 +1,16 @@
+@import "variables";
+
+.profile {
+	width: 70%;
+	background: $jamHoverColor;
+	margin-bottom: 20px;
+	padding: 20px;
+
+	h3 {
+		color: #111;
+
+		img {
+			margin-right: 18px;
+		}
+	}
+}

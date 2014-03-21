@@ -16,9 +16,9 @@
   	<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
 	<!-- build:css({.tmp,app}) styles/main.css -->
-    <link rel="stylesheet" type="text/css" href="styles/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="styles/libs/normalize.css">
+    <link rel="stylesheet" type="text/css" href="styles/libs/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="styles/main.css">
-    <link rel="stylesheet" type="text/css" href="styles/topbar/topbar.css">
     <!-- endbuild -->
 
 </head>
@@ -36,7 +36,7 @@
 
     <div id="aboutDialog" class="modalDialog" closeModal="#aboutDialog">
       <div>
-        <span title="Close" class="close" closeModal="#aboutDialog">x</span>
+        <span class="close" closeModal="#aboutDialog"><span class="glyphicon glyphicon-remove"></span></span>
         <h3>About HTML Jam</h3>
         <hr/>
         <p>Created by <b>Paul Salmon</b> and <a href="http://glevelapps.blogspot.co.uk/" target="_blank"><b>Guillaume Gouchon</b></a>.</p>
@@ -46,19 +46,18 @@
 
     <div id="legalDialog" class="modalDialog" closeModal="#legalDialog">
       <div>
-        <span title="Close" class="close" closeModal="#legalDialog">x</span>
+        <span class="close" closeModal="#legalDialog"><span class="glyphicon glyphicon-remove"></span></span>
         <h3>Legal Content</h3>
         <hr/>
         <p>TODO</p>
       </div>
     </div>
 
-    <footer class="easeTransition">
+    <div id="appInfo" class="easeTransition">
       <span modal="#aboutDialog">About</span>
       <span modal="#legalDialog">Legal</span>
       <a href="mailto:team.htmljam@gmail.com">Contact</a>
-    </footer>
-
+    </div>
 
 	<!-- Google Analytics -->
      <script>

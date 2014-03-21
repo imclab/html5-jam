@@ -1,0 +1,83 @@
+@import "../variables";
+
+.comments {
+    padding: 10px;
+    background-color: #fff;
+    color: #111;
+    overflow: auto;
+    max-height: 800px;
+
+    .sendCommentLayout {
+        margin-bottom: 10px;
+
+        input {
+           padding: 4px 8px 4px 8px;
+           height: 43px;
+        }
+
+        button {
+            height: 43px;
+            border-top-left-radius: 0px;
+            border-bottom-left-radius: 0px;
+        }
+    }
+
+    .comment {
+        padding: 6px;
+
+        &:hover > .removeComment {
+            opacity: 0.5;
+        }
+
+        .header {
+            height: 30px;
+
+            .owner {
+                color: $mainBlue;
+
+                &:hover {
+                    text-decoration: none;
+                    opacity: 0.9;
+
+                    & > small {
+                        text-decoration: underline;
+                    }
+                }
+
+                img {
+                    width: 30px;
+                    height: 30px;
+                }
+            }
+
+            .date {
+                color: #777;
+                line-height: 30px;
+            }
+        }
+
+        .removeComment {
+            height: 20px;
+            width: 20px;
+            padding: 0px;
+            opacity: 0;
+
+            &:hover {
+                opacity: 0.9!important;
+            }
+        }
+
+        .content {
+            margin-top: 12px;
+            font-size: 1.4em;
+        }
+
+        hr {
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+    }
+
+    
+}

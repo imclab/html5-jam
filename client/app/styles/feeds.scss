@@ -1,0 +1,13 @@
+@import "variables";
+
+.feedsMenu {
+	margin-top: 30px;
+
+	.btn-group button.active {
+		background: $mainBlue;
+	}
+}
+
+.feeds {
+	margin-top: 20px;
+}

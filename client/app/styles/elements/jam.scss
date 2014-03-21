@@ -1,0 +1,46 @@
+@import "../variables";
+
+.jam {
+	padding: 20px;
+	background: #fff;
+	cursor: pointer;
+	color: #111;
+	margin-bottom: 20px;
+
+	&:hover {
+		background: $jamHoverColor;
+	}
+
+	.jamHeader {
+		line-height: 40px;
+
+		img {
+			height: 40px;
+			width: 40px;
+			margin-right: 10px;		
+		}
+	}
+
+	.dateCreation {
+		color: #777;
+	}
+
+	.ownerName {
+		color: #333;
+		font-size: 1.1em;
+		margin-left: 10px;
+	}
+
+	.likes {
+		font-size: 2.0em;
+		color: $mainBlue;
+
+		&:hover {
+			font-size: 2.5em;
+		}
+
+		.green {
+			color: $greenLike;
+		}
+	}
+}
