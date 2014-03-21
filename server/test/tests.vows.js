@@ -74,7 +74,7 @@ suite.discuss('Get jam details...')
     .expect(200)
     .expect('should respond with jam\'s details', function (err, res, body) {
         var jam = JSON.parse(body);
-        assert.equal(jam.name, 'Super popular jam');
+        assert(jam.name.length > 0);
         assert.equal(jam.privacy, 0);
         assert(jam.videos.length > 0);
      })
