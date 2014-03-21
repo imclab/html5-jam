@@ -13,7 +13,6 @@ define(function (require) {
             userId: null
         },
 
-
         initialize: function () {
             this.attributes.createdAt = this.transformDate(this.attributes.createdAt);
         },
