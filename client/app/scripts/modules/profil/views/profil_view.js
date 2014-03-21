@@ -15,6 +15,22 @@ define(function (require) {
             } else {
                 return 'profil/profil_empty';
             }
+        },
+
+        events: {
+            "click .followButton" : "follow"
+        },
+
+        follow: function () {
+            if (this.model.attributes.doIFollowHim == false) {
+                vent.trigger("user:follow", this.model.id);
+                this.model.attributes.doIFollowHim = true;
+                this.render();
+            } else {
+                vent.trigger("user:unfollow", this.model.id);
+                this.model.attributes.doIFollowHim = false;
+                this.render();
+            }
         }
 
     });

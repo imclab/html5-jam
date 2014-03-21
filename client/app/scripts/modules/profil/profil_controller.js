@@ -8,6 +8,7 @@ define(function (require) {
     var ProfilLayout = require('modules/profil/views/profil_layout');
     var ProfilView = require('modules/profil/views/profil_view');
     var User = require('modules/common/models/user');
+    var Friend = require('modules/common/models/friend');
     var JamModel = require('modules/common/models/jam');
 
     var JamListView = require('modules/common/views/jams_view');
@@ -86,8 +87,31 @@ define(function (require) {
         },
 
         _bindEvents: function () {
+            this.listenTo(vent, 'user:follow', this.followUser);
+            this.listenTo(vent, 'user:unfollow', this.unfollowUser);
+        },
 
+        followUser: function (friendId) {
+            new Friend({
+                friendId: friendId
+            }).save({}, {
+                success: function (xhr) {
+                    console.log('::success::', xhr);
+                }
+            });
+        },
+
+        unfollowUser: function (friendId) {
+            new Friend({
+                id: '',
+                friendId: friendId
+            }).destroy({
+                success: function (xhr) {
+                    console.log('::success::', xhr);
+                }
+            });
         }
+
     });
 
     return ProfilController;

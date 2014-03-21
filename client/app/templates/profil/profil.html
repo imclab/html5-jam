@@ -1,7 +1,8 @@
 <div class="profile boxShadowed">
 
 	<div class="pull-right">
-	<button class="btn-xs btn-info">Follow</button>
+	<button class="btn-xs btn-info followButton <% if (doIFollowHim) { %>btn-success<% } else { %>btn-info<% } %>">
+		<% if (doIFollowHim) { %>Unfollow<% } else { %>Follow<% } %></button>
 		<button class="btn-xs btn-danger">Delete Account</button>
 	</div>
 

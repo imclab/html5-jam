@@ -13,7 +13,8 @@ define(function (require) {
             id: null,
             vignette_one: null,
             vignette_three: null,
-            vignette_two: null
+            vignette_two: null,
+            doIFollowHim: false
 	    }
 
     });

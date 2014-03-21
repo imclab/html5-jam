@@ -34,7 +34,20 @@ exports.getUserProfile = function (req, res, next) {
 					}
 				}
 			}
-			res.send(user);
+			Friend.findAll(
+				{	
+					where: {
+						userId: req.user.id,
+						friendId: req.params.userId
+					}
+				})
+			.success(function (friends) {
+				user.doIFollowHim = friends.length > 0;
+				res.send(user);
+			})
+			.error(function (error) {
+				return next(new Errors.Error(error, 'Server error'));
+			});
 		})
 		.error(function (error) {
 			return next(new Errors.Error(error, 'Server error'));
