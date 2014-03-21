@@ -266,7 +266,7 @@ define(function (require) {
         likeJam: function (jamId) {
             new Like({
                 jamId: jamId
-            }).save({
+            }).save({}, {
                 success: function (xhr) {
                     console.log('::success::', xhr);
                 }

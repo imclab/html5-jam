@@ -34,15 +34,19 @@ define(function (require) {
             }
 
             return Backbone.sync(method, model, options);
+        },
+
+        toJSON: function () {
+            var data = Backbone.Model.prototype.toJSON.call(this);
+
+            _.extend(data, {
+                createdAt: moment(this.get("createdAt")).fromNow()
+            });
+
+            return data;
         }
 
     });
-
-    // override toJSON
-    JamModel.prototype.toJSON = function() {
-        this.attributes.createdAt = moment(this.attributes.createdAt).fromNow();
-        return this.attributes;
-    };
 
 
     return JamModel;
