@@ -10,7 +10,7 @@
     background: #fff;
     opacity: 0.9;
     padding: 20px;
-    @include box-shadow(rgba(0, 0, 0, 0.75) 0px 2px 10px 10px);
+    @include box-shadow(rgba(255, 255, 255, 1) 0px 2px 5px 5px);
 
     h1 {
         font-family: 'Lemon';
