@@ -176,10 +176,10 @@ exports.getJamFeeds = function (req, res, next) {
 	}
 
 	// get  user info
-	Comment.daoFactoryManager.sequelize.query('SELECT j.*, u.name as ownerName, u.facebook_id as ownerFacebookId, u.picture_url as ownerPictureUrl, count(l.id) as nbLikes'
+	Comment.daoFactoryManager.sequelize.query('SELECT j.*, u.name as ownerName, u.facebook_id as ownerFacebookId, u.picture_url as ownerPictureUrl, COUNT(l.id) as nbLikes, IF (l.userId=?, 1, 0) as doILikeIt'
 	+ ' FROM jams j LEFT JOIN users u ON u.id=j.userId LEFT OUTER JOIN likes l ON l.jamId=j.id ' + (feedsType == 'friendsJams' ? 'LEFT JOIN friends f ON j.userId=f.friendId' : '')
 	+ ' WHERE j.privacy=0 ' + (feedsType == 'friendsJams' ? 'AND f.userId=' + req.user.id : '') + ' GROUP BY j.id ORDER BY ' + orderBy + ' LIMIT ' + (page == 1 ? 0 : ((page - 1) * pagination + 1)) + ',' + pagination
-		, null, { raw: true }, [req.user.id])
+		, null, { raw: true }, [req.user.id, req.user.id])
 	.success(function (rows) {
 	
 		var result = {
