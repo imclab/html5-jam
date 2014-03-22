@@ -32,6 +32,10 @@ a {
     @include box-shadow(rgba(50, 50, 50, 0.75) 1px 3px 5px 0px);
 }
 
+.form-control:focus {
+    border-color: #2077b2;
+}
+
 .modalDialog {
     overflow: none;
     @extend .easeTransition;
@@ -87,6 +91,19 @@ a {
 
 }
 
+.blink {
+    -webkit-animation: blink 1.2s alternate infinite;
+    -moz-animation: blink 1.2s alternate infinite;
+    -o-animation: blink 1.2s alternate infinite;
+}
+@-webkit-keyframes blink {
+    from { opacity: 0.6 }
+    to   { opacity: 0.2 }
+}
+@-moz-keyframes blink {
+    from { opacity: 0.6 }
+    to   { opacity: 0.2 }
+}
 
 
 

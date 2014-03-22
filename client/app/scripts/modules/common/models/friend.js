@@ -19,7 +19,7 @@ define(function (require) {
                 options.url = '/api/users/' + model.attributes.friendId + '/follow';
             } else if (method === 'delete') {
                 // unfollow a user
-                options.url = '/api/jams/' + model.attributes.friendId + '/follow';
+                options.url = '/api/users/' + model.attributes.friendId + '/follow';
             }
 
             return Backbone.sync(method, model, options);

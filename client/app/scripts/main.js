@@ -48,7 +48,7 @@ function ($, Backbone, App) {
         e.stopPropagation();
     });
 
-    $(document).on("click", "#instructions h1", function (e) {
+    $(document).on("click", "#linkInstructions", function (e) {
         var top = window.pageYOffset || document.documentElement.scrollTop
         if (top < document.body.scrollHeight / 3) {
             $("html, body").animate({ scrollTop: document.body.scrollHeight }, 500);

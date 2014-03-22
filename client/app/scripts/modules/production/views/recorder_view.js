@@ -38,7 +38,7 @@ define(function (require) {
         },
 
         ui: {
-            onStage: ".stageLight"
+            onStage: ".onStage"
         },
 
         create: function () {
@@ -51,16 +51,14 @@ define(function (require) {
 
         stop: function () {
             vent.trigger("recorder:stop");
-
-            if (this.ui.onStage.hasClass("onStage")) {
-                this.ui.onStage.removeClass("onStage");
-            }
+            
+            this.ui.onStage.addClass("hide");
         },
 
         record: function () {
             vent.trigger("recorder:record");
 
-            this.ui.onStage.addClass("onStage");
+            this.ui.onStage.removeClass("hide");
         },
 
         save: function () {

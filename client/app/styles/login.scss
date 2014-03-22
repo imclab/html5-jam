@@ -10,7 +10,6 @@
     background: #fff;
     opacity: 0.9;
     padding: 20px;
-    @include box-shadow(rgba(255, 255, 255, 1) 0px 2px 5px 5px);
 
     h1 {
         font-family: 'Lemon';
@@ -55,32 +54,33 @@
     }
 }
 
-#instructions {
+#linkInstructions {
     position:absolute;
-    height: 100%;
+    left:0px;
+    bottom: 0px;
     width: 100%;
-    top: 90%;
-    background: #ccd5e9;
+    margin: 0px;
+    padding: 15px;
+    font-family: 'Lemon';
+    font-size: 2.2em;
+    text-shadow: 2px 2px 5px #aaa;
+    background: #fff;
+    cursor: pointer;
     text-align: center;
 
-    h1 {
-        height: 10%;
-        width: 100%;
-        line-height: 80px;
-        margin: 0px;
-        padding: 0px;
-        font-family: 'Lemon';
-        font-size: 2.2em;
-        text-shadow: 2px 2px 5px #aaa;
-        background: #fff;
-        cursor: pointer;
-
-        &:hover {
-            background: #8da3d4;
-            opacity: 0.9;
-        }
-
+    &:hover {
+        background: #8da3d4;
+        opacity: 0.9;
     }
+}
+
+#instructions {
+    position:absolute;
+    height: 90%;
+    width: 100%;
+    top: 100%;
+    background: #ccd5e9;
+    text-align: center;
 
     .row {
         width: 100%;
