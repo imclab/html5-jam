@@ -10,8 +10,8 @@ define(function (require) {
         model: Video,
 
         save: function (options) {
-            _.each(this.models, function (elem) {
-                elem.save(null, {
+            this.each(function (model) {
+                model.save(null, {
                     jamId: options.jamId
                 });
             });
@@ -20,4 +20,3 @@ define(function (require) {
 
     return VideoCollection;
 });
-

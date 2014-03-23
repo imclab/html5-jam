@@ -11,7 +11,6 @@ define(function (require) {
     var RecorderView = require('modules/production/views/recorder_view');
     var SideBarView = require('modules/production/views/sidebar_view');
     var CommentsView = require('modules/production/views/comments_view');
-    var VideosListView = require('modules/production/views/jam_videos_list');
 
     var Like = require('modules/common/models/like');
     var CommentModel = require('modules/production/models/comment');
@@ -72,12 +71,10 @@ define(function (require) {
                 this.views.recorder = new RecorderView();
                 this.views.sidebar = new SideBarView();
                 this.views.comments = new CommentsView();
-                this.views.videos_list = new VideosListView();
 
                 productionLayout.recorder.show(this.views.recorder);
                 productionLayout.sidebar.show(this.views.sidebar);
                 productionLayout.comments.show(this.views.comments);
-                productionLayout.videos_list.show(this.views.videos_list);
             });
 
             return productionLayout;
@@ -132,8 +129,8 @@ define(function (require) {
 
                     for (i = 0; i < __videos.length; i++) {
                         if (__videos[i].active) {
-                            // Add to Videos_list
-                            self.views.videos_list.collection.add(__videos[i]);
+                            // Add to videos list
+                            self.views.recorder.collection.add(__videos[i]);
                         } else {
                             // Add to SideBar
                             self.views.sidebar.collection.add(__videos[i]);
@@ -161,12 +158,7 @@ define(function (require) {
         save: function () {
             if (!this.attributes.models.jam) {
                 console.log("[Production_controller.js > save] ERROR : No Jam loaded : ", this.views.recorder.collection);
-
-                for (var i=0; i<this.views.recorder.collection.models.length; i++) {
-                    this.views.videos_list.collection.add(this.views.recorder.collection.models[i]);
-                }
-
-                this.views.recorder.collection.reset();
+                this.createNewJam();
             } else {
                 // Actualise / create the jam
                 // Save the video
@@ -250,16 +242,23 @@ define(function (require) {
             //      Comments
             var new_jam = new Jam({
                 user_facebook_id: AppData.user.get('facebook_id'),
-                name: 'Jam winner'
+                name: this.views.recorder.ui.edit_jam_name.val()
             });
 
             var onSuccess = function (model, response, options) {
                 // Tout enregistrer (les videos, les comments vont degager)
-                Backbone.history.navigate('jam/' + model.id, true);
+                this.views.recorder.collection.save({
+                    jamId: model.id
+                });
+
+                setTimeout(function () {
+                    Backbone.history.navigate('jam/' + model.id, true);
+                }, 100);
+
             };
 
             new_jam.save({}, {
-                success: onSuccess
+                success: _.bind(onSuccess, this)
             });
         },
 

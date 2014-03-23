@@ -13,8 +13,7 @@ define(function (require) {
         regions: {
             sidebar: '.sidebar',
             recorder: '.recorder',
-            comments: '.comments',
-            videos_list: '.videos_list'
+            comments: '.comments'
         }
 
     });

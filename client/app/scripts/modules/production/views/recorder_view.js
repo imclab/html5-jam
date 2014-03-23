@@ -38,7 +38,8 @@ define(function (require) {
         },
 
         ui: {
-            onStage: ".onStage"
+            onStage: ".onStage",
+            edit_jam_name: "input.edit-jam-name"
         },
 
         create: function () {
