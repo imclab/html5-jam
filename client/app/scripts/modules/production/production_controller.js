@@ -28,26 +28,24 @@ define(function (require) {
         initialize: function (options) {
             BaseController.prototype.initialize.call(this, options);
 
-            this._initializeAttributes();
+            this._initializeAttributes(options);
             this._bindEvents();
-        },
 
-        onShow: function () {
-            // Common area
-            console.log('[ProductionController > onShow] ' + this.attributes.type);
+            console.log('[ProductionController > onInit] ', options);
         },
 
         show: function (options) {
-
-            if (options.jam_id) {
+            if (options.jamId) {
                 // Existing project :
-                this.attributes.jamId = options.jam_id;
+                this.attributes.jamId = options.jamId;
             } else {
                 delete this.attributes.jamId;
                 this.attributes.models = {};
             }
 
-            switch (options.type) {
+            this.attributes.mode = options.mode;
+
+            switch (this.attributes.mode) {
             case 'edit':
                 this.getJamFromServer();
                 BaseController.prototype.show.call(this);
@@ -65,7 +63,9 @@ define(function (require) {
         },
 
         getLayout: function () {
-            var productionLayout = new ProductionLayout();
+            var productionLayout = new ProductionLayout({
+                mode: this.attributes.mode
+            });
 
             this.listenTo(productionLayout, 'show', function () {
                 this.views.recorder = new RecorderView();
@@ -80,10 +80,12 @@ define(function (require) {
             return productionLayout;
         },
 
-        _initializeAttributes: function () {
+        _initializeAttributes: function (options) {
             this.views = {};
             this.attributes = {};
             this.attributes.models = {};
+
+            this.attributes.mode = options.mode || "show";
 
             _.extend(this.attributes, new PlayerManager());
         },
