@@ -12,7 +12,6 @@ var Jam = Models.Jam;
 
 
 exports.getUserProfile = function (req, res, next) {
-
 	User.find(
 		{ 
 			where: { 
@@ -42,7 +41,7 @@ exports.getUserProfile = function (req, res, next) {
 					}
 				})
 			.success(function (friends) {
-				user.doIFollowHim = friends.length > 0;
+				user.dataValues.doIFollowHim = friends.length > 0;
 				res.send(user);
 			})
 			.error(function (error) {

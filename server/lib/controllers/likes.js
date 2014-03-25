@@ -24,7 +24,7 @@ exports.likeJam = function (req, res, next) {
 
 		// create like
 		Like.findOrCreate({ userId: req.user.id, jamId: jam.id })
-		.success(function (newlike) {
+		.success(function (newlike, created) {
 			res.send(200);
 		})
 		.error(function (error) {
