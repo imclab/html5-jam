@@ -82,8 +82,8 @@ define(function (require) {
             this.handleConnection();
             this._createTopbarController();
             this._createProductionController({
-                type: 'edit',
-                jam_id: jamId
+                mode: 'edit',
+                jamId: jamId
             });
         },
 
@@ -91,8 +91,8 @@ define(function (require) {
             this.handleConnection();
             this._createTopbarController();
             this._createProductionController({
-                type: 'show',
-                jam_id: jamId
+                mode: 'show',
+                jamId: jamId
             });
         },
 
@@ -100,7 +100,7 @@ define(function (require) {
             this.handleConnection();
             this._createTopbarController();
             this._createProductionController({
-                type: 'create'
+                mode: 'create'
             });
         },
 
@@ -146,13 +146,13 @@ define(function (require) {
 
                 this.controllers.production = new ProductionController(options);
                 this.controllers.production.show({
-                    type: options.type,
-                    jam_id: options.jam_id
+                    mode: options.mode,
+                    jamId: options.jamId
                 });
             } else {
                 this.controllers.production.show({
-                    type: options.type,
-                    jam_id: options.jam_id
+                    mode: options.mode,
+                    jamId: options.jamId
                 });
             }
         },
