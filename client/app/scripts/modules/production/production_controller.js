@@ -37,11 +37,14 @@ define(function (require) {
         show: function (options) {
             if (options.jamId) {
                 // Existing project :
+                console.log("Plouf : ", options);
                 this.attributes.jamId = options.jamId;
             } else {
                 delete this.attributes.jamId;
                 this.attributes.models = {};
             }
+
+            console.log("Plouf : ", this.attributes.jamId);
 
             this.attributes.mode = options.mode;
 
@@ -53,7 +56,6 @@ define(function (require) {
             case 'show':
                 this.getJamFromServer();
                 BaseController.prototype.show.call(this);
-                vent.trigger('recorder:initMediaCapture');
                 break;
             case 'create':
                 BaseController.prototype.show.call(this);
@@ -140,6 +142,12 @@ define(function (require) {
                     }
 
                     self.views.recorder.model = xhr;
+
+                    self.views.recorder.onRender = function () {
+                        
+                vent.trigger('recorder:initMediaCapture');
+                    };
+
                     self.views.recorder.render();
                 }
             });
