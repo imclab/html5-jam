@@ -21,10 +21,10 @@ exports.likeJam = function (req, res, next) {
 		) 
 	}).success(function (jam) {
 		if (jam == null) { return next(new Errors.BadRequest('Jam not found')); }
-
+		
 		// create like
 		Like.findOrCreate({ userId: req.user.id, jamId: jam.id })
-		.success(function (newlike) {
+		.success(function (newlike, created) {
 			res.send(200);
 		})
 		.error(function (error) {
