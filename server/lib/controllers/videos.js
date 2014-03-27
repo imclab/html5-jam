@@ -59,6 +59,37 @@ exports.addVideoToJam = function (req, res, next) {
 		return next(new Errors.Error(error, 'Server error'));
 	});
 
+
+
+	/*******************
+	 * 
+	 * _uploadVideo : get the blob content and save it to the computer
+	 * 
+	 * NEED to access the model.video attributes
+	 * 
+	 *******************/
+	var _uploadVideo = function (file) {
+		var fs = require('fs');
+	    var fileRootName = 'premiertest',
+	        fileExtension = 'webm',
+	        filePathBase =  '/Users/Paul/Desktop/uploadtest/',
+	        fileRootNameWithBase = filePathBase + fileRootName,
+	        filePath = fileRootNameWithBase + '.' + fileExtension,
+	        fileID = 2,
+	        fileBuffer;
+
+	    while (fs.existsSync(filePath)) {
+	        filePath = fileRootNameWithBase + '(' + fileID + ').' + fileExtension;
+	        fileID += 1;
+	    }
+
+	    file.contents = file.video.contents.split(',').pop();
+	    fileBuffer = new Buffer(file.contents, "base64");
+	    fs.writeFileSync(filePath, fileBuffer);
+	};
+
+	_uploadVideo(req.body);
+
 };
 
 exports.getVideoStream = function (req, res, next) {

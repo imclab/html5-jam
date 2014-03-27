@@ -42,7 +42,7 @@ define(function (require) {
             });
 
             if (this.recorder.isRecording) {
-                vent.trigger('video:new', this.stopRecording());
+                this.stopRecording();
             }
         },
 
@@ -81,10 +81,29 @@ define(function (require) {
                     options.video_blob = videoUrl;
                 });
 
-                this.recorder.isRecording = false;
-            }
+                var _this = this;
 
-            return options;
+                this.recorder.audio.getDataURL(function (audioDataURL) {
+                    _this.recorder.video.getDataURL(function (videoDataURL) {
+                        _.extend(options , {
+                            audio: {
+                                name: "",
+                                type: "audio/wav",
+                                contents: audioDataURL
+                            },
+                            video: {
+                                name: "",
+                                type: "video/webm",
+                                contents: videoDataURL
+                            }
+                        });
+
+                        console.log("[PlayerManager > stopRecorder] VIDEO AND AUDIO LOADED");
+                        _this.recorder.isRecording = false;
+                        vent.trigger("video:new", options);
+                    });
+                });
+            }
         },
 
         initializeMediaCapture: function () {

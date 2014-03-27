@@ -12,6 +12,8 @@ define(function (require) {
             // instrument: '',
             // active: '',
             // volume: '',
+            audio: {},
+            video: {},
             video_blob: '',
             audio_blob: '',
             _cid: ''
@@ -25,6 +27,7 @@ define(function (require) {
 
         sync: function (method, model, options) {
             console.log('::SYNC:: Method  [Video] : ', method);
+            console.log('::SYNC:: Model [Video] : ', model);
             console.log('::SYNC:: Options [Video] : ', options);
 
             if (method === 'create') {

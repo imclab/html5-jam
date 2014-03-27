@@ -102,10 +102,7 @@ define(function (require) {
 
             this.listenTo(vent, 'video:new', function (options) {
                 this.addSelectedId(
-                    this.addNewVideo({
-                        video_blob: options.video_blob,
-                        audio_blob: options.audio_blob
-                    })
+                    this.addNewVideo(options)
                 );
             });
 
@@ -186,6 +183,9 @@ define(function (require) {
         },
 
         addNewVideo: function (options) {
+
+            console.log("options : ", options);
+
             options.description = 'Jackie Sharp';
             options.instrument = 3;
             options.active = true;
