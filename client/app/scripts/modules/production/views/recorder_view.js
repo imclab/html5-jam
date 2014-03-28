@@ -39,7 +39,8 @@ define(function (require) {
 
         ui: {
             onStage: ".onStage",
-            edit_jam_name: "input.edit-jam-name"
+            edit_jam_name: "input.edit-jam-name",
+            recordBtn: '.recbtn'
         },
 
         create: function () {
@@ -54,6 +55,7 @@ define(function (require) {
             vent.trigger("recorder:stop");
             
             this.ui.onStage.addClass("hide");
+            this.ui.recordBtn.addClass('btn-danger').removeClass('btn-warning');
         },
 
         record: function () {

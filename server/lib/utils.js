@@ -31,6 +31,12 @@ module.exports = {
 	decrypt: function (data) {
 		var decipher = crypto.createDecipher(config.crypto.algorithm, config.crypto.key);
 		return decipher.update(data, 'hex', 'utf8') + decipher.final('utf8');
+	},
+
+	createFolder: function (path) {
+		var path = __dirname.replaceAll('lib', '') + 'uploads/videos/' + path;
+		console.log("Creating folder :".debug + path);
+		fs.mkdir(path);
 	}
 
 };

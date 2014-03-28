@@ -66,6 +66,7 @@ define(function (require) {
             }
 
             this.recorder.isRecording = true;
+            $('.recbtn').addClass('btn-warning').removeClass('btn-danger');
         },
 
         stopRecording: function () {

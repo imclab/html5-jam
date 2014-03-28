@@ -3,6 +3,7 @@
 var Sequelize = require('sequelize');
 var Errors = require('../errors');
 var Models = require('../models');
+var Utils = require('../utils');
 
 var Jam = Models.Jam;
 var User = Models.User;
@@ -27,6 +28,10 @@ exports.createNewJam = function (req, res, next) {
 
 		Jam.create({ name: postData.name, privacy: postData.privacy })
 		.success(function (newJam) {
+
+			// create jam folder
+			Utils.createFolder('' + newJam.dataValues.id);
+
 			Like.create({ userId: req.user.id, jamId: newJam.id });
 			user.addJam(newJam)
 			.success(function () {

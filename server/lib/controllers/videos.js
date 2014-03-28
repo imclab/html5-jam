@@ -38,7 +38,7 @@ exports.addVideoToJam = function (req, res, next) {
 		    var videoFileBuffer = new Buffer(postData.video.contents.split(',').pop(), "base64");
 
 			// save the video file to disk
-			Utils.writeFileToDisk(newVideo.id + '.webm', videoFileBuffer, function (err) {
+			Utils.writeFileToDisk(req.params.jamId + '/' + newVideo.id + '.webm', videoFileBuffer, function (err) {
 				if (err) {
 					return next(new Errors.Error(err, 'Server error'));
 				} else {
@@ -86,7 +86,7 @@ exports.getVideoStream = function (req, res, next) {
 		.success(function (videos) {
 			if (videos == null || videos.length == 0) { return next(new Errors.BadRequest('Video not found')); }
 
-			Utils.readFileFromDisk(req.params.videoId + '.webm', function (error, file) {
+			Utils.readFileFromDisk(req.params.jamId + '/' + req.params.videoId + '.webm', function (error, file) {
 				if (error) {
 					return next(new Errors.BadRequest('Video not found'));
 				} else {
@@ -127,7 +127,7 @@ exports.deleteVideoFromJam = function (req, res, next) {
 			if (jam.userId == req.user.id || video.userId == req.user.id) {
 				video.destroy()
 				.success(function () {
-					Utils.deleteFileFromDisk(req.params.videoId + '.webm', function (error) {
+					Utils.deleteFileFromDisk(req.params.jamId + '/' + req.params.videoId + '.webm', function (error) {
 						if (error) {
 							return next(new Errors.BadRequest('Video not found'));
 						} else {
