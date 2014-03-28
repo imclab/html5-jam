@@ -7,7 +7,6 @@ define(function (require) {
     var Video = Backbone.Model.extend({
 
         defaults: {
-            cover: '../images/offlinecontent/thumb_example.png',
             description: '',
             // instrument: '',
             // active: '',
@@ -33,6 +32,8 @@ define(function (require) {
             if (method === 'create') {
                 options.url = '/api/jams/' + options.jamId + '/videos';
             } else if (method === 'delete') {
+                options.url = '/api/jams/' + options.jamId + '/videos/' + this.id;
+            } else if (method === 'read') {
                 options.url = '/api/jams/' + options.jamId + '/videos/' + this.id;
             }
 

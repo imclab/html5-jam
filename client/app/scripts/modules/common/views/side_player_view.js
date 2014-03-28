@@ -8,7 +8,7 @@ define(function (require) {
 
     var PlayerView = Marionette.ItemView.extend({
 
-        template: 'common/video_player',
+        template: 'production/video_sidebar',
 
         className: 'video-player',
 
@@ -16,6 +16,11 @@ define(function (require) {
             'click .delete-video' : '_remove',
             'click .play-video' : 'play',
             'click .mute-video' : 'mute'
+        },
+
+        ui: {
+            muteBtn : '.mute-video',
+            muteBtnIcon : '.mute-video span'
         },
 
         onShow: function () {
@@ -29,15 +34,9 @@ define(function (require) {
         },
 
         mute: function () {
-            if (this.controller.audio.muted) {
-                this.controller.audio.muted = false;
-                if (this.$el.hasClass('active')) {
-                    this.$el.removeClass('active');
-                }
-            } else {
-                this.controller.audio.muted = true;
-                this.$el.addClass('active');
-            }
+            this.controller.audio.muted = !this.controller.audio.muted;
+            this.ui.muteBtn.toggleClass('btn-success btn-warning');
+            this.ui.muteBtnIcon.toggleClass('glyphicon-volume-off glyphicon-volume-up');
         },
 
         _remove: function () {

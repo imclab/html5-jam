@@ -95,6 +95,7 @@ define(function (require) {
         _bindEvents: function () {
             this.listenTo(vent, 'recorder:save', this.save);
 
+            this.listenTo(vent, 'player:play', this.playVideo);
             this.listenTo(vent, 'player:remove', this.removeVideo);
 
             this.listenTo(vent, 'comment:new', this.addComments);
@@ -200,6 +201,13 @@ define(function (require) {
             this.attributes.selectedIds[model.cid] = {};
             this.attributes.selectedIds[model.cid].video = document.getElementById("video-player-" + model.get('_cid'));
             this.attributes.selectedIds[model.cid].audio = document.getElementById("audio-player-" + model.get('_cid'));
+        },
+
+        playVideo: function (model) {
+            console.log('TODO : get correct video tag')
+            var videoTag = document.getElementsByTagName("video")[0];
+            videoTag.src = 'api/jams/' + this.attributes.jamId + '/videos/' + model.attributes.id;
+            videoTag.play();            
         },
 
         removeVideo: function (model) {
