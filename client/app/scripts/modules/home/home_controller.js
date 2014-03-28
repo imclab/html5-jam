@@ -6,7 +6,6 @@ define(function (require) {
     var vent = require('modules/common/vent');
 
     var User = require('modules/common/models/user');
-    var Like = require('modules/common/models/like');
     
     var JamCollection = require('modules/common/collections/jams');
     var JamListView = require('modules/common/views/jams_view');
@@ -15,6 +14,7 @@ define(function (require) {
     var FeedsLayout = require('modules/home/views/feeds_layout');
 
     var AppData = require('modules/common/app_data');
+    var LikeManager = require('modules/common/like_manager');
 
     var HomeController = BaseController.extend({
         initialize: function (options) {
@@ -60,27 +60,6 @@ define(function (require) {
             this.listenTo(vent, 'feeds:showOurFavorites', this.showFeeds);
         },
 
-        likeJam: function (jamId) {
-            new Like({
-                jamId: jamId
-            }).save({
-                success: function (xhr) {
-                    console.log('::success::', xhr);
-                }
-            });
-        },
-
-        dislikeJam: function (jamId) {
-            new Like({
-                id: '',
-                jamId: jamId
-            }).destroy({
-                success: function (xhr) {
-                    console.log('::success::', xhr);
-                }
-            });
-        },
-
         showFeeds: function (feedsType) {
             var self = this;
 
@@ -96,6 +75,8 @@ define(function (require) {
         }
 
     });
+
+    _.extend(HomeController.prototype, LikeManager);
 
     return HomeController;
 });

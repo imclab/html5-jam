@@ -22,6 +22,7 @@ define(function (require) {
     var AppData = require('modules/common/app_data');
 
     var PlayerManager = require('modules/production/player_manager');
+    var LikeManager = require('modules/common/like_manager');
 
     var RecorderController = BaseController.extend({
 
@@ -278,30 +279,11 @@ define(function (require) {
             new_jam.save({}, {
                 success: _.bind(onSuccess, this)
             });
-        },
-
-        likeJam: function (jamId) {
-            new Like({
-                jamId: jamId
-            }).save({}, {
-                success: function (xhr) {
-                    console.log('::success::', xhr);
-                }
-            });
-        },
-
-        dislikeJam: function (jamId) {
-            new Like({
-                id: '',
-                jamId: jamId
-            }).destroy({
-                success: function (xhr) {
-                    console.log('::success::', xhr);
-                }
-            });
         }
 
     });
+
+    _.extend(RecorderController.prototype, LikeManager);
 
     return RecorderController;
 
