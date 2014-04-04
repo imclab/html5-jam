@@ -24,6 +24,10 @@ define(function (require) {
                     // Besoin de creer un profil
                 }
             });
+        },
+
+        isOwner: function (_id) {
+            return (this.user.get("id") === _id);
         }
 
     };
