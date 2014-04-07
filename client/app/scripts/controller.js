@@ -25,13 +25,18 @@ define(function (require) {
 
         handleConnection: function () {
             if (!AppData.user) {
+                this.showLoading();
+
                 if (this.attributes.authmanager.checkAuthenticationCookie()) {
                     this.attributes.authmanager.authenticationRequest();
                 } else {
                     // No cookie found
                     Backbone.history.navigate('login/', true);
+                    return false;
                 }
             }
+
+            return true;
         },
 
         handleToken: function (tokenId) {
@@ -55,54 +60,59 @@ define(function (require) {
         },
 
         showIndex: function () {
-            this.handleConnection();
-            this.handleTopbar();
-            this._createController("home").then(_.bind(this._show, this, "home"));
+            if (this.handleConnection()) {
+                this.handleTopbar();
+                this._createController("home").then(_.bind(this._show, this, "home"));
+            }
         },
 
         editJam: function (jamId) {
-            var options = {
-                mode: 'edit',
-                jamId: jamId
-            };
-            this.handleConnection();
-            this.handleTopbar();
-            this._createController("production", options).then(_.bind(this._show, this, "production", options));
+            if (this.handleConnection()) {
+                var options = {
+                    mode: 'edit',
+                    jamId: jamId
+                };
+                this.handleTopbar();
+                this._createController("production", options).then(_.bind(this._show, this, "production", options));
+            }
         },
 
         showJam: function (jamId) {
-            var options = {
-                mode: 'show',
-                jamId: jamId
-            };
-            this.handleConnection();
-            this.handleTopbar();
-            this._createController("production", options).then(_.bind(this._show, this, "production", options));
+            if (this.handleConnection()) {
+                var options = {
+                    mode: 'show',
+                    jamId: jamId
+                };
+                this.handleTopbar();
+                this._createController("production", options).then(_.bind(this._show, this, "production", options));
+            }
         },
 
         createJam: function () {
-            var options = {
-                mode: 'create'
-            };
-            this.handleConnection();
-            this.handleTopbar();
-            this._createController("production", options).then(_.bind(this._show, this, "production", options));
-
+            if (this.handleConnection()) {
+                var options = {
+                    mode: 'create'
+                };
+                this.handleTopbar();
+                this._createController("production", options).then(_.bind(this._show, this, "production", options));
+            }
         },
 
         showProfil: function (profilId) {
-            var options = {
-                profilId: profilId
-            };
-            this.handleConnection();
-            this.handleTopbar();
-            this._createController("profil", options).then(_.bind(this._show, this, "profil", options));
+            if (this.handleConnection()) {
+                var options = {
+                    profilId: profilId
+                };
+                this.handleTopbar();
+                this._createController("profil", options).then(_.bind(this._show, this, "profil", options));
+            }
         },
 
         showFriends: function () {
-            this.handleConnection();
-            this.handleTopbar();
-            this._createController("friendlist").then(_.bind(this._show, this, "friendlist"));
+            if (this.handleConnection()) {
+                this.handleTopbar();
+                this._createController("friendlist").then(_.bind(this._show, this, "friendlist"));
+            }
         },
 
         showAboutDialog: function () {

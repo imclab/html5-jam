@@ -10,8 +10,6 @@ define(function (require) {
     var LoginView = Marionette.ItemView.extend({
         template: 'login/login',
 
-        el: '#login',
-
         initialize: function () {
             if (this.$el.hasClass('hidden')) {
                 this.$el.removeClass('hidden');
