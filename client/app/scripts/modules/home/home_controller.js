@@ -53,11 +53,7 @@ define(function (require) {
         _bindEvents: function () {
             this.listenTo(vent, 'jam:like', this.likeJam);
             this.listenTo(vent, 'jam:dislike', this.dislikeJam);
-
-            this.listenTo(vent, 'feeds:showMostPopular', this.showFeeds);
-            this.listenTo(vent, 'feeds:showMostRecent', this.showFeeds);
-            this.listenTo(vent, 'feeds:showFriendsJams', this.showFeeds);
-            this.listenTo(vent, 'feeds:showOurFavorites', this.showFeeds);
+            this.listenTo(vent, 'feeds:showSelection', this.showFeeds);
         },
 
         showFeeds: function (feedsType) {

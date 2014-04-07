@@ -22,22 +22,22 @@ define(function (require) {
         },
 
         showMostPopular: function (e) {
-            vent.trigger('feeds:showMostPopular', 'popular');
+            vent.trigger('feeds:showSelection', 'popular');
             this.selectFeedsButton(e.target);
         },
 
         showMostRecent: function (e) {
-            vent.trigger('feeds:showMostRecent', 'recent');
+            vent.trigger('feeds:showSelection', 'recent');
             this.selectFeedsButton(e.target);
         },
 
         showFriendsJams: function (e) {
-            vent.trigger('feeds:showFriendsJams', 'friendsJams');
+            vent.trigger('feeds:showSelection', 'friendsJams');
             this.selectFeedsButton(e.target);
         },
 
         showOurFavorites: function (e) {
-            vent.trigger('feeds:showOurFavorites', 'ourfavorites');
+            vent.trigger('feeds:showSelection', 'ourfavorites');
             this.selectFeedsButton(e.target);
         },
 
