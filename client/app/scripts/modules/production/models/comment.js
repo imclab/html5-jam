@@ -3,7 +3,7 @@ define(function (require) {
     "use strict";
 
     var Backbone = require('backbone');
-    var Utils = require('modules/common/utils');
+    var moment = require('moment');
 
     var Comment = Backbone.Model.extend({
 
@@ -11,10 +11,6 @@ define(function (require) {
             content: '',
             createdAt: '',
             userId: null
-        },
-
-        initialize: function () {
-            this.attributes.createdAt = this.transformDate(this.attributes.createdAt);
         },
 
         sync: function (method, model, options) {
@@ -27,17 +23,19 @@ define(function (require) {
             }
 
             return Backbone.sync(method, model, options);
+        },
+
+        toJSON: function () {
+            var data = Backbone.Model.prototype.toJSON.call(this);
+
+            _.extend(data, {
+                createdAt: moment(this.get("createdAt")).fromNow()
+            });
+
+            return data;
         }
 
     });
-
-    // override toJSON
-    Comment.prototype.toJSON = function () {
-        this.attributes.createdAt = moment(this.attributes.createdAt).fromNow();
-        return this.attributes;
-    };
-
-    _.extend(Comment.prototype, Utils);
 
     return Comment;
 });

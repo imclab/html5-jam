@@ -16,18 +16,17 @@ define(function (require) {
         fetchUser: function () {
             this.user.fetch({
                 url: 'api/users/' + this.userId,
-                success: function (xhr) {
+                success: function () {
                     vent.trigger('user:fetching:end');
                 },
                 error: function () {
-                    // L'utilisateur n'existe pas dans la BDD
-                    // Besoin de creer un profil
+                    console.log("User don't exist in DDB");
                 }
             });
         },
 
-        isOwner: function (_id) {
-            return (this.user.get("id") === _id);
+        isOwner: function (idParam) {
+            return (this.user.get("id") === idParam);
         }
 
     };
