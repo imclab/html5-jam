@@ -6,14 +6,7 @@ define(function (require) {
     var Backbone = require('backbone');
     var vent = require('modules/common/vent');
 
-    var Controllers = {};
-
-    Controllers.production = require('modules/production/production_controller');
-    Controllers.topbar = require('modules/topbar/topbar_controller');
-    Controllers.friendlist = require('modules/friendlist/friendlist_controller');
-    Controllers.profil = require('modules/profil/profil_controller');
-    Controllers.login = require('modules/login/login_controller');
-    Controllers.home = require('modules/home/home_controller');
+    var LoadingView = require("modules/common/views/loading_view");
 
     var AuthManager = require('modules/common/auth_manager');
 
@@ -35,7 +28,7 @@ define(function (require) {
                 if (this.attributes.authmanager.checkAuthenticationCookie()) {
                     this.attributes.authmanager.authenticationRequest();
                 } else {
-                    // Pas de cookie found
+                    // No cookie found
                     Backbone.history.navigate('login/', true);
                 }
             }
@@ -58,53 +51,58 @@ define(function (require) {
         },
 
         showLogin: function () {
-            this._createController("login");
+            this._createController("login").then(_.bind(this._show, this, "login"));
         },
 
         showIndex: function () {
             this.handleConnection();
-            this._createController("topbar");
-            this._createController("home");
+            this.handleTopbar();
+            this._createController("home").then(_.bind(this._show, this, "home"));
         },
 
         editJam: function (jamId) {
-            this.handleConnection();
-            this._createController("topbar");
-            this._createController("production", {
+            var options = {
                 mode: 'edit',
                 jamId: jamId
-            });
+            };
+            this.handleConnection();
+            this.handleTopbar();
+            this._createController("production", options).then(_.bind(this._show, this, "production", options));
         },
 
         showJam: function (jamId) {
-            this.handleConnection();
-            this._createController("topbar");
-            this._createController("production", {
+            var options = {
                 mode: 'show',
                 jamId: jamId
-            });
+            };
+            this.handleConnection();
+            this.handleTopbar();
+            this._createController("production", options).then(_.bind(this._show, this, "production", options));
         },
 
         createJam: function () {
-            this.handleConnection();
-            this._createController("topbar");
-            this._createController("production", {
+            var options = {
                 mode: 'create'
-            });
+            };
+            this.handleConnection();
+            this.handleTopbar();
+            this._createController("production", options).then(_.bind(this._show, this, "production", options));
+
         },
 
         showProfil: function (profilId) {
-            this.handleConnection();
-            this._createController("topbar");
-            this._createController("profil", {
+            var options = {
                 profilId: profilId
-            });
+            };
+            this.handleConnection();
+            this.handleTopbar();
+            this._createController("profil", options).then(_.bind(this._show, this, "profil", options));
         },
 
         showFriends: function () {
             this.handleConnection();
-            this._createController("topbar");
-            this._createController("friendlist");
+            this.handleTopbar();
+            this._createController("friendlist").then(_.bind(this._show, this, "friendlist"));
         },
 
         showAboutDialog: function () {
@@ -115,18 +113,41 @@ define(function (require) {
             console.log("SHOWLEGALDIALOG");
         },
 
-        _createController: function (str, options) {
-            if (!this.controllers[str]) {
-                options = options || {};
-
-                options.region = this.regions ? this.regions.corpus : null;
-                options.user = AppData ? AppData.user : null;
-
-                this.controllers[str] = new this.Controllers[str](options);
-                this.controllers[str].show(options);
-            } else {
-                this.controllers[str].show(options);
+        handleTopbar: function () {
+            if (!this.controllers.topbar) {
+                this._createController("topbar").then(_.bind(this._show, this, "topbar"));
             }
+        },
+
+        showLoading: function () {
+            this.regions.corpus.show(new LoadingView());
+        },
+
+        _createController: function (page, options) {
+            var deferred = new $.Deferred();
+
+            if (!this.controllers[page]) {
+                this.showLoading();
+
+                require(["modules/"+page+"/"+page+"_controller"], _.bind(function (Controller) {
+                    options = options || {};
+
+                    options.region = this.regions ? this.regions.corpus : null;
+                    options.user = AppData ? AppData.user : null;
+
+                    this.controllers[page] = new Controller(options);
+
+                    deferred.resolve();
+                }, this));
+            } else {
+                return deferred.resolve();
+            }
+
+            return deferred;
+        },
+
+        _show: function(page, options) {
+            this.controllers[page].show(options);
         },
 
         _initializeAttributes: function () {
@@ -134,8 +155,6 @@ define(function (require) {
             this.attributes = {};
             this.attributes.models = {};
             this.attributes.authmanager = new AuthManager();
-
-            this.Controllers = Controllers;
         },
 
         _initializeAuthentication: function () {
