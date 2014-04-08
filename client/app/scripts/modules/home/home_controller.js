@@ -50,22 +50,20 @@ define(function (require) {
         _bindEvents: function () {
             this.listenTo(vent, 'jam:like', this.likeJam);
             this.listenTo(vent, 'jam:dislike', this.dislikeJam);
+
+            // TODO : This should call a sorting of the collection, not fetching again and again
             this.listenTo(vent, 'feeds:showSelection', this.showFeeds);
         },
 
         showFeeds: function (feedsType) {
             var self = this;
 
-            // Couille ici, spa narmol
             this.attributes.models.feeds.fetch({
-                url: '/api/feeds/',
                 data: { feedsType: feedsType },
-                success: function (xhr) {
+                success: function (collection, response, options) {
                     self.views.feeds.collection = new JamCollection();
-                    self.views.feeds.collection.add(xhr.models[0].get('jams'));
+                    self.views.feeds.collection.add(response.jams);
                     self.views.feeds.render();
-
-                    console.log("XHR", xhr);
                 }
             });
         }

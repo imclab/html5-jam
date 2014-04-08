@@ -40,7 +40,8 @@ define(function (require) {
         ui: {
             onStage: ".onStage",
             edit_jam_name: "input.edit-jam-name",
-            recordBtn: '.recbtn'
+            recordBtn: '.recbtn',
+            likeButton: 'button.likeButton'
         },
 
         create: function () {
@@ -53,7 +54,7 @@ define(function (require) {
 
         stop: function () {
             vent.trigger("recorder:stop");
-            
+
             this.ui.onStage.addClass("hide");
             this.ui.recordBtn.addClass('btn-danger').removeClass('btn-warning');
         },
@@ -68,18 +69,46 @@ define(function (require) {
             vent.trigger("recorder:save");
         },
 
-        like: function () {
-            if (!this.model.attributes.doILikeIt) {
-                vent.trigger("jam:like", this.model.id);
-                this.model.attributes.doILikeIt = true;
-                this.model.attributes.nbLikes++;
-                this.render();
-            } else {
-                vent.trigger("jam:dislike", this.model.id);
-                this.model.attributes.doILikeIt = false;
-                this.model.attributes.nbLikes--;
-                this.render();
+        serializeData: function () {
+            var data = Marionette.CompositeView.prototype.serializeData.call(this);
+            var likeOptions = this._getLikeOptions();
+
+            return _.extend(data, {
+                options: likeOptions
+            });
+        },
+
+        _getLikeOptions: function () {
+            if (this.model) {
+                var doILikeIt = this.model.get("doILikeIt");
+
+                return {
+                    "class": doILikeIt ? "btn-success" : "btn-info",
+                    oldClass: !doILikeIt ? "btn-success" : "btn-info",
+                    label: doILikeIt ? "Unlike" : "I like it !"
+                };
             }
+        },
+
+        like: function () {
+            if (!this.model.get("doILikeIt")) {
+                vent.trigger("jam:like", this.model.get("id"));
+                this.model.set("doILikeIt", true);
+                this.model.attributes.nbLikes++;
+                this._renderLike();
+            } else {
+                vent.trigger("jam:dislike", this.model.get("id"));
+                this.model.set("doILikeIt", false);
+                this.model.attributes.nbLikes--;
+                this._renderLike();
+            }
+        },
+
+        _renderLike: function () {
+            var options = this._getLikeOptions();
+            this.ui.likeButton.removeClass(options.oldClass);
+            this.ui.likeButton.addClass(options["class"]);
+            this.ui.likeButton.html("<span class=\"glyphicon glyphicon-music\"></span>&nbsp;&nbsp;" + options.label);
         }
 
     });

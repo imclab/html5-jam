@@ -1,14 +1,15 @@
 <div class="header row">
     <div class="col-xs-8">
-    <% if (name == null) { %>
-        <input id="inputName"  class="form-control edit-jam-name" type="text" placeholder="enter a name for this jam !"/>
-    <% } else { %>
-        <h4><%= name %></h4>
-    <% } %>
+        <% if (name == null) { %>
+            <input id="inputName"  class="form-control edit-jam-name" type="text" placeholder="enter a name for this jam !"/>
+        <% } else { %>
+            <h4><%= name %></h4>
+        <% } %>
     </div>
+    
     <% if (name != null) { %>
         <div class="col-xs-4 right">
-            <button class="likeButton btn-xs right <% if (doILikeIt) { %>btn-success<% } else { %>btn-info<% } %>"><span class="glyphicon glyphicon-music"></span>&nbsp;&nbsp;<% if (doILikeIt) { %>Unlike<% } else { %>I like it !<% } %></button>
+            <button class="likeButton btn-xs right <%= options.class %>"><span class="glyphicon glyphicon-music"></span>&nbsp;&nbsp;<%= options.label %></button>
             &nbsp;&nbsp;<%= nbLikes %>
         </div>
     <% } %>

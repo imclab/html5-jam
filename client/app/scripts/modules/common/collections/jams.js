@@ -7,7 +7,20 @@ define(function (require) {
 
     var JamCollection = Backbone.Collection.extend({
 
-        model: JamModel
+        model: JamModel,
+
+        url: "/api/feeds/",
+
+        sync: function (method, collection, options) {
+            console.log('::SYNC:: Method [Jams] : ', arguments);
+            options = options || {};
+
+            if (method === "read") {
+                options.url = this.url;
+
+                return Backbone.sync(method, collection, options);
+            }
+        }
 
     });
 
