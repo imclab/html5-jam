@@ -56,6 +56,7 @@ define(function (require) {
         showFeeds: function (feedsType) {
             var self = this;
 
+            // Couille ici, spa narmol
             this.attributes.models.feeds.fetch({
                 url: '/api/feeds/',
                 data: { feedsType: feedsType },

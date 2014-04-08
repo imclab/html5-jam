@@ -17,28 +17,23 @@ define(function (require) {
             "click .ownerName" : "goToOwnerProfile"
         },
 
-        initialize: function () {
-
-            if (this.model.get("id") === 100 || this.model.get("doILikeIt")) {
-                console.log(_.clone(this.model));
-            }
-        },
-
         redirection: function () {
             Backbone.history.navigate("jam/" + this.model.id, true);
         },
 
         like: function (event) {
             event.stopPropagation();
-            if (this.model.attributes.doILikeIt === false) {
-                vent.trigger("jam:like", this.model.id);
-                this.model.attributes.doILikeIt = true;
-                this.model.attributes.nbLikes++;
+            if (this.model.get("doILikeIt") === false) {
+                vent.trigger("jam:like", this.model.get("id"));
+                this.model.set("doILikeIt", true);
+                var nbLikes = this.model.get("nbLikes") + 1;
+                this.model.set("nbLikes", nbLikes);
                 this.render();
             } else {
-                vent.trigger("jam:dislike", this.model.id);
-                this.model.attributes.doILikeIt = false;
-                this.model.attributes.nbLikes--;
+                vent.trigger("jam:dislike", this.model.get("id"));
+                this.model.set("doILikeIt", false);
+                var nbLikes = this.model.get("nbLikes") - 1;
+                this.model.set("nbLikes", nbLikes);
                 this.render();
             }
         },

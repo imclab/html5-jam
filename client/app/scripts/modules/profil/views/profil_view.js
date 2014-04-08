@@ -22,13 +22,13 @@ define(function (require) {
         },
 
         follow: function () {
-            if (this.model.attributes.doIFollowHim === false) {
-                vent.trigger("user:follow", this.model.id);
-                this.model.attributes.doIFollowHim = true;
+            if (this.model.get("doIFollowHim") === false) {
+                vent.trigger("user:follow", this.model.get("id"));
+                this.model.set("doIFollowHim", true);
                 this.render();
             } else {
-                vent.trigger("user:unfollow", this.model.id);
-                this.model.attributes.doIFollowHim = false;
+                vent.trigger("user:unfollow", this.model.get("id"));
+                this.model.set("doIFollowHim", false);
                 this.render();
             }
         },
