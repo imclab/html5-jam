@@ -5,15 +5,12 @@ define(function (require) {
     var BaseController = require('modules/common/controllers/base_controller');
     var vent = require('modules/common/vent');
 
-    var User = require('modules/common/models/user');
-    
     var JamCollection = require('modules/common/collections/jams');
     var JamListView = require('modules/common/views/jams_view');
     var JamView = require('modules/common/views/jam_view');
 
     var FeedsLayout = require('modules/home/views/feeds_layout');
 
-    var AppData = require('modules/common/app_data');
     var LikeManager = require('modules/common/like_manager');
 
     var HomeController = BaseController.extend({
@@ -63,9 +60,11 @@ define(function (require) {
                 url: '/api/feeds/',
                 data: { feedsType: feedsType },
                 success: function (xhr) {
-                    self.views.feeds.collection = new JamCollection(); 
+                    self.views.feeds.collection = new JamCollection();
                     self.views.feeds.collection.add(xhr.models[0].get('jams'));
                     self.views.feeds.render();
+
+                    console.log("XHR", xhr);
                 }
             });
         }

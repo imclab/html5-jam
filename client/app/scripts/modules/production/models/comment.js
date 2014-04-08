@@ -10,7 +10,7 @@ define(function (require) {
         defaults: {
             content: '',
             createdAt: '',
-            userId: null
+            userId: ''
         },
 
         sync: function (method, model, options) {

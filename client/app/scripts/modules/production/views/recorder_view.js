@@ -69,7 +69,7 @@ define(function (require) {
         },
 
         like: function () {
-            if (this.model.attributes.doILikeIt == false) {
+            if (!this.model.attributes.doILikeIt) {
                 vent.trigger("jam:like", this.model.id);
                 this.model.attributes.doILikeIt = true;
                 this.model.attributes.nbLikes++;

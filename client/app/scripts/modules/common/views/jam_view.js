@@ -6,8 +6,6 @@ define(function (require) {
     var Backbone = require("backbone");
     var vent = require("modules/common/vent");
 
-    var JamCollection = require("modules/common/collections/jams");
-
     var JamView = Marionette.ItemView.extend({
         className: "jam-element",
 
@@ -19,13 +17,20 @@ define(function (require) {
             "click .ownerName" : "goToOwnerProfile"
         },
 
+        initialize: function () {
+
+            if (this.model.get("id") === 100 || this.model.get("doILikeIt")) {
+                console.log(_.clone(this.model));
+            }
+        },
+
         redirection: function () {
             Backbone.history.navigate("jam/" + this.model.id, true);
         },
 
         like: function (event) {
             event.stopPropagation();
-            if (this.model.attributes.doILikeIt == false) {
+            if (this.model.attributes.doILikeIt === false) {
                 vent.trigger("jam:like", this.model.id);
                 this.model.attributes.doILikeIt = true;
                 this.model.attributes.nbLikes++;
@@ -36,6 +41,12 @@ define(function (require) {
                 this.model.attributes.nbLikes--;
                 this.render();
             }
+        },
+
+        serializeData: function () {
+            var data = Marionette.ItemView.prototype.serializeData.call(this);
+
+            return data;
         },
 
         goToOwnerProfile: function (event) {

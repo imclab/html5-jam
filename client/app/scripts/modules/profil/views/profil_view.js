@@ -22,7 +22,7 @@ define(function (require) {
         },
 
         follow: function () {
-            if (this.model.attributes.doIFollowHim == false) {
+            if (this.model.attributes.doIFollowHim === false) {
                 vent.trigger("user:follow", this.model.id);
                 this.model.attributes.doIFollowHim = true;
                 this.render();
@@ -31,6 +31,29 @@ define(function (require) {
                 this.model.attributes.doIFollowHim = false;
                 this.render();
             }
+        },
+
+        serializeData: function () {
+            var data = Marionette.ItemView.prototype.serializeData.call(this);
+            var followData = this.followData();
+
+            return _.extend(data, {
+                isOwner: AppData.isOwner(data.id),
+                followData: followData
+            });
+        },
+
+        followData: function () {
+            if (this.model) {
+                var doIFollowHim = this.model.get("doIFollowHim");
+
+                return {
+                    "class": doIFollowHim ? "btn-success" : "btn-info",
+                    label: doIFollowHim ? "Unfollow" : "Follow"
+                };
+            }
+
+            return;
         }
 
     });

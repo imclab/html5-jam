@@ -139,7 +139,7 @@ define(function (require) {
             if (!this.controllers[page]) {
                 this.showLoading();
 
-                require(["modules/"+page+"/"+page+"_controller"], _.bind(function (Controller) {
+                require([this.path(page)], _.bind(function (Controller) {
                     options = options || {};
 
                     options.region = this.regions ? this.regions.corpus : null;
@@ -184,6 +184,10 @@ define(function (require) {
                 AppData.fetchUser();
             });
         },
+
+        path: function (page) {
+            return "modules/"+page+"/"+page+"_controller";
+        }
 
     });
 

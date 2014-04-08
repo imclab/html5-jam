@@ -1,9 +1,11 @@
 <div class="profile boxShadowed">
 
 	<div class="pull-right">
-	<button class="btn-xs followButton <% if (doIFollowHim) { %>btn-success<% } else { %>btn-info<% } %>">
-		<% if (doIFollowHim) { %>Unfollow<% } else { %>Follow<% } %></button>
-		<button class="btn-xs btn-danger">Delete Account</button>
+        <% if (!isOwner) { %>
+	       <button class="btn-xs followButton <%= followData.class %>"><%= followData.label %></button>
+        <% } else { %>
+		  <button class="btn-xs btn-danger">Delete Account</button>
+        <% } %>
 	</div>
 
 	<h3><img alt="profile picture" class="img-rounded" src="http://graph.facebook.com/<%= facebook_id %>/picture?type=square" /><%= name %></h3>
