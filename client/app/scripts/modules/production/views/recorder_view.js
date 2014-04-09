@@ -28,6 +28,12 @@ define(function (require) {
             }, this);
         },
 
+        onDomRefresh: function () {
+            if (this.model.get("fetch")) {
+                vent.trigger('recorder:initMediaCapture');
+            }
+        },
+
         events: {
             "click .playbtn" : "play",
             "click .stopbtn" : "stop",
@@ -42,7 +48,8 @@ define(function (require) {
             edit_jam_name: "input.edit-jam-name",
             recordBtn: '.recbtn',
             likeButton: 'button.likeButton',
-            nbLikes: 'span.nbLikes'
+            nbLikes: 'span.nbLikes',
+            preview: '#preview'
         },
 
         create: function () {

@@ -21,7 +21,7 @@ define(function (require) {
             this.listenTo(vent, 'recorder:play', this.playAllSelected);
             this.listenTo(vent, 'recorder:stop', this.stop);
             this.listenTo(vent, 'recorder:record', this.record);
-            this.listenTo(vent, 'recorder:initMediaCapture', this.initializeMediaCapture);
+            this.listenToOnce(vent, 'recorder:initMediaCapture', this.initializeMediaCapture);
         },
 
         playAllSelected: function () {

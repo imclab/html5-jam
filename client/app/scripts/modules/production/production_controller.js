@@ -117,41 +117,33 @@ define(function (require) {
 
             this.attributes.models.jam.fetch({
                 url: '/api/jams/' + self.attributes.jamId,
-                success: function (xhr) {
+                success: function (model, response) {
                     console.log("[ProductionController > JAM:" + self.attributes.jamId + "] Fetching from server : jam.cid=" + self.attributes.models.jam.cid);
-                    console.log("[JAM FECTCH xhr]: ", xhr);
 
                     var i;
-                    var __videos = xhr.get('videos');
+                    for (i = 0; i < response.videos.length; i++) {
+                        response.videos[i].jamId = self.attributes.jamId;
 
-                    for (i = 0; i < __videos.length; i++) {
-                        __videos[i].jamId = self.attributes.jamId;
-
-                        if (__videos[i].active) {
+                        if (response.videos[i].active) {
                             // Add to videos list
-                            self.views.recorder.collection.add(__videos[i]);
+                            self.views.recorder.collection.add(response.videos[i]);
                         } else {
                             // Add to SideBar
-                            self.views.sidebar.collection.add(__videos[i]);
+                            self.views.sidebar.collection.add(response.videos[i]);
                         }
                     }
 
-                    self.views.recorder.model = xhr;
-
-                    self.views.recorder.onRender = function () {
-
-                vent.trigger('recorder:initMediaCapture');
-                    };
-
+                    self.views.recorder.model = model;
+                    self.views.recorder.model.set("fetch", "true");
                     self.views.recorder.render();
                 }
             });
 
             this.attributes.models.comments.fetch({
                 url: '/api/jams/' + self.attributes.jamId + '/comments',
-                success: function (xhr) {
-                    console.log('[ProductionController > Comments]', xhr);
-                    self.views.comments.collection.add(xhr.models[0].get('comments'), { at: 0 });
+                success: function (model, response) {
+                    console.log('[ProductionController > Comments]', response);
+                    self.views.comments.collection.add(response.comments);
                 }
             });
         },
@@ -209,10 +201,10 @@ define(function (require) {
         },
 
         addComments: function (str) {
-            if (this.attributes.jamId == null) {
+            if (this.attributes.jamId === null) {
                 alert("Save the jam before adding comments !");
                 return;
-            } else if (str == null || str.length == 0) {
+            } else if (str === null || str.length === 0) {
                 return;
             }
 
@@ -265,6 +257,7 @@ define(function (require) {
 
             };
 
+            // TODO : Use deffered
             new_jam.save({}, {
                 success: _.bind(onSuccess, this)
             });
