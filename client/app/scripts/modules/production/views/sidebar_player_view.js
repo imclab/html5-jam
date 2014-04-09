@@ -16,12 +16,8 @@ define(function (require) {
             muteBtnIcon : '.mute-video span'
         },
 
-        initialize: function (jamId) {
-            this.jamId = jamId;
-        },
-
         play: function () {
-            this.controller.video.src = "api/jams/" + this.model.get("jamId") + "/videos/" + this.model.get("id");
+            this.controller.video.src = this.model.get("path");
 
             PlayerView.prototype.play.call(this);
         },

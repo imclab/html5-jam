@@ -173,12 +173,10 @@ define(function (require) {
         },
 
         addNewVideo: function (options) {
+            console.log("NewVideo options : ", options);
 
-            console.log("options : ", options);
-
-            options.description = 'Jackie Sharp';
-            options.instrument = 3;
-            options.active = true;
+            options.instrument = 5;
+            options.active = false;
             options.volume = 10;
 
             var newModel = new VideoModel(options);
