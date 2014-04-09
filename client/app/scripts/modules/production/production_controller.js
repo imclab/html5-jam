@@ -144,7 +144,6 @@ define(function (require) {
                 success: function (model, response) {
                     console.log('[ProductionController > Comments]', response);
                     self.views.comments.collection.add(response.comments);
-                    self.views.comments.initFILO();
                 }
             });
         },
