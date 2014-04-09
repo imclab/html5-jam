@@ -41,7 +41,8 @@ define(function (require) {
             onStage: ".onStage",
             edit_jam_name: "input.edit-jam-name",
             recordBtn: '.recbtn',
-            likeButton: 'button.likeButton'
+            likeButton: 'button.likeButton',
+            nbLikes: 'span.nbLikes'
         },
 
         create: function () {
@@ -109,6 +110,7 @@ define(function (require) {
             this.ui.likeButton.removeClass(options.oldClass);
             this.ui.likeButton.addClass(options["class"]);
             this.ui.likeButton.html("<span class=\"glyphicon glyphicon-music\"></span>&nbsp;&nbsp;" + options.label);
+            this.ui.nbLikes.text(this.model.get("nbLikes"));
         }
 
     });

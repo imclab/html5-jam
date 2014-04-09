@@ -12,7 +12,6 @@ define(function (require) {
     var SideBarView = require('modules/production/views/sidebar_view');
     var CommentsView = require('modules/production/views/comments_view');
 
-    var Like = require('modules/common/models/like');
     var CommentModel = require('modules/production/models/comment');
     var CommentCollection = require('modules/production/collections/comments');
     var VideoModel = require('modules/common/models/video');
@@ -37,15 +36,11 @@ define(function (require) {
 
         show: function (options) {
             if (options.jamId) {
-                // Existing project :
-                console.log("Plouf : ", options);
                 this.attributes.jamId = options.jamId;
             } else {
                 delete this.attributes.jamId;
                 this.attributes.models = {};
             }
-
-            console.log("Plouf : ", this.attributes.jamId);
 
             this.attributes.mode = options.mode;
 
@@ -96,7 +91,6 @@ define(function (require) {
         _bindEvents: function () {
             this.listenTo(vent, 'recorder:save', this.save);
 
-            this.listenTo(vent, 'player:play', this.playVideo);
             this.listenTo(vent, 'player:remove', this.removeVideo);
 
             this.listenTo(vent, 'comment:new', this.addComments);
@@ -131,6 +125,8 @@ define(function (require) {
                     var __videos = xhr.get('videos');
 
                     for (i = 0; i < __videos.length; i++) {
+                        __videos[i].jamId = self.attributes.jamId;
+
                         if (__videos[i].active) {
                             // Add to videos list
                             self.views.recorder.collection.add(__videos[i]);
@@ -143,7 +139,7 @@ define(function (require) {
                     self.views.recorder.model = xhr;
 
                     self.views.recorder.onRender = function () {
-                        
+
                 vent.trigger('recorder:initMediaCapture');
                     };
 
@@ -202,13 +198,6 @@ define(function (require) {
             this.attributes.selectedIds[model.cid] = {};
             this.attributes.selectedIds[model.cid].video = document.getElementById("video-player-" + model.get('_cid'));
             this.attributes.selectedIds[model.cid].audio = document.getElementById("audio-player-" + model.get('_cid'));
-        },
-
-        playVideo: function (model) {
-            console.log('TODO : get correct video tag')
-            var videoTag = document.getElementsByTagName("video")[0];
-            videoTag.src = 'api/jams/' + this.attributes.jamId + '/videos/' + model.attributes.id;
-            videoTag.play();            
         },
 
         removeVideo: function (model) {
