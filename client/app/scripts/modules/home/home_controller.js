@@ -51,13 +51,13 @@ define(function (require) {
             this.listenTo(vent, 'jam:like', this.likeJam);
             this.listenTo(vent, 'jam:dislike', this.dislikeJam);
 
-            // TODO : This should call a sorting of the collection, not fetching again and again
             this.listenTo(vent, 'feeds:showSelection', this.showFeeds);
         },
 
         showFeeds: function (feedsType) {
             var self = this;
 
+            // TODO : This should store the result !!!
             this.attributes.models.feeds.fetch({
                 data: { feedsType: feedsType },
                 success: function (collection, response, options) {

@@ -5,7 +5,7 @@ define(function (require) {
     var Marionette = require('marionette');
     var VideoModel = require('modules/common/models/video');
     var VideoCollection = require('modules/common/collections/videos');
-    var SidePlayerView = require("modules/common/views/side_player_view");
+    var SidePlayerView = require("modules/production/views/sidebar_player_view");
 
     var SideBarView = Marionette.CompositeView.extend({
 
