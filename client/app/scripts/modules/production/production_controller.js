@@ -144,6 +144,7 @@ define(function (require) {
                 success: function (model, response) {
                     console.log('[ProductionController > Comments]', response);
                     self.views.comments.collection.add(response.comments);
+                    self.views.comments.initFILO();
                 }
             });
         },
@@ -222,7 +223,7 @@ define(function (require) {
                 }
             });
 
-            this.views.comments.collection.add(newComment, { at: 0 });
+            this.views.comments.collection.add(newComment);
             this.views.comments.ui.textarea.val('');
         },
 

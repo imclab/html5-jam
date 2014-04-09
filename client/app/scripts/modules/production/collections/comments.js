@@ -7,7 +7,7 @@ define(function (require) {
     var Comment = require('modules/production/models/comment');
 
     var CommentCollection = Backbone.Collection.extend({
-        
+
         model: Comment
 
     });
