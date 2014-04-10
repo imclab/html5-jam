@@ -259,6 +259,11 @@ define(function (require) {
             new_jam.save({}, {
                 success: _.bind(onSuccess, this)
             });
+        },
+
+        onClose: function () {
+            this.closeManager();
+            BaseController.prototype.onClose.call(this);
         }
 
     });

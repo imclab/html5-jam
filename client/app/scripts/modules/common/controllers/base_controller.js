@@ -16,6 +16,8 @@ define(function (require) {
         },
 
         onClose: function () {
+            delete this.attributes;
+            delete this.views;
             this._closeLayout();
             this.stopListening();
         },

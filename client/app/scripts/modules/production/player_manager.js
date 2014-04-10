@@ -42,19 +42,19 @@ define(function (require) {
             });
 
             if (this.recorder.isRecording) {
-                this.stopRecording();
+                this._stopRecording();
             }
         },
 
         record: function () {
             this.playAllSelected();
-            this.startRecording({
+            this._startRecording({
                 video: true,
                 audio: true
             });
         },
 
-        startRecording: function (options) {
+        _startRecording: function (options) {
             if (options) {
                 if (options.video === true) {
                     this.recorder.video.startRecording();
@@ -69,7 +69,7 @@ define(function (require) {
             $('.recbtn').addClass('btn-warning').removeClass('btn-danger');
         },
 
-        stopRecording: function () {
+        _stopRecording: function () {
             var options = {};
 
             if (this.recorder.isRecording) {
@@ -143,6 +143,18 @@ define(function (require) {
         _setRecorderBlob: function (obj) {
             this.recorderBlob = obj;
             this._initializeRecordRTC();
+        },
+
+        closeManager: function () {
+            if (this.recorder.isRecording) {
+                this.recorder.audio.stopRecording();
+                this.recorder.video.stopRecording();
+            }
+
+            delete this.recorder;
+            delete this.recorderPreview;
+            delete this.recorderBlob;
+            delete this.selectedIds;
         }
 
     });
