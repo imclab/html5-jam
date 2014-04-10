@@ -7,14 +7,12 @@ define(function (require) {
     var vent = require('modules/common/vent');
 
     var LoadingView = require("modules/common/views/loading_view");
-
     var AuthManager = require('modules/common/auth_manager');
-
-    // var Cook = require('modules/common/cookie_manager');
-
     var AppData = require('modules/common/app_data');
 
     var MainController = Marionette.Controller.extend({
+
+        controllerNames: ["login", "home", "production", "login", "topbar", "friendlist", "profil"],
 
         initialize: function (options) {
             this.regions = options.regions || {};
@@ -56,13 +54,13 @@ define(function (require) {
         },
 
         showLogin: function () {
-            this._createController("login").then(_.bind(this._show, this, "login"));
+            this._createController("login").then(_.bind(this._showController, this, "login"));
         },
 
         showIndex: function () {
             if (this.handleConnection()) {
                 this.handleTopbar();
-                this._createController("home").then(_.bind(this._show, this, "home"));
+                this._createController("home").then(_.bind(this._showController, this, "home"));
             }
         },
 
@@ -73,7 +71,7 @@ define(function (require) {
                     jamId: jamId
                 };
                 this.handleTopbar();
-                this._createController("production", options).then(_.bind(this._show, this, "production", options));
+                this._createController("production", options).then(_.bind(this._showController, this, "production", options));
             }
         },
 
@@ -84,7 +82,7 @@ define(function (require) {
                     jamId: jamId
                 };
                 this.handleTopbar();
-                this._createController("production", options).then(_.bind(this._show, this, "production", options));
+                this._createController("production", options).then(_.bind(this._showController, this, "production", options));
             }
         },
 
@@ -94,7 +92,7 @@ define(function (require) {
                     mode: 'create'
                 };
                 this.handleTopbar();
-                this._createController("production", options).then(_.bind(this._show, this, "production", options));
+                this._createController("production", options).then(_.bind(this._showController, this, "production", options));
             }
         },
 
@@ -104,14 +102,14 @@ define(function (require) {
                     profilId: profilId
                 };
                 this.handleTopbar();
-                this._createController("profil", options).then(_.bind(this._show, this, "profil", options));
+                this._createController("profil", options).then(_.bind(this._showController, this, "profil", options));
             }
         },
 
         showFriends: function () {
             if (this.handleConnection()) {
                 this.handleTopbar();
-                this._createController("friendlist").then(_.bind(this._show, this, "friendlist"));
+                this._createController("friendlist").then(_.bind(this._showController, this, "friendlist"));
             }
         },
 
@@ -125,7 +123,7 @@ define(function (require) {
 
         handleTopbar: function () {
             if (!this.controllers.topbar) {
-                this._createController("topbar").then(_.bind(this._show, this, "topbar"));
+                this._createController("topbar").then(_.bind(this._showController, this, "topbar"));
             }
         },
 
@@ -156,8 +154,33 @@ define(function (require) {
             return deferred;
         },
 
-        _show: function(page, options) {
+        _showController: function(page, options) {
+            this._closeControllersExcept(page);
+
             this.controllers[page].show(options);
+        },
+
+        _closeControllersExcept: function (controllerName) {
+            var toClose = _.without(this.controllerNames, controllerName);
+
+            this._closeControllers(toClose);
+        },
+
+        _closeControllers: function (controllerNames) {
+            var self = this;
+
+            if (!_.isArray(controllerNames)) {
+                controllerNames = [controllerNames];
+            }
+
+            if (this.controllers) {
+                _.each(controllerNames, function (controllerName) {
+                    if (self.controllers["controllerName"]) {
+                        self.controllers["controllerName"].close();
+                        delete self.controllers["controllerName"];
+                    }
+                });
+            }
         },
 
         _initializeAttributes: function () {
