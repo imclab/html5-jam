@@ -34,7 +34,6 @@ define(function (require) {
 
             return data;
         }
-
     });
 
     return Comment;

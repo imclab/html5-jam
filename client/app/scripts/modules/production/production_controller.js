@@ -1,6 +1,6 @@
 /*global define*/
 define(function (require) {
-    'use strict';
+    "use strict";
 
     var _ = require('underscore');
     var Backbone = require('backbone');
@@ -12,7 +12,6 @@ define(function (require) {
     var SideBarView = require('modules/production/views/sidebar_view');
     var CommentsView = require('modules/production/views/comments_view');
 
-    var Like = require('modules/common/models/like');
     var CommentModel = require('modules/production/models/comment');
     var CommentCollection = require('modules/production/collections/comments');
     var VideoModel = require('modules/common/models/video');
@@ -37,15 +36,11 @@ define(function (require) {
 
         show: function (options) {
             if (options.jamId) {
-                // Existing project :
-                console.log("Plouf : ", options);
                 this.attributes.jamId = options.jamId;
             } else {
                 delete this.attributes.jamId;
                 this.attributes.models = {};
             }
-
-            console.log("Plouf : ", this.attributes.jamId);
 
             this.attributes.mode = options.mode;
 
@@ -96,7 +91,6 @@ define(function (require) {
         _bindEvents: function () {
             this.listenTo(vent, 'recorder:save', this.save);
 
-            this.listenTo(vent, 'player:play', this.playVideo);
             this.listenTo(vent, 'player:remove', this.removeVideo);
 
             this.listenTo(vent, 'comment:new', this.addComments);
@@ -123,39 +117,33 @@ define(function (require) {
 
             this.attributes.models.jam.fetch({
                 url: '/api/jams/' + self.attributes.jamId,
-                success: function (xhr) {
+                success: function (model, response) {
                     console.log("[ProductionController > JAM:" + self.attributes.jamId + "] Fetching from server : jam.cid=" + self.attributes.models.jam.cid);
-                    console.log("[JAM FECTCH xhr]: ", xhr);
 
                     var i;
-                    var __videos = xhr.get('videos');
+                    for (i = 0; i < response.videos.length; i++) {
+                        response.videos[i].jamId = self.attributes.jamId;
 
-                    for (i = 0; i < __videos.length; i++) {
-                        if (__videos[i].active) {
+                        if (response.videos[i].active) {
                             // Add to videos list
-                            self.views.recorder.collection.add(__videos[i]);
+                            self.views.recorder.collection.add(response.videos[i]);
                         } else {
                             // Add to SideBar
-                            self.views.sidebar.collection.add(__videos[i]);
+                            self.views.sidebar.collection.add(response.videos[i]);
                         }
                     }
 
-                    self.views.recorder.model = xhr;
-
-                    self.views.recorder.onRender = function () {
-                        
-                vent.trigger('recorder:initMediaCapture');
-                    };
-
+                    self.views.recorder.model = model;
+                    self.views.recorder.model.set("fetch", "true");
                     self.views.recorder.render();
                 }
             });
 
             this.attributes.models.comments.fetch({
                 url: '/api/jams/' + self.attributes.jamId + '/comments',
-                success: function (xhr) {
-                    console.log('[ProductionController > Comments]', xhr);
-                    self.views.comments.collection.add(xhr.models[0].get('comments'), { at: 0 });
+                success: function (model, response) {
+                    console.log('[ProductionController > Comments]', response);
+                    self.views.comments.collection.add(response.comments);
                 }
             });
         },
@@ -185,12 +173,10 @@ define(function (require) {
         },
 
         addNewVideo: function (options) {
+            console.log("NewVideo options : ", options);
 
-            console.log("options : ", options);
-
-            options.description = 'Jackie Sharp';
-            options.instrument = 3;
-            options.active = true;
+            options.instrument = 5;
+            options.active = false;
             options.volume = 10;
 
             var newModel = new VideoModel(options);
@@ -204,13 +190,6 @@ define(function (require) {
             this.attributes.selectedIds[model.cid].audio = document.getElementById("audio-player-" + model.get('_cid'));
         },
 
-        playVideo: function (model) {
-            console.log('TODO : get correct video tag')
-            var videoTag = document.getElementsByTagName("video")[0];
-            videoTag.src = 'api/jams/' + this.attributes.jamId + '/videos/' + model.attributes.id;
-            videoTag.play();            
-        },
-
         removeVideo: function (model) {
             model.destroy({
                 jamId: this.attributes.jamId
@@ -220,10 +199,10 @@ define(function (require) {
         },
 
         addComments: function (str) {
-            if (this.attributes.jamId == null) {
+            if (this.attributes.jamId === null) {
                 alert("Save the jam before adding comments !");
                 return;
-            } else if (str == null || str.length == 0) {
+            } else if (str === null || str.length === 0) {
                 return;
             }
 
@@ -243,7 +222,7 @@ define(function (require) {
                 }
             });
 
-            this.views.comments.collection.add(newComment, { at: 0 });
+            this.views.comments.collection.add(newComment);
             this.views.comments.ui.textarea.val('');
         },
 
@@ -276,6 +255,7 @@ define(function (require) {
 
             };
 
+            // TODO : Use deffered
             new_jam.save({}, {
                 success: _.bind(onSuccess, this)
             });

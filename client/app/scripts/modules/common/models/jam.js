@@ -14,6 +14,7 @@ define(function (require) {
             privacy: false,
             updatedAt: '',
             userId: 0,
+            star: 0,
             ownerFacebookId: 0,
             nbLikes: 0,
             doILikeIt: false
@@ -34,6 +35,16 @@ define(function (require) {
             }
 
             return Backbone.sync(method, model, options);
+        },
+
+
+        parse: function (response, options) {
+            _.each(response.videos, function (video) {
+                video.jamId = response.id;
+                video.path = "api/jams/" + response.id + "/videos/" + video.id;
+            });
+
+            return response;
         },
 
         toJSON: function () {

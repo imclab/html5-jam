@@ -25,7 +25,8 @@ define(function (require) {
         },
 
         play: function () {
-            vent.trigger('player:play', this.model);
+            this.controller.video.play();
+            this.controller.audio.play();
         },
 
         mute: function () {
