@@ -141,7 +141,7 @@ exports.getJamDetails = function (req, res, next) {
 			jam.doILikeIt = result > 0;
 
 			// get jam's videos
-			Jam.daoFactoryManager.sequelize.query('SELECT v.id, v.instrument, v.createdAt, v.userId, u.name as ownerName, u.facebook_id as ownerFacebookId, u.picture_url as ownerPictureUrl, AVG(n.value) AS note'
+			Jam.daoFactoryManager.sequelize.query('SELECT v.id, v.jamId, v.instrument, v.createdAt, v.userId, u.name as ownerName, u.facebook_id as ownerFacebookId, u.picture_url as ownerPictureUrl, AVG(n.value) AS note'
 			+ ' FROM videos v LEFT JOIN users u ON u.id=v.userId LEFT OUTER JOIN notes n ON n.videoId=v.id'
 			+ ' WHERE v.jamId=? GROUP BY v.id ORDER BY v.createdAt DESC'
 				, null, { raw: true }, [req.params.jamId])
