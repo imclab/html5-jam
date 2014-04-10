@@ -32,7 +32,7 @@ exports.addVideoToJam = function (req, res, next) {
 		if (jam == null) { return next(new Errors.BadRequest('Jam not found')); }
 
 		// create video
-		Video.create({ instrument: postData.instrument, userId: req.user.id })
+		Video.create({ instrument: postData.instrument, userId: req.user.id, active: postData.active, volume: postData.volume })
 		.success(function (newVideo) {
 
 		    var videoFileBuffer = new Buffer(postData.video.contents.split(',').pop(), "base64");
@@ -51,6 +51,53 @@ exports.addVideoToJam = function (req, res, next) {
 						return next(new Errors.Error(error, 'Server error'));
 					});
 				}
+			});
+		})
+		.error(function (error) {
+			return next(new Errors.Error(error, 'Server error'));
+		});
+	})
+	.error(function (error) {
+		return next(new Errors.Error(error, 'Server error'));
+	});
+
+};
+
+exports.updateVideo = function (req, res, next) {
+	
+	var postData = req.body;
+
+	// get jam
+	Jam.find({
+		where: Sequelize.and(
+			{ id: req.params.jamId },
+			Sequelize.or(
+				{ privacy: 0 },
+				{ userId: req.user.id }
+			)
+		)
+	}).success(function (jam) {
+		if (jam == null) { return next(new Errors.BadRequest('Jam not found')); }
+
+		// get video
+		Video.find({
+			where: { id: req.params.videoId }
+		})
+		.success(function (video) {
+			if (video == null) { return next(new Errors.BadRequest('Video not found')); }
+
+			// update video
+			video.instrument = postData.instrument || video.instrument;
+			video.active = postData.active || video.active;
+			video.volume = postData.volume || video.volume;
+
+			// save video
+			video.save()
+			.success(function () {
+				res.send(video);
+			})
+			.error(function (error) {
+				return next(new Errors.Error(error, 'Server error'));
 			});
 		})
 		.error(function (error) {

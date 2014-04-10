@@ -14,6 +14,12 @@ module.exports.init = function (app) {
 	 app.post('/jams/:jamId/videos', express.multipart(), authorization.requiresAuthentication, videos.addVideoToJam);
 
 
+	 /**
+	 *	Update Video
+	 */
+	 app.put('/jams/:jamId/videos/:videoId', authorization.requiresAuthentication, videos.updateVideo);
+
+
 	/**
 	 * 	Get video stream
 	 */
