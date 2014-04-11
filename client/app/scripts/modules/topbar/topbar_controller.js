@@ -24,9 +24,8 @@ define(function (require) {
         },
 
         _bindEvents: function () {
-            // this.listenTo(vent, 'topbar:feeds', this.toHome);
-            // this.listenTo(vent, 'topbar:username', this.toProfil);
-            // this.listenTo(vent, 'topbar:friends', this.toFriendList);
+            this.listenTo(vent, 'topbar:feeds', this.toHome);
+            this.listenTo(vent, 'topbar:username', this.toProfil);
             this.listenTo(vent, 'topbar:newJam', this.toNewProject);
             this.listenTo(vent, 'topbar:logout', this.logout);
         },
@@ -37,10 +36,6 @@ define(function (require) {
 
         getView: function () {
             return new TopBar({ model : AppData.user });
-        },
-
-        toFriendList: function () {
-            this.navigate('friends/');
         },
 
         toProfil: function () {
@@ -57,7 +52,7 @@ define(function (require) {
 
         logout: function () {
             new AuthManager().removeAuthenticationCookie();
-            Backbone.history.navigate('login/');
+            this.navigate('login/');
             window.location.reload();
         },
 

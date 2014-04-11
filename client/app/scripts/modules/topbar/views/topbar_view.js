@@ -39,10 +39,6 @@ define(function (require) {
             });
         },
 
-        toFriendList: function () {
-            vent.trigger('topbar:friends');
-        },
-
         toProfil: function () {
             vent.trigger('topbar:profil');
         },

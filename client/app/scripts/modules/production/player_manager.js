@@ -132,6 +132,7 @@ define(function (require) {
 
         _initializeRecordRTC: function () {
             this.recorder.audio = RecordRTC(this.recorderBlob, {
+                type: 'audio',
                 bufferSize: 16384
             });
 
@@ -143,18 +144,6 @@ define(function (require) {
         _setRecorderBlob: function (obj) {
             this.recorderBlob = obj;
             this._initializeRecordRTC();
-        },
-
-        closeManager: function () {
-            if (this.recorder.isRecording) {
-                this.recorder.audio.stopRecording();
-                this.recorder.video.stopRecording();
-            }
-
-            delete this.recorder;
-            delete this.recorderPreview;
-            delete this.recorderBlob;
-            delete this.selectedIds;
         }
 
     });

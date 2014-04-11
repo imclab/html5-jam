@@ -12,7 +12,7 @@ define(function (require) {
 
     var MainController = Marionette.Controller.extend({
 
-        controllerNames: ["login", "home", "production", "login", "topbar", "friendlist", "profil"],
+        controllerNames: ["login", "home", "production", "login", "friendlist", "profil"],
 
         initialize: function (options) {
             this.regions = options.regions || {};
@@ -154,7 +154,7 @@ define(function (require) {
             return deferred;
         },
 
-        _showController: function(page, options) {
+        _showController: function (page, options) {
             this._closeControllersExcept(page);
 
             this.controllers[page].show(options);
@@ -167,19 +167,17 @@ define(function (require) {
         },
 
         _closeControllers: function (controllerNames) {
-            var self = this;
-
             if (!_.isArray(controllerNames)) {
                 controllerNames = [controllerNames];
             }
 
             if (this.controllers) {
                 _.each(controllerNames, function (controllerName) {
-                    if (self.controllers["controllerName"]) {
-                        self.controllers["controllerName"].close();
-                        delete self.controllers["controllerName"];
+                    if (this.controllers[controllerName]) {
+                        this.controllers[controllerName].close();
+                        delete this.controllers[controllerName];
                     }
-                });
+                }, this);
             }
         },
 
@@ -209,7 +207,7 @@ define(function (require) {
         },
 
         path: function (page) {
-            return "modules/"+page+"/"+page+"_controller";
+            return "modules/" + page + "/" + page + "_controller";
         }
 
     });

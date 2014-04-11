@@ -264,6 +264,18 @@ define(function (require) {
         onClose: function () {
             this.closeManager();
             BaseController.prototype.onClose.call(this);
+        },
+
+        closeManager: function () {
+            if (this.attributes.recorder.isRecording) {
+                this.attributes.recorder.audio.stopRecording();
+                this.attributes.recorder.video.stopRecording();
+            }
+
+            delete this.attributes.recorder;
+            delete this.attributes.recorderPreview;
+            delete this.attributes.recorderBlob;
+            delete this.attributes.selectedIds;
         }
 
     });
