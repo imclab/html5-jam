@@ -57,7 +57,6 @@ define(function (require) {
         showFeeds: function (feedsType) {
             var self = this;
 
-            // TODO : This should store the result !!!
             this.attributes.models.feeds.fetch({
                 data: { feedsType: feedsType },
                 success: function (collection, response, options) {

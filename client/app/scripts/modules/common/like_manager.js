@@ -1,5 +1,6 @@
 /*global define*/
 define(function (require) {
+    "use strict";
 
     var Like = require('modules/common/models/like');
 

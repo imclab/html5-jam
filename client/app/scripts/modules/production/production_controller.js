@@ -22,6 +22,7 @@ define(function (require) {
 
     var PlayerManager = require('modules/production/player_manager');
     var LikeManager = require('modules/common/like_manager');
+    var KeyboardManager = require('modules/common/keyboard_manager');
 
     var RecorderController = BaseController.extend({
 
@@ -29,6 +30,7 @@ define(function (require) {
             BaseController.prototype.initialize.call(this, options);
 
             this._initializeAttributes(options);
+            this._initializeControls();
             this._bindEvents();
 
             console.log('[ProductionController > onInit] ', options);
@@ -84,8 +86,6 @@ define(function (require) {
             this.attributes.models = {};
 
             this.attributes.mode = options.mode || "show";
-
-            _.extend(this.attributes, new PlayerManager());
         },
 
         _bindEvents: function () {
@@ -103,7 +103,6 @@ define(function (require) {
             });
 
             this.listenTo(vent, 'jam:create', this.createNewJam);
-
             this.listenTo(vent, 'jam:like', this.likeJam);
             this.listenTo(vent, 'jam:dislike', this.dislikeJam);
         },
@@ -244,7 +243,6 @@ define(function (require) {
             });
 
             var onSuccess = function (model, response, options) {
-                // Tout enregistrer (les videos, les comments vont degager)
                 this.views.recorder.collection.save({
                     jamId: model.id
                 });
@@ -252,7 +250,6 @@ define(function (require) {
                 setTimeout(function () {
                     Backbone.history.navigate('jam/' + model.id, true);
                 }, 100);
-
             };
 
             // TODO : Use deffered
@@ -262,25 +259,18 @@ define(function (require) {
         },
 
         onClose: function () {
-            this.closeManager();
             BaseController.prototype.onClose.call(this);
         },
 
-        closeManager: function () {
-            if (this.attributes.recorder.isRecording) {
-                this.attributes.recorder.audio.stopRecording();
-                this.attributes.recorder.video.stopRecording();
-            }
-
-            delete this.attributes.recorder;
-            delete this.attributes.recorderPreview;
-            delete this.attributes.recorderBlob;
-            delete this.attributes.selectedIds;
+        _initializeControls: function () {
+            this.initKeyboardManager();
         }
 
     });
 
     _.extend(RecorderController.prototype, LikeManager);
+    _.extend(RecorderController.prototype, KeyboardManager);
+    _.extend(RecorderController.attributes, new PlayerManager());
 
     return RecorderController;
 

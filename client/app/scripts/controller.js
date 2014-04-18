@@ -22,11 +22,14 @@ define(function (require) {
         },
 
         handleConnection: function () {
+            // FAIRE JOUER LES PROMISES
             if (!AppData.user) {
                 this.showLoading();
 
                 if (this.attributes.authmanager.checkAuthenticationCookie()) {
                     this.attributes.authmanager.authenticationRequest();
+                    // TODO : Pb here no ?
+                    // return false;
                 } else {
                     // No cookie found
                     Backbone.history.navigate('login/', true);

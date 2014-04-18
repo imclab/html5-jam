@@ -8,13 +8,22 @@ define(function (require) {
     var VideoCollection = Backbone.Collection.extend({
 
         model: Video,
-
+// TODO SAVE FUNCTION WITH Promise PLZ
         save: function (options) {
-            this.each(function (model) {
-                model.save(null, {
-                    jamId: options.jamId
+            console.log("Coucou les guignols : ", _.clone(this));
+            this.sync("save", this.models, options);
+        },
+
+        sync: function (method, collection, options) {
+            options = options || {};
+
+            if (method === "save") {
+                this.each(function (model) {
+                    model.save(null, {
+                        jamId: options.jamId
+                    });
                 });
-            });
+            }
         }
     });
 
