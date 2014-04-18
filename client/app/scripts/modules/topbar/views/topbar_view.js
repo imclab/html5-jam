@@ -14,10 +14,7 @@ define(function (require) {
         el: '#topbar',
 
         events: {
-            'click .newJam' : 'toNewProject',
-            'click .profilBtn' : 'toProfil',
-            'click .username' : 'toHome',
-            'click .logout' : 'logout'
+            'click button.logout' : 'logout'
         },
 
         getTemplate: function () {
@@ -37,18 +34,6 @@ define(function (require) {
                 this.model = AppData.user;
                 this.render();
             });
-        },
-
-        toProfil: function () {
-            vent.trigger('topbar:profil');
-        },
-
-        toNewProject: function () {
-            vent.trigger('topbar:newJam');
-        },
-
-        toHome: function () {
-            vent.trigger('topbar:home');
         },
 
         logout: function () {

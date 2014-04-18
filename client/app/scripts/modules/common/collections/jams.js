@@ -12,7 +12,7 @@ define(function (require) {
         url: "/api/feeds/",
 
         sync: function (method, collection, options) {
-            console.log('::SYNC:: Method [Jams] : ', arguments);
+            // console.log('::SYNC:: Method [Jams] : ', arguments);
             options = options || {};
 
             if (method === "read") {

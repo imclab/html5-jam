@@ -24,9 +24,7 @@ define(function (require) {
         },
 
         _bindEvents: function () {
-            this.listenTo(vent, 'topbar:feeds', this.toHome);
-            this.listenTo(vent, 'topbar:username', this.toProfil);
-            this.listenTo(vent, 'topbar:newJam', this.toNewProject);
+            this.listenTo(vent, 'topbar:newJam', this.navigate);
             this.listenTo(vent, 'topbar:logout', this.logout);
         },
 
@@ -38,26 +36,16 @@ define(function (require) {
             return new TopBar({ model : AppData.user });
         },
 
-        toProfil: function () {
-            this.navigate('profil/' + AppData.user.get('id'));
-        },
-
-        toNewProject: function () {
-            this.navigate('jam/');
-        },
-
-        toHome: function () {
-            this.navigate('/');
-        },
-
         logout: function () {
             new AuthManager().removeAuthenticationCookie();
             this.navigate('login/');
             window.location.reload();
         },
 
-        navigate: function (destination) {
-            Backbone.history.navigate(destination, true);
+        navigate: function (dest) {
+            dest = dest + '/';
+
+            Backbone.history.navigate(dest, true);
         }
 
     });

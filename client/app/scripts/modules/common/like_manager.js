@@ -12,6 +12,9 @@ define(function (require) {
                 }).save({}, {
                     success: function (xhr) {
                         console.log('::success::', xhr);
+                    },
+                    error: function (err) {
+                        console.log("We have an error :", err);
                     }
                 });
             },
@@ -23,6 +26,9 @@ define(function (require) {
                 }).destroy({
                     success: function (xhr) {
                         console.log('::success::', xhr);
+                    },
+                    error: function (err) {
+                        console.log("We have an error :", err);
                     }
                 });
             }

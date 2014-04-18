@@ -240,10 +240,6 @@ define(function (require) {
         },
 
         createNewJam: function () {
-            // CREATE JAM ::
-            //      Video list
-            //      User Infos
-            //      Comments
             var new_jam = new Jam({
                 user_facebook_id: AppData.user.get('facebook_id'),
                 name: this.views.recorder.ui.edit_jam_name.val()
@@ -256,14 +252,26 @@ define(function (require) {
                 });
             }, this);
 
-            // TODO : Use deffered
             new_jam.save({}, {
                 success: _.bind(onSuccess, this)
             });
         },
 
         onClose: function () {
+            this.closeManager();
             BaseController.prototype.onClose.call(this);
+        },
+
+        closeManager: function () {
+            if (this.attributes.recorder.isRecording) {
+                this.attributes.recorder.audio.stopRecording();
+                this.attributes.recorder.video.stopRecording();
+            }
+
+            delete this.attributes.recorder;
+            delete this.attributes.recorderPreview;
+            delete this.attributes.recorderBlob;
+            delete this.attributes.selectedIds;
         },
 
         _initializeControls: function () {

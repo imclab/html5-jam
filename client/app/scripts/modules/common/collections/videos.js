@@ -31,14 +31,12 @@ define(function (require) {
                         collection[i].save(null, {
                             jamId: options.jamId,
                             success: function () {
-                                console.log("Video saved");
                                 deliveredVideoSuccess++;
                                 if (deliveredVideoFail + deliveredVideoSuccess >= collection.length) {
                                     options.deferred.resolve();
                                 }
                             },
                             error: function () {
-                                console.log("Video rejected");
                                 deliveredVideoFail++;
                                 if (deliveredVideoFail + deliveredVideoSuccess >= collection.length) {
                                     options.deferred.resolve();
