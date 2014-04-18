@@ -9,7 +9,6 @@ define(function (require) {
     var AuthManager = function () {
 
         return {
-
             handleConnection: function () {
                 return this.isConnected();
             },
@@ -43,6 +42,10 @@ define(function (require) {
 
             removeAuthenticationCookie: function () {
                 CookieManager.remove(Const.COOKIE_AUTH);
+            },
+
+            setCookiePouch: function () {
+                Back
             }
         };
     };

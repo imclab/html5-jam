@@ -85,6 +85,8 @@ define(function (require) {
             this.attributes = {};
             this.attributes.models = {};
 
+            _.extend(this.attributes, new PlayerManager());
+
             this.attributes.mode = options.mode || "show";
         },
 
@@ -161,14 +163,19 @@ define(function (require) {
                 // Add the video to the jam
                 // Reload the page
                 console.log("[Production_controller.js > save] SUCCESS : ", this.attributes.selectedIds);
-
-                // On envoit toutes les videos selectionnees au server
-                this.views.recorder.collection.save({
-                    jamId: this.attributes.jamId
-                });
+                this.saveVideos();
             }
+        },
 
-            // On reinitialise tout => refetch du jam et pas besoin de passer un objet d'une vue a l'autre
+        saveVideos: function (callback) {
+            var deferred = new $.Deferred();
+
+            this.views.recorder.collection.save({
+                jamId: this.attributes.jamId,
+                deferred: deferred
+            });
+
+            return deferred;
         },
 
         addNewVideo: function (options) {
@@ -242,15 +249,12 @@ define(function (require) {
                 name: this.views.recorder.ui.edit_jam_name.val()
             });
 
-            var onSuccess = function (model, response, options) {
-                this.views.recorder.collection.save({
-                    jamId: model.id
-                });
-
-                setTimeout(function () {
+            var onSuccess = _.bind(function (model, response, options) {
+                this.attributes.jamId = model.id;
+                this.saveVideos().then(function () {
                     Backbone.history.navigate('jam/' + model.id, true);
-                }, 100);
-            };
+                });
+            }, this);
 
             // TODO : Use deffered
             new_jam.save({}, {
@@ -270,7 +274,6 @@ define(function (require) {
 
     _.extend(RecorderController.prototype, LikeManager);
     _.extend(RecorderController.prototype, KeyboardManager);
-    _.extend(RecorderController.attributes, new PlayerManager());
 
     return RecorderController;
 
