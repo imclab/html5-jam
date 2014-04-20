@@ -62,10 +62,14 @@ define(function (require) {
         },
 
         showIndex: function () {
-            if (this.handleConnection()) {
-                this.handleTopbar();
-                this._createController("home").then(_.bind(this._showController, this, "home"));
-            }
+            this.handleConnectionAsync().then(
+                _.bind(function () {
+                    this.handleTopbar();
+                    this._createController("home").then(this._showController, this, "home");
+                }, this), function () {
+                    Backbone.history.navigate('login/', true);
+                }
+            );
         },
 
         editJam: function (jamId) {
