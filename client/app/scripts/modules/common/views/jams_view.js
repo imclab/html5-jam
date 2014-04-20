@@ -19,7 +19,6 @@ define(function (require) {
 
             this.collection = new JamCollection();
         }
-
     });
 
     return JamListView;

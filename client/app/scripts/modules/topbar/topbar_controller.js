@@ -38,14 +38,12 @@ define(function (require) {
 
         logout: function () {
             new AuthManager().removeAuthenticationCookie();
-            this.navigate('login/');
+            this.navigate('login');
             window.location.reload();
         },
 
         navigate: function (dest) {
-            dest = dest + '/';
-
-            Backbone.history.navigate(dest, true);
+            Backbone.history.navigate(dest + '/', true);
         }
 
     });

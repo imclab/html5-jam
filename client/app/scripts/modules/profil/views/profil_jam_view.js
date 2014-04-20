@@ -6,13 +6,19 @@ define(function (require) {
     var Backbone = require('backbone');
     var vent = require('modules/common/vent');
 
+    var AppData = require('modules/common/app_data');
+
     var JamView = require('modules/common/views/jam_view');
 
     var ProfilJamView = JamView.extend({
         template: 'profil/profil_jam',
 
-        events: {
-            "click button.deleteJam" : "deleteJam"
+        initialize: function () {
+            JamView.prototype.initialize.call(this);
+
+            _.extend(this.events, {
+                "click button.deleteJam": "deleteJam"
+            });
         },
 
         deleteJam: function () {
@@ -24,12 +30,13 @@ define(function (require) {
         },
 
         serializeData: function () {
-            return {
-                description: this.model.get("description"),
-                name: this.model.get("name"),
-                createdAt: this.model.get("createdAt"),
-                isOwner: true
-            };
+            var data = this.model.toJSON();
+
+            _.extend(data, {
+                isOwner: AppData.isOwner(data.userId)
+            });
+
+            return data;
         }
     });
 

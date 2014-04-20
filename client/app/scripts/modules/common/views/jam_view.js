@@ -12,7 +12,7 @@ define(function (require) {
         template: "common/jam",
 
         events: {
-            "click .jam" : "redirection",
+            "click h3" : "redirection",
             "click .likes" : "like",
             "click .ownerName" : "goToOwnerProfile"
         },

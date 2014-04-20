@@ -15,15 +15,14 @@ define(function (require) {
             vignette_three: null,
             vignette_two: null,
             doIFollowHim: false
-	    }
+	    },
+
+        toJSON: function () {
+            this.attributes.createdAt = moment(this.attributes.createdAt).fromNow();
+            return this.attributes;
+        }
 
     });
-
-    // override toJSON
-    User.prototype.toJSON = function() {
-        this.attributes.createdAt = moment(this.attributes.createdAt).fromNow();
-        return this.attributes;
-    };
 
     return User;
 });
