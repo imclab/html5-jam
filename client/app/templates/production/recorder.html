@@ -1,13 +1,12 @@
 <div class="header row">
-    <div class="col-xs-8">
-        <% if (name == null) { %>
-            <input id="inputName"  class="form-control edit-jam-name" type="text" placeholder="enter a name for this jam !"/>
-        <% } else { %>
+    <% if (mode === "create") { %>
+        <div class="col-xs-8">
+            <input id="inputName"  class="form-control edit-jam-name" type="text" placeholder="enter a name for this jam !" autofocus="autofocus"/>
+        </div>
+    <% } else { %>
+        <div class="col-xs-8">
             <h4><%= name %></h4>
-        <% } %>
-    </div>
-    
-    <% if (name != null) { %>
+        </div>
         <div class="col-xs-4 right">
             <button class="likeButton btn-xs right <%= options.class %>"><span class="glyphicon glyphicon-music"></span>&nbsp;&nbsp;<%= options.label %></button>
             &nbsp;&nbsp;<span class="nbLikes"><%= nbLikes %></span>

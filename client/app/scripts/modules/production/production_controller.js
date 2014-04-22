@@ -68,13 +68,19 @@ define(function (require) {
             });
 
             this.listenTo(productionLayout, 'show', function () {
-                this.views.recorder = new RecorderView();
-                this.views.sidebar = new SideBarView();
-                this.views.comments = new CommentsView();
+                this.views.recorder = new RecorderView({
+                    mode: this.attributes.mode
+                });
+
+                if (this.attributes.mode !== "create") {
+                    this.views.sidebar = new SideBarView();
+                    this.views.comments = new CommentsView();
+
+                    productionLayout.sidebar.show(this.views.sidebar);
+                    productionLayout.comments.show(this.views.comments);
+                }
 
                 productionLayout.recorder.show(this.views.recorder);
-                productionLayout.sidebar.show(this.views.sidebar);
-                productionLayout.comments.show(this.views.comments);
             });
 
             return productionLayout;
@@ -116,6 +122,7 @@ define(function (require) {
             this.attributes.models.videos = new VideoCollection();
             this.attributes.models.comments = new CommentCollection();
 
+            // ACTIVE OU NON PLZ
             this.attributes.models.jam.fetch({
                 url: '/api/jams/' + self.attributes.jamId,
                 success: function (model, response) {
@@ -155,14 +162,14 @@ define(function (require) {
 
         save: function () {
             if (!this.attributes.models.jam) {
-                console.log("[Production_controller.js > save] ERROR : No Jam loaded : ", this.views.recorder.collection);
+                console.log("[Production_controller.js > save] STATUS : No Jam loaded : ", this.views.recorder.collection);
                 this.createNewJam();
             } else {
                 // Actualise / create the jam
                 // Save the video
                 // Add the video to the jam
                 // Reload the page
-                console.log("[Production_controller.js > save] SUCCESS : ", this.attributes.selectedIds);
+                console.log("[Production_controller.js > save] STATUS : ", this.attributes.selectedIds);
                 this.saveVideos();
             }
         },
@@ -182,7 +189,7 @@ define(function (require) {
             console.log("NewVideo options : ", options);
 
             options.instrument = 5;
-            options.active = false;
+            options.active = true;
             options.volume = 10;
 
             var newModel = new VideoModel(options);

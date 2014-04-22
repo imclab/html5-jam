@@ -39,10 +39,20 @@ define(function (require) {
 
 
         parse: function (response, options) {
+            console.log("PARSE Jam model : ", _.clone(response));
+
+            // N'affecte pas le fetch depuis collection
             _.each(response.videos, function (video) {
                 video.jamId = response.id;
                 video.path = "api/jams/" + response.id + "/videos/" + video.id;
             });
+
+            // Server must send true/false to doilikeit
+            if (_.isArray(response.jams)) {
+                _.each(response.jams, function (jam) {
+                    jam.doILikeIt = (jam.doILikeIt === 0) ? false : true;
+                });
+            }
 
             return response;
         },

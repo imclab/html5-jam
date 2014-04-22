@@ -63,6 +63,10 @@ define(function (require) {
                     self.views.feeds.collection = new JamCollection();
                     self.views.feeds.collection.add(response.jams);
                     self.views.feeds.render();
+
+                    _.each(response.jams, function (jam) {
+                        console.log("Jam num" + jam.id + " is ", _.clone(jam));
+                    });
                 }
             });
         }

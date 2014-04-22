@@ -19,7 +19,10 @@ define(function (require) {
 
         template: "production/recorder",
 
-        initialize: function () {
+        initialize: function (options) {
+            options = options || {};
+            this.mode = options.mode;
+
             this.model = new Jam();
             this.collection = new VideoCollection();
 
@@ -35,12 +38,12 @@ define(function (require) {
         },
 
         events: {
-            "click .playbtn" : "play",
-            "click .stopbtn" : "stop",
-            "click .recbtn"  : "record",
-            "click .savebtn" : "save",
-            "click .createbtn" : "create",
-            "click .likeButton" : "like"
+            "click button.playbtn" : "play",
+            "click button.stopbtn" : "stop",
+            "click button.recbtn"  : "record",
+            "click button.savebtn" : "save",
+            "click button.createbtn" : "create",
+            "click button.likeButton" : "like"
         },
 
         ui: {
@@ -82,7 +85,8 @@ define(function (require) {
             var likeOptions = this._getLikeOptions();
 
             return _.extend(data, {
-                options: likeOptions
+                options: likeOptions,
+                mode: this.mode
             });
         },
 

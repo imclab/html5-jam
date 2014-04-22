@@ -1,12 +1,18 @@
 <div class="row production">
 
-	<div class="sidebar col-md-3 boxShadowed"></div>
+    <% if (mode !== "create") { %>
+	   <div class="sidebar col-md-3 boxShadowed"></div>
+    <% } %>
 
 	<div class="col-md-6">
 		<div class="recorder boxShadowed"></div>
 	</div>
 
-	<div class="comments col-md-3 boxShadowed"></div>
+    <% if (mode !== "create") { %>
+	    <div class="comments col-md-3 boxShadowed"></div>
+    <% } else { %>
+        <div class="col-md-6 boxShadowed">Description, etc.</div>
+    <% } %>
 
 </div>
 
