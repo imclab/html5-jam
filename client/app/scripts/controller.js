@@ -18,27 +18,24 @@ define(function (require) {
             this.regions = options.regions || {};
             this._initializeAttributes();
             this._bindEvents();
-
-            this._initializeAuthentication();
         },
 
-        handleConnection: function () {
-            // FAIRE JOUER LES PROMISES
-            if (!AppData.user) {
-                this.showLoading();
+        handleConnectionAsync: function () {
+            var promise = new Promise(function (resolve, reject) {
+                if (!AppData.user) {
+                    this.showLoading();
 
-                if (this.attributes.authmanager.checkAuthenticationCookie()) {
-                    this.attributes.authmanager.authenticationRequest();
-                    // TODO : Pb here no ?
-                    // return false;
+                    if (this.attributes.authmanager.checkAuthenticationCookie()) {
+                        this.attributes.authmanager.authenticationRequest(resolve, reject);
+                    } else {
+                        reject();
+                    }
                 } else {
-                    // No cookie found
-                    Backbone.history.navigate('login/', true);
-                    return false;
+                    resolve();
                 }
-            }
-
-            return true;
+            });
+    
+            return promise;
         },
 
         handleToken: function (tokenId) {
@@ -49,76 +46,80 @@ define(function (require) {
                 Backbone.history.navigate('/', true);
             });
 
-            this.attributes.authmanager.authenticationRequest(function (response) {
-                console.log("[Controller > handleToken] Auth SUCCESS", response);
-                vent.trigger('authentication:success', response.id);
-            }, function (xhr) {
-                console.log("[Controller > handleToken] Auth FAILED", xhr);
-            });
+            var promise = new Promise(function (resolve, reject) {
+                this.attributes.authmanager.authenticationRequest(resolve, reject);
+            }).then(_.bind(function (id) {
+                this._initAppData(id);
+            }, this), this.toLogin);
         },
 
         showLogin: function () {
             this._createController("login").then(_.bind(this._showController, this, "login"));
         },
 
+        toLogin: function () {
+            Backbone.history.navigate('login/', true);
+        },
+
         showIndex: function () {
-            this.handleConnectionAsync().then(
-                _.bind(function () {
-                    this.handleTopbar();
-                    this._createController("home").then(this._showController, this, "home");
-                }, this), function () {
-                    Backbone.history.navigate('login/', true);
-                }
-            );
+            this.handleConnectionAsync().then(_.bind(function () {
+                this.handleTopbar();
+                this._createController("home").then(_.bind(this._showController, this, "home"));
+            }, this), this.toLogin);
+
+            // if (this.handleConnection()) {
+            //     this.handleTopbar();
+            //     this._createController("home").then(_.bind(this._showController, this, "home"));
+            // }
         },
 
         editJam: function (jamId) {
-            if (this.handleConnection()) {
+            this.handleConnectionAsync().then(_.bind(function () {
                 var options = {
                     mode: 'edit',
                     jamId: jamId
                 };
                 this.handleTopbar();
                 this._createController("production", options).then(_.bind(this._showController, this, "production", options));
-            }
+            }, this), this.toLogin);
         },
 
         showJam: function (jamId) {
-            if (this.handleConnection()) {
+            this.handleConnectionAsync().then(_.bind(function () {
                 var options = {
                     mode: 'show',
                     jamId: jamId
                 };
                 this.handleTopbar();
                 this._createController("production", options).then(_.bind(this._showController, this, "production", options));
-            }
+            }, this), this.toLogin);
         },
 
         createJam: function () {
-            if (this.handleConnection()) {
+            this.handleConnectionAsync().then(_.bind(function () {
                 var options = {
                     mode: 'create'
                 };
                 this.handleTopbar();
                 this._createController("production", options).then(_.bind(this._showController, this, "production", options));
-            }
+            }, this), this.toLogin);
         },
 
         showProfil: function (profilId) {
-            if (this.handleConnection()) {
+            this.handleConnectionAsync().then(_.bind(function () {
                 var options = {
                     profilId: profilId
                 };
                 this.handleTopbar();
                 this._createController("profil", options).then(_.bind(this._showController, this, "profil", options));
-            }
+            }, this), this.toLogin);
         },
 
         showFriends: function () {
-            if (this.handleConnection()) {
+            this.handleConnectionAsync().then(_.bind(function () {
                 this.handleTopbar();
                 this._createController("friendlist").then(_.bind(this._showController, this, "friendlist"));
-            }
+            }, this), this.toLogin);
         },
 
         showAboutDialog: function () {
@@ -196,15 +197,9 @@ define(function (require) {
             this.attributes.authmanager = new AuthManager();
         },
 
-        _initializeAuthentication: function () {
-            this.listenToOnce(vent, 'authentication:success', function (_id) {
-                AppData.initUser(_id);
-                AppData.fetchUser();
-            });
-
-            this.listenTo(vent, 'authentication:fail', function () {
-                Backbone.history.navigate('login/', true);
-            });
+        _initAppData: function (_id) {
+            AppData.initUser(_id);
+            AppData.fetchUser();
         },
 
         _bindEvents: function () {
