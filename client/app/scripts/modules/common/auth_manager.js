@@ -13,21 +13,25 @@ define(function (require) {
                 return this.isConnected();
             },
 
-            authenticationRequest: function (resolve, reject) {
-                // Check if the user exist
-                $.ajax({
-                    url: '/api/me',
-                    method: 'GET',
-                    success: function (response) {
-                        console.log("[AuthManager > authenticationRequest] SUCCESS", response);
-                        resolve();
-                    },
-                    error: function (xhr) {
-                        console.log("[AuthManager > authenticationRequest] FAILED", xhr);
-                        CookieManager.remove(Const.COOKIE_AUTH);
-                        reject();
-                    }
+            authenticationRequest: function () {
+                var promise = new Promise(function (resolve, reject) {
+                    // Check if the user exist
+                    $.ajax({
+                        url: '/api/me',
+                        method: 'GET',
+                        success: function (response) {
+                            console.log("[AuthManager > authenticationRequest] SUCCESS", response);
+                            resolve(response.id);
+                        },
+                        error: function (xhr) {
+                            console.log("[AuthManager > authenticationRequest] FAILED", xhr);
+                            CookieManager.remove(Const.COOKIE_AUTH);
+                            reject();
+                        }
+                    });
                 });
+
+                return promise;
             },
 
             checkAuthenticationCookie: function () {

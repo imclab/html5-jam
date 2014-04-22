@@ -21,19 +21,23 @@ define(function (require) {
         },
 
         handleConnectionAsync: function () {
-            var promise = new Promise(function (resolve, reject) {
+            var promise = new Promise(_.bind(function (resolve, reject) {
                 if (!AppData.user) {
                     this.showLoading();
-
                     if (this.attributes.authmanager.checkAuthenticationCookie()) {
-                        this.attributes.authmanager.authenticationRequest(resolve, reject);
+                        this.attributes.authmanager.authenticationRequest().then(function (id) {
+                            AppData.initUser(id);
+                            AppData.fetchUser().then(function () {
+                                resolve();
+                            }, reject);
+                        }, reject);
                     } else {
                         reject();
                     }
                 } else {
                     resolve();
                 }
-            });
+            }, this));
     
             return promise;
         },
@@ -42,15 +46,16 @@ define(function (require) {
             this.attributes.authmanager.setAuthenticationCookie(tokenId.replace('?token=', ''));
 
             this.listenToOnce(vent, 'user:fetching:end', function () {
-                // AppData.user is created and fetched
                 Backbone.history.navigate('/', true);
+                // AppData.user is created and fetched
             });
 
-            var promise = new Promise(function (resolve, reject) {
-                this.attributes.authmanager.authenticationRequest(resolve, reject);
-            }).then(_.bind(function (id) {
-                this._initAppData(id);
-            }, this), this.toLogin);
+            this.attributes.authmanager.authenticationRequest().then(function (id) {
+                AppData.initUser(id);
+                AppData.fetchUser().then(function () {
+                    Backbone.history.navigate('/', true);
+                }, this.toLogin);
+            }, this.toLogin);
         },
 
         showLogin: function () {
@@ -195,11 +200,6 @@ define(function (require) {
             this.attributes = {};
             this.attributes.models = {};
             this.attributes.authmanager = new AuthManager();
-        },
-
-        _initAppData: function (_id) {
-            AppData.initUser(_id);
-            AppData.fetchUser();
         },
 
         _bindEvents: function () {

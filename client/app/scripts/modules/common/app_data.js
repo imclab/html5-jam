@@ -8,21 +8,27 @@ define(function (require) {
         user: undefined,
         userId: -1,
 
-        initUser: function (_id) {
+        initUser: function (id) {
             this.user = new User();
-            this.userId = _id;
+            this.userId = id;
         },
 
         fetchUser: function () {
-            this.user.fetch({
-                url: 'api/users/' + this.userId,
-                success: function () {
-                    vent.trigger('user:fetching:end');
-                },
-                error: function () {
-                    console.log("User don't exist in DDB");
-                }
-            });
+            var promise = new Promise(_.bind(function (resolve, reject) {
+                this.user.fetch({
+                    url: 'api/users/' + this.userId,
+                    success: function () {
+                        vent.trigger('user:fetching:end');
+                        resolve();
+                    },
+                    error: function () {
+                        console.log("User don't exist in DDB");
+                        reject();
+                    }
+                });
+            }, this));
+
+            return promise;
         },
 
         isOwner: function (idParam) {
