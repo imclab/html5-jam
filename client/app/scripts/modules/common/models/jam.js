@@ -39,7 +39,7 @@ define(function (require) {
 
 
         parse: function (response) {
-            console.log("PARSE Jam model : ", _.clone(response));
+            // console.log("PARSE Jam model : ", _.clone(response));
 
             // N'affecte pas le fetch depuis collection
             _.each(response.videos, function (video) {

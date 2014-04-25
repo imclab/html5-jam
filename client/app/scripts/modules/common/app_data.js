@@ -19,6 +19,10 @@ define(function (require) {
         },
 
         isOwner: function (idParam) {
+            if (typeof idParam !== "number") {
+                idParam = parseInt(idParam);
+            }
+
             return (this.user.get("id") === idParam);
         }
 

@@ -9,7 +9,6 @@ define(function (require) {
     var ProfilView = require('modules/profil/views/profil_view');
     var User = require('modules/common/models/user');
     var Friend = require('modules/common/models/friend');
-    var JamModel = require('modules/common/models/jam');
 
     var JamListView = require('modules/common/views/jams_view');
     var JamView = require('modules/profil/views/profil_jam_view');
@@ -34,32 +33,19 @@ define(function (require) {
 
             var _this = this;
 
-            if (!options.profilId) {
-                // if (!AppData.user) {
-                //     this.listenToOnce(vent, 'user:fetching:end', function () {
-                //         console.log('Profil jams', AppData.user.get('jams'));
-                //         this.views.jamlist.collection.add(AppData.user.get('jams'));
-                //         this.views.content.model = AppData.user;
-                //         this.views.content.render();
-                //     });
-                // } else {
+            if (!options.profilId || AppData.isOwner(options.profilId)) {
+                console.log("My profil view");
                 this.views.content.model = AppData.user;
                 this.views.content.render();
                 this.views.jamlist.collection.add(AppData.user.get('jams'));
-                // }
-            } else if (this.attributes.userlist[options.profilId]) {
-                this.views.content.model = this.attributes.userlist[options.profilId];
-                this.views.content.render();
-                this.views.jamlist.collection.add(this.attributes.userlist[options.profilId].get('jams'));
             } else {
-                this.attributes.userlist[options.profilId] = new User();
-                this.attributes.userlist[options.profilId].fetch({
-                    url: 'api/users/' + options.profilId,
-                    success: function (model, response, options) {
-                        _this.views.content.model = model;
-                        _this.views.content.render();
-                        _this.views.jamlist.collection.add(model.get('jams'));
-                    }
+                console.log("An other one");
+                this.views.content.model = new User();
+                this.views.content.model.fetch({
+                    url: 'api/users/' + options.profilId
+                }).then(function (response) {
+                    _this.views.content.render();
+                    _this.views.jamlist.collection.add(response.jams);
                 });
             }
         },
@@ -82,7 +68,6 @@ define(function (require) {
 
         _initializeAttributes: function () {
             this.attributes = {};
-            this.attributes.userlist = {};
             this.views = {};
         },
 
