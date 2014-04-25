@@ -2,30 +2,20 @@
 define(function (require) {
 
     var User = require('modules/common/models/user');
-    var vent = require('modules/common/vent');
 
     var App = {
         user: undefined,
         userId: -1,
 
+        fetchUser: function (options) {
+            options = options || {};
 
-// TODO : COMBINE initUser et fetchUser
+            if (options.userId) {
+                this.user = new User();
+                this.userId = options.userId;
+            }
 
-        initUser: function (id) {
-            this.user = new User();
-            this.userId = id;
-        },
-
-        fetchUser: function () {
-            this.user.fetch({
-                url: 'api/users/' + this.userId,
-                success: function () {
-                    vent.trigger('user:fetching:end');
-                },
-                error: function () {
-                    console.log("User don't exist in DDB");
-                }
-            });
+            return this.user.fetch({ url: 'api/users/' + this.userId });
         },
 
         isOwner: function (idParam) {

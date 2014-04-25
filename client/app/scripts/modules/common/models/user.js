@@ -1,6 +1,7 @@
 define(function (require) {
 
     var Backbone = require('backbone');
+    var moment = require('moment');
 
     var User = Backbone.Model.extend({
 

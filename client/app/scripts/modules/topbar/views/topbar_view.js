@@ -7,10 +7,7 @@ define(function (require) {
 
     var AppData = require('modules/common/app_data');
 
-    var Jam = require('modules/common/models/jam');
-
     var TopBar = Marionette.ItemView.extend({
-        
         el: '#topbar',
 
         events: {
@@ -30,10 +27,8 @@ define(function (require) {
                 this.$el.removeClass('hidden');
             }
 
-            this.listenTo(vent, 'user:fetching:end', function () {
-                this.model = AppData.user;
-                this.render();
-            });
+            this.model = AppData.user;
+            this.render();
         },
 
         logout: function () {

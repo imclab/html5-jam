@@ -35,18 +35,18 @@ define(function (require) {
             var _this = this;
 
             if (!options.profilId) {
-                if (!AppData.user) {
-                    this.listenToOnce(vent, 'user:fetching:end', function () {
-                        console.log('Profil jams', AppData.user.get('jams'));
-                        this.views.jamlist.collection.add(AppData.user.get('jams'));
-                        this.views.content.model = AppData.user;
-                        this.views.content.render();
-                    });
-                } else {
-                    this.views.content.model = AppData.user;
-                    this.views.content.render();
-                    this.views.jamlist.collection.add(AppData.user.get('jams'));
-                }
+                // if (!AppData.user) {
+                //     this.listenToOnce(vent, 'user:fetching:end', function () {
+                //         console.log('Profil jams', AppData.user.get('jams'));
+                //         this.views.jamlist.collection.add(AppData.user.get('jams'));
+                //         this.views.content.model = AppData.user;
+                //         this.views.content.render();
+                //     });
+                // } else {
+                this.views.content.model = AppData.user;
+                this.views.content.render();
+                this.views.jamlist.collection.add(AppData.user.get('jams'));
+                // }
             } else if (this.attributes.userlist[options.profilId]) {
                 this.views.content.model = this.attributes.userlist[options.profilId];
                 this.views.content.render();

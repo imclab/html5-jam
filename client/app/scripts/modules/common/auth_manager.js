@@ -17,16 +17,7 @@ define(function (require) {
                 // Check if the user exist
                 return $.ajax({
                     url: '/api/me',
-                    method: 'GET',
-                    success: function (response) {
-                        console.log("[AuthManager > authenticationRequest] SUCCESS", response);
-                        vent.trigger('authentication:success', response.id);
-                    },
-                    error: function (xhr) {
-                        console.log("[AuthManager > authenticationRequest] FAILED", xhr);
-                        CookieManager.remove(Const.COOKIE_AUTH);
-                        vent.trigger('authentication:fail');
-                    }
+                    method: 'GET'
                 });
             },
 

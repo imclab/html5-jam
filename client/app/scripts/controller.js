@@ -5,10 +5,12 @@ define(function (require) {
     var Marionette = require('marionette');
     var Backbone = require('backbone');
     var vent = require('modules/common/vent');
+    var Const = require('modules/common/constants');
 
     var LoadingView = require("modules/common/views/loading_view");
     var AuthManager = require('modules/common/auth_manager');
     var AppData = require('modules/common/app_data');
+    var CookieManager = require('modules/common/cookie_manager');
 
     var MainController = Marionette.Controller.extend({
 
@@ -18,16 +20,12 @@ define(function (require) {
             this.regions = options.regions || {};
             this._initializeAttributes();
             this._bindEvents();
-
-            this._initializeAuthentication();
         },
 
         handleConnection: function (callback) {
             if (!AppData.user) {
                 this.showLoading();
-
-                this.connect(callback, this.errorConnection);
-
+                this.connect(callback);
             } else {
                 callback();
             }
@@ -35,30 +33,34 @@ define(function (require) {
             return;
         },
 
-        connect: function (callback, errorConnection) {
+        connect: function (callback) {
+            var errorConnection = function () {
+                CookieManager.remove(Const.COOKIE_AUTH);
+                Backbone.history.navigate('login/', true);
+            };
+            var errorFetchingUser = function () {
+                console.log("Error in database, user not found");
+                errorConnection();
+            };
+
             if (this.attributes.authmanager.checkAuthenticationCookie()) {
-                this.attributes.authmanager.authenticationRequest().then(callback, errorConnection);
+                this.attributes.authmanager.authenticationRequest()
+                    .then(function (response) {
+                        return AppData.fetchUser({userId: response.id});
+                    }, errorConnection)
+                    .then(callback, errorFetchingUser);
             } else {
                 // No cookie found
                 errorConnection();
             }
         },
 
-        errorConnection: function () {
-            Backbone.history.navigate('login/', true);
-        },
-
         handleToken: function (tokenId) {
             this.attributes.authmanager.setAuthenticationCookie(tokenId.replace('?token=', ''));
 
-            this.listenToOnce(vent, 'user:fetching:end', function () {
-                // AppData.user is created and fetched
-                Backbone.history.navigate('/', true);
-            });
-
-            this.attributes.authmanager.authenticationRequest(function (response) {
+            this.attributes.authmanager.authenticationRequest().then(function (response) {
                 console.log("[Controller > handleToken] Auth SUCCESS", response);
-                vent.trigger('authentication:success', response.id);
+                Backbone.history.navigate('/', true);
             }, function (xhr) {
                 console.log("[Controller > handleToken] Auth FAILED", xhr);
             });
@@ -200,22 +202,11 @@ define(function (require) {
             this.attributes.authmanager = new AuthManager();
         },
 
-        _initializeAuthentication: function () {
-            this.listenToOnce(vent, 'authentication:success', function (id) {
-                AppData.initUser(id);
-                AppData.fetchUser();
-            });
-
-            this.listenTo(vent, 'authentication:fail', function () {
-                Backbone.history.navigate('login/', true);
-            });
-        },
-
         _bindEvents: function () {
-            this.listenTo(vent, 'actualize:appdata', function () {
-                console.log('[Controller > actualize:appdata]');
-                AppData.fetchUser();
-            });
+            // this.listenTo(vent, 'actualize:appdata', function () {
+            //     console.log('[Controller > actualize:appdata]');
+            //     AppData.fetchUser();
+            // });
         },
 
         path: function (page) {
