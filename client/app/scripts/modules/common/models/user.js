@@ -14,12 +14,16 @@ define(function (require) {
             vignette_one: null,
             vignette_three: null,
             vignette_two: null,
+            createdAt: '',
             doIFollowHim: false
-	    },
+        },
 
         toJSON: function () {
-            this.attributes.createdAt = moment(this.attributes.createdAt).fromNow();
-            return this.attributes;
+            var data = Backbone.Model.prototype.toJSON.call(this);
+
+            data.createdAt = moment(data.createdAt).fromNow();
+
+            return data;
         }
 
     });

@@ -2,13 +2,12 @@
 define(function (require) {
     "use strict";
 
-    var Marionette = require('marionette');
     var Backbone = require('backbone');
-    var vent = require('modules/common/vent');
-
+    var Marionette = require('marionette');
     var AppData = require('modules/common/app_data');
 
     var JamView = require('modules/common/views/jam_view');
+    var JamModel = require('modules/common/models/jam');
 
     var ProfilJamView = JamView.extend({
         template: 'profil/profil_jam',
@@ -30,7 +29,7 @@ define(function (require) {
         },
 
         serializeData: function () {
-            var data = this.model.toJSON();
+            var data = Marionette.ItemView.prototype.serializeData.call(this);
 
             _.extend(data, {
                 isOwner: AppData.isOwner(data.userId)

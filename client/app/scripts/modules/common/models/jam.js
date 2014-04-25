@@ -38,7 +38,7 @@ define(function (require) {
         },
 
 
-        parse: function (response, options) {
+        parse: function (response) {
             console.log("PARSE Jam model : ", _.clone(response));
 
             // N'affecte pas le fetch depuis collection
@@ -52,6 +52,8 @@ define(function (require) {
                 _.each(response.jams, function (jam) {
                     jam.doILikeIt = (jam.doILikeIt === 0) ? false : true;
                 });
+            } else {
+                response.doILikeIt = (response.doILikeIt === 0) ? false : true;
             }
 
             return response;

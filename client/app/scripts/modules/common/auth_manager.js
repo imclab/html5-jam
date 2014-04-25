@@ -42,10 +42,6 @@ define(function (require) {
 
             removeAuthenticationCookie: function () {
                 CookieManager.remove(Const.COOKIE_AUTH);
-            },
-
-            setCookiePouch: function () {
-                Back
             }
         };
     };
