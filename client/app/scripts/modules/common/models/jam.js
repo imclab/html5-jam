@@ -47,23 +47,24 @@ define(function (require) {
                 video.path = "api/jams/" + response.id + "/videos/" + video.id;
             });
 
-            // Server must send true/false to doilikeit
-            if (_.isArray(response.jams)) {
-                _.each(response.jams, function (jam) {
-                    jam.doILikeIt = (jam.doILikeIt === 0) ? false : true;
-                });
-            } else {
-                response.doILikeIt = (response.doILikeIt === 0) ? false : true;
+            return response;
+        },
+
+        doILikeIt: function () {
+            // Will server is sending 0 instead of FALSE :
+            if (typeof this.get("doILikeIt") === "number") {
+                return (this.get("doILikeIt") === 1) ? true : false;
             }
 
-            return response;
+            return this.get("doILikeIt");
         },
 
         toJSON: function () {
             var data = Backbone.Model.prototype.toJSON.call(this);
 
             _.extend(data, {
-                createdAt: moment(this.get("createdAt")).fromNow()
+                createdAt: moment(this.get("createdAt")).fromNow(),
+                doILikeIt: this.doILikeIt()
             });
 
             return data;

@@ -92,7 +92,7 @@ define(function (require) {
 
         _getLikeOptions: function () {
             if (this.model) {
-                var doILikeIt = this.model.get("doILikeIt");
+                var doILikeIt = this.model.doILikeIt();
 
                 return {
                     "class": doILikeIt ? "btn-success" : "btn-info",
@@ -103,7 +103,7 @@ define(function (require) {
         },
 
         like: function () {
-            if (!this.model.get("doILikeIt")) {
+            if (!this.model.doILikeIt()) {
                 vent.trigger("jam:like", this.model.get("id"));
                 this.model.set("doILikeIt", true);
                 this.model.attributes.nbLikes++;

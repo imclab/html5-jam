@@ -23,7 +23,7 @@ define(function (require) {
 
         like: function (event) {
             event.stopPropagation();
-            if (this.model.get("doILikeIt") === false) {
+            if (this.model.doILikeIt() === false) {
                 vent.trigger("jam:like", this.model.get("id"));
                 this.model.set("doILikeIt", true);
                 var nbLikes = this.model.get("nbLikes") + 1;
