@@ -15,7 +15,7 @@ define(function (require) {
 
             authenticationRequest: function () {
                 // Check if the user exist
-                $.ajax({
+                return $.ajax({
                     url: '/api/me',
                     method: 'GET',
                     success: function (response) {

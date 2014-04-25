@@ -8,9 +8,12 @@ define(function (require) {
         user: undefined,
         userId: -1,
 
-        initUser: function (_id) {
+
+// TODO : COMBINE initUser et fetchUser
+
+        initUser: function (id) {
             this.user = new User();
-            this.userId = _id;
+            this.userId = id;
         },
 
         fetchUser: function () {

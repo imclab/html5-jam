@@ -170,19 +170,16 @@ define(function (require) {
                 // Add the video to the jam
                 // Reload the page
                 console.log("[Production_controller.js > save] STATUS : ", this.attributes.selectedIds);
-                this.saveVideos();
+                this.saveVideos().then(function () {
+                    Backbone.history.loadUrl();
+                });
             }
         },
 
-        saveVideos: function (callback) {
-            var deferred = new $.Deferred();
-
-            this.views.recorder.collection.save({
-                jamId: this.attributes.jamId,
-                deferred: deferred
+        saveVideos: function () {
+            return this.views.recorder.collection.save({
+                jamId: this.attributes.jamId
             });
-
-            return deferred;
         },
 
         addNewVideo: function (options) {
@@ -229,10 +226,7 @@ define(function (require) {
             });
 
             newComment.save({}, {
-                jamId: self.attributes.jamId,
-                success: function (xhr) {
-                    console.log('::success::', xhr);
-                }
+                jamId: self.attributes.jamId
             });
 
             this.views.comments.collection.add(newComment);
@@ -247,20 +241,20 @@ define(function (require) {
         },
 
         createNewJam: function () {
-            var new_jam = new Jam({
+            var _this = this;
+
+            new Jam({
                 user_facebook_id: AppData.user.get('facebook_id'),
                 name: this.views.recorder.ui.edit_jam_name.val()
-            });
-
-            var onSuccess = _.bind(function (model, response, options) {
-                this.attributes.jamId = model.id;
-                this.saveVideos().then(function () {
-                    Backbone.history.navigate('jam/' + model.id, true);
-                });
-            }, this);
-
-            new_jam.save({}, {
-                success: _.bind(onSuccess, this)
+            })
+            .save(null, {})
+            .then(function (model) {
+                _this.attributes.jamId = model.id;
+                return _this.saveVideos();
+            })
+            .then(function () {
+                console.log("Arguments : ", arguments);
+                Backbone.history.navigate('jam/' + _this.attributes.jamId, true);
             });
         },
 

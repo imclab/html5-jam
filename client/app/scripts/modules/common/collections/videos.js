@@ -2,6 +2,7 @@
 define(function (require) {
     "use strict";
 
+    var $ = require("jquery");
     var Backbone = require('backbone');
     var vent = require('modules/common/vent');
     var Video = require('modules/common/models/video');
@@ -11,40 +12,20 @@ define(function (require) {
         model: Video,
 
         save: function (options) {
-            this.sync("save", this.models, options);
+            return this.sync("save", this, options);
         },
 
         sync: function (method, collection, options) {
             options = options || {};
 
-            var deliveredVideoSuccess = 0;
-            var deliveredVideoFail = 0;
-
             if (method === "save") {
+                var promises = [];
 
-                if (_.isArray(collection)) {
-                    if (!options.deferred) {
-                        console.log("Unespected call of videos.save, you should use a deferred in options.");
-                    }
-
-                    for (var i=0;i<collection.length;i++) {
-                        collection[i].save(null, {
-                            jamId: options.jamId,
-                            success: function () {
-                                deliveredVideoSuccess++;
-                                if (deliveredVideoFail + deliveredVideoSuccess >= collection.length) {
-                                    options.deferred.resolve();
-                                }
-                            },
-                            error: function () {
-                                deliveredVideoFail++;
-                                if (deliveredVideoFail + deliveredVideoSuccess >= collection.length) {
-                                    options.deferred.resolve();
-                                }
-                            }
-                        });
-                    }
+                for (var i=0;i<collection.models.length;i++) {
+                    promises.push(collection.models[i].save(null, { jamId: options.jamId }));
                 }
+
+                return $.when.apply($, promises);
             }
         }
     });

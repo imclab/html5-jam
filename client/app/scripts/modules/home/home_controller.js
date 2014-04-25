@@ -58,16 +58,11 @@ define(function (require) {
             var self = this;
 
             this.attributes.models.feeds.fetch({
-                data: { feedsType: feedsType },
-                success: function (collection, response, options) {
-                    self.views.feeds.collection = new JamCollection();
-                    self.views.feeds.collection.add(response.jams);
-                    self.views.feeds.render();
-
-                    _.each(response.jams, function (jam) {
-                        console.log("Jam num" + jam.id + " is ", _.clone(jam));
-                    });
-                }
+                data: { feedsType: feedsType }
+            }).then(function (response) {
+                self.views.feeds.collection = new JamCollection();
+                self.views.feeds.collection.add(response.jams);
+                self.views.feeds.render();
             });
         }
 

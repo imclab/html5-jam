@@ -22,23 +22,30 @@ define(function (require) {
             this._initializeAuthentication();
         },
 
-        handleConnection: function () {
-            // FAIRE JOUER LES PROMISES
+        handleConnection: function (callback) {
             if (!AppData.user) {
                 this.showLoading();
 
-                if (this.attributes.authmanager.checkAuthenticationCookie()) {
-                    this.attributes.authmanager.authenticationRequest();
-                    // TODO : Pb here no ?
-                    // return false;
-                } else {
-                    // No cookie found
-                    Backbone.history.navigate('login/', true);
-                    return false;
-                }
+                this.connect(callback, this.errorConnection);
+
+            } else {
+                callback();
             }
 
-            return true;
+            return;
+        },
+
+        connect: function (callback, errorConnection) {
+            if (this.attributes.authmanager.checkAuthenticationCookie()) {
+                this.attributes.authmanager.authenticationRequest().then(callback, errorConnection);
+            } else {
+                // No cookie found
+                errorConnection();
+            }
+        },
+
+        errorConnection: function () {
+            Backbone.history.navigate('login/', true);
         },
 
         handleToken: function (tokenId) {
@@ -62,59 +69,60 @@ define(function (require) {
         },
 
         showIndex: function () {
-            if (this.handleConnection()) {
+            this.handleConnection(_.bind(function () {
                 this.handleTopbar();
                 this._createController("home").then(_.bind(this._showController, this, "home"));
-            }
+            }, this));
         },
 
         editJam: function (jamId) {
-            if (this.handleConnection()) {
+            this.handleConnection(_.bind(function () {
                 var options = {
                     mode: 'edit',
                     jamId: jamId
                 };
                 this.handleTopbar();
                 this._createController("production", options).then(_.bind(this._showController, this, "production", options));
-            }
+            }, this));
         },
 
         showJam: function (jamId) {
-            if (this.handleConnection()) {
+            this.handleConnection(_.bind(function () {
                 var options = {
                     mode: 'show',
                     jamId: jamId
                 };
                 this.handleTopbar();
                 this._createController("production", options).then(_.bind(this._showController, this, "production", options));
-            }
+            }, this));
         },
 
         createJam: function () {
-            if (this.handleConnection()) {
+            this.handleConnection(_.bind(function () {
                 var options = {
                     mode: 'create'
                 };
                 this.handleTopbar();
                 this._createController("production", options).then(_.bind(this._showController, this, "production", options));
-            }
+            }, this));
         },
 
         showProfil: function (profilId) {
-            if (this.handleConnection()) {
+            this.handleConnection(_.bind(function () {
+
                 var options = {
                     profilId: profilId
                 };
                 this.handleTopbar();
                 this._createController("profil", options).then(_.bind(this._showController, this, "profil", options));
-            }
+            }, this));
         },
 
         showFriends: function () {
-            if (this.handleConnection()) {
+            this.handleConnection(_.bind(function () {
                 this.handleTopbar();
                 this._createController("friendlist").then(_.bind(this._showController, this, "friendlist"));
-            }
+            }, this));
         },
 
         showAboutDialog: function () {
@@ -193,8 +201,8 @@ define(function (require) {
         },
 
         _initializeAuthentication: function () {
-            this.listenToOnce(vent, 'authentication:success', function (_id) {
-                AppData.initUser(_id);
+            this.listenToOnce(vent, 'authentication:success', function (id) {
+                AppData.initUser(id);
                 AppData.fetchUser();
             });
 
