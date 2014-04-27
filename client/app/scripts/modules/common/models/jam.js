@@ -21,7 +21,7 @@ define(function (require) {
         },
 
         sync: function (method, model, options) {
-            console.log('::SYNC:: Method [Jam] : ', method);
+            // console.log('::SYNC:: Method [Jam] : ', method);
 
             if (method === 'create') {
                 // Create a jam

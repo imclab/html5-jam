@@ -12,7 +12,7 @@ define(function (require) {
         },
 
         sync: function (method, model, options) {
-            console.log('::SYNC:: Method [Like] : ', method);
+            // console.log('::SYNC:: Method [Like] : ', method);
 
             if (method === 'create') {
                 // Like a jam

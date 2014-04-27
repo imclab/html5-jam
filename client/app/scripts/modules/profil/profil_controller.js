@@ -34,7 +34,6 @@ define(function (require) {
             var _this = this;
 
             if (!options.profilId || AppData.isOwner(options.profilId)) {
-                console.log("My profil view");
                 this.views.content.model = AppData.user;
                 this.views.content.render();
                 this.views.jamlist.collection.add(AppData.user.get('jams'));

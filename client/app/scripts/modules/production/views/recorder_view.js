@@ -6,7 +6,7 @@ define(function (require) {
     var Marionette = require("marionette");
     var VideoCollection = require("modules/common/collections/videos");
     var vent = require("modules/common/vent");
-    var PlayerView = require("modules/common/views/player_view");
+    var PlayerView = require("modules/production/views/recorder_player_view");
     var Jam = require('modules/common/models/jam');
 
     var RecorderView = Marionette.CompositeView.extend({
@@ -25,16 +25,6 @@ define(function (require) {
 
             this.model = new Jam();
             this.collection = new VideoCollection();
-
-            this.collection.on("remove", function () {
-                console.log("Remove");
-            }, this);
-        },
-
-        onDomRefresh: function () {
-            if (this.model.get("fetch")) {
-                vent.trigger('recorder:initMediaCapture');
-            }
         },
 
         events: {
