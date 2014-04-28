@@ -8,19 +8,13 @@ install nodejs, npm, mysql-server
 
 Database
 ========
-create database: mysql > CREATE DATABASE htmljam;
-<br>
-mysql > USE htmljam;
-<br>
-populate with test data : mysql > SOURCE ./test/test_data.sql;
+create databases htmljam and htmljam_dev;
 
 Server
 ======
 html5-jam/server$ npm install
 <br>
-start server : html5-jam/server$ node server.js
-<br>
-launch unit tests : html5-jam/server$ npm test
+start server : html5-jam/server$ NODE_ENV=development node app.js
 
 Client
 ======

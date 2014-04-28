@@ -30,7 +30,7 @@ exports.createNewJam = function (req, res, next) {
 		.success(function (newJam) {
 
 			// create jam folder
-			Utils.createFolder('' + newJam.dataValues.id);
+			Utils.createFolder(newJam.dataValues.id);
 
 			Like.create({ userId: req.user.id, jamId: newJam.id });
 			user.addJam(newJam)
