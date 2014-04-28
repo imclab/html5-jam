@@ -30,7 +30,7 @@ app.configure(function () {
 // production configuration
 app.configure('development', function () {
 	config.server.port ++;
-	config.db.name +='-dev';
+	config.db.name +='_dev';
 	config.db.enableLogging = true;
 });
 
