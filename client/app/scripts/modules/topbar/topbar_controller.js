@@ -14,13 +14,7 @@ define(function (require) {
 
     var TopbarController = Marionette.Controller.extend({
         initialize: function (options) {
-            this._initializeAttributes();
             this._bindEvents();
-        },
-
-        _initializeAttributes: function () {
-            this.attributes = {};
-            this.attributes.models = {};
         },
 
         _bindEvents: function () {
@@ -33,7 +27,7 @@ define(function (require) {
         },
 
         getView: function () {
-            return new TopBar({ model : AppData.user });
+            return new TopBar();
         },
 
         logout: function () {

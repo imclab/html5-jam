@@ -32,8 +32,6 @@ define(function (require) {
             this._initializeAttributes(options);
             this._initializeControls();
             this._bindEvents();
-
-            // console.log('[ProductionController > onInit] ', options);
         },
 
         show: function (options) {

@@ -21,5 +21,4 @@ define(function (require) {
     });
 
     return RecorderPlayerView;
-
 });

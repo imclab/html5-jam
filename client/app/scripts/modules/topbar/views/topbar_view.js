@@ -28,7 +28,6 @@ define(function (require) {
             }
 
             this.model = AppData.user;
-            this.render();
         },
 
         logout: function () {
