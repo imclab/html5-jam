@@ -13,7 +13,7 @@ exports.init = function () {
 	passport.use(new FacebookStrategy({
 		    clientID: config.facebook.clientID,
 		    clientSecret: config.facebook.clientSecret,
-		    callbackURL: "http://localhost:" + config.server.port + "/auth/facebook/callback"
+		    callbackURL: "http://warnode.com:" + config.server.port + "/auth/facebook/callback"
 	 	}, 	function (accessToken, refreshToken, profile, done) {
 		        users.login(profile, accessToken, done);
 		    }
