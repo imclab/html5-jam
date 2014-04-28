@@ -1,23 +1,22 @@
- html5-jam
+html5-jam
 ========
 
-Stuff to install
-============
+###Stuff to install
 
 install nodejs, npm, mysql-server
 
-Database
-========
+###Database
+
 create databases htmljam and htmljam_dev;
 
-Server
-======
+###Server
+
 html5-jam/server$ npm install
 <br>
 start server : html5-jam/server$ NODE_ENV=development node app.js
 
-Client
-======
+###Client
+
 $ npm install -g bower
 <br>
 $ npm install -g grunt

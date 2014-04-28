@@ -62,8 +62,8 @@ module.exports = function (grunt) {
             proxies : [
                 {
                     context: '/api',
-                    host: '0.0.0.0',
-                    port: 3000,
+                    host: 'warnode.com',
+                    port: 8081,
                     https: false,
                     changeOrigin: true,
                     rewrite: {

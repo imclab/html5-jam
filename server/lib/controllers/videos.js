@@ -15,7 +15,7 @@ exports.addVideoToJam = function (req, res, next) {
 	var postData = req.body;
 
 	// check data
-	if (!postData || !postData.video || postData.video.length == 0) {
+	if (!postData || !postData.video || postData.video.length == 0 || !postData.audio || postData.audio.length == 0) {
 		return next(new Errors.BadRequest('Missing fields'));
 	}
 
@@ -34,21 +34,27 @@ exports.addVideoToJam = function (req, res, next) {
 		// create video
 		Video.create({ instrument: postData.instrument, userId: req.user.id, active: postData.active, volume: postData.volume })
 		.success(function (newVideo) {
-
-		    var videoFileBuffer = new Buffer(postData.video.contents.split(',').pop(), "base64");
-
 			// save the video file to disk
+		    var videoFileBuffer = new Buffer(postData.video.contents.split(',').pop(), "base64");
 			Utils.writeFileToDisk(req.params.jamId + '/' + newVideo.id + '.webm', videoFileBuffer, function (err) {
 				if (err) {
 					return next(new Errors.Error(err, 'Server error'));
 				} else {
-					// add relation
-					jam.addVideos(newVideo)
-					.success(function () {
-						res.send(newVideo);
-					})
-					.error(function (error) {
-						return next(new Errors.Error(error, 'Server error'));
+					// save the audio file to disk
+				    var audioFileBuffer = new Buffer(postData.audio.contents.split(',').pop(), "base64");
+					Utils.writeFileToDisk(req.params.jamId + '/' + newVideo.id + '.wav', audioFileBuffer, function (err) {
+						if (err) {
+							return next(new Errors.Error(err, 'Server error'));
+						} else {
+							// add relation
+							jam.addVideos(newVideo)
+							.success(function () {
+								res.send(newVideo);
+							})
+							.error(function (error) {
+								return next(new Errors.Error(error, 'Server error'));
+							});
+						}
 					});
 				}
 			});
@@ -138,6 +144,48 @@ exports.getVideoStream = function (req, res, next) {
 					return next(new Errors.BadRequest('Video not found'));
 				} else {
 					res.writeHead(200, {'Content-Type': 'video/mpeg' });
+					res.end(file, 'binary');
+				}
+			});
+		})
+		.error(function (error) {
+			return next(new Errors.Error(error, 'Server error'));
+		});
+	})
+	.error(function (error) {
+		return next(new Errors.Error(error, 'Server error'));
+	});
+
+};
+
+exports.getAudioStream = function (req, res, next) {
+
+	// get jam
+	Jam.find({ 
+		where: Sequelize.and(
+			{ id: req.params.jamId }, 
+			Sequelize.or(
+				{ privacy: 0 }, 
+				{ userId: req.user.id }
+			)
+		) 
+	})
+	.success(function (jam) {
+		if (jam == null) { return next(new Errors.BadRequest('Jam not found')); }
+
+		jam.getVideos({
+			where: {
+				id: req.params.videoId
+			}
+		})
+		.success(function (videos) {
+			if (videos == null || videos.length == 0) { return next(new Errors.BadRequest('Video not found')); }
+
+			Utils.readFileFromDisk(req.params.jamId + '/' + req.params.videoId + '.wav', function (error, file) {
+				if (error) {
+					return next(new Errors.BadRequest('Audio not found'));
+				} else {
+					res.writeHead(200, {'Content-Type': 'audio/wav' });
 					res.end(file, 'binary');
 				}
 			});
