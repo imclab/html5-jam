@@ -32,11 +32,10 @@ define(function (require) {
             this._initializeAttributes(options);
             this._initializeControls();
             this._bindEvents();
-
-            console.log('[ProductionController > onInit] ', options);
         },
 
         show: function (options) {
+            this.attributes.mode = options.mode;
             if (options.jamId) {
                 this.attributes.jamId = options.jamId;
             } else {
@@ -44,21 +43,14 @@ define(function (require) {
                 this.attributes.models = {};
             }
 
-            this.attributes.mode = options.mode;
+            BaseController.prototype.show.call(this);
 
-            switch (this.attributes.mode) {
-            case 'edit':
-                this.getJamFromServer();
-                BaseController.prototype.show.call(this);
-                break;
-            case 'show':
-                this.getJamFromServer();
-                BaseController.prototype.show.call(this);
-                break;
-            case 'create':
-                BaseController.prototype.show.call(this);
+            if (this.attributes.mode !== 'create') {
+                this.getJamFromServer().then(function () {
+                    vent.trigger('recorder:initMediaCapture');
+                });
+            } else {
                 vent.trigger('recorder:initMediaCapture');
-                break;
             }
         },
 
@@ -105,14 +97,23 @@ define(function (require) {
             this.listenTo(vent, 'comment:remove', this.removeComment);
 
             this.listenTo(vent, 'video:new', function (options) {
-                this.addSelectedId(
-                    this.addNewVideo(options)
-                );
+                this.addNewVideo(options);
             });
 
             this.listenTo(vent, 'jam:create', this.createNewJam);
             this.listenTo(vent, 'jam:like', this.likeJam);
             this.listenTo(vent, 'jam:dislike', this.dislikeJam);
+
+            this.listenTo(vent, 'videoplayer:add', this.addSelectedId);
+            this.listenTo(vent, 'videoplayer:remove', this.removeSelectedId);
+        },
+
+        addSelectedId:  function (controller, id) {
+            this.attributes.selectedIds[id] = controller;
+        },
+
+        removeSelectedId: function (id) {
+            delete this.attributes.selectedIds[id];
         },
 
         getJamFromServer: function () {
@@ -122,38 +123,29 @@ define(function (require) {
             this.attributes.models.videos = new VideoCollection();
             this.attributes.models.comments = new CommentCollection();
 
-            // ACTIVE OU NON PLZ
-            this.attributes.models.jam.fetch({
-                url: '/api/jams/' + self.attributes.jamId,
-                success: function (model, response) {
-                    console.log("[ProductionController > JAM:" + self.attributes.jamId + "] Fetching from server : jam.cid=" + self.attributes.models.jam.cid);
+            this.views.recorder.model = this.attributes.models.jam;
 
-                    var i;
-                    for (i = 0; i < response.videos.length; i++) {
-                        response.videos[i].jamId = self.attributes.jamId;
+            this.attributes.models.comments.fetch({ url: '/api/jams/' + self.attributes.jamId + '/comments' })
+                .then(function (response) {
+                    self.views.comments.collection.add(response.comments);
+                });
 
-                        if (response.videos[i].active) {
+            return this.attributes.models.jam.fetch({ url: '/api/jams/' + self.attributes.jamId })
+                .then(function (response) {
+                    // console.log("[ProductionController > JAM:" + self.attributes.jamId + "] Fetching from server : jam.cid=" + self.attributes.models.jam.cid);
+                    _.each(response.videos, function (video) {
+                        video.jamId = self.attributes.jamId;
+                        if (video.active) {
                             // Add to videos list
-                            self.views.recorder.collection.add(response.videos[i]);
+                            self.views.recorder.collection.add(video);
                         } else {
                             // Add to SideBar
-                            self.views.sidebar.collection.add(response.videos[i]);
+                            self.views.sidebar.collection.add(video);
                         }
-                    }
+                    });
 
-                    self.views.recorder.model = model;
-                    self.views.recorder.model.set("fetch", "true");
                     self.views.recorder.render();
-                }
-            });
-
-            this.attributes.models.comments.fetch({
-                url: '/api/jams/' + self.attributes.jamId + '/comments',
-                success: function (model, response) {
-                    console.log('[ProductionController > Comments]', response);
-                    self.views.comments.collection.add(response.comments);
-                }
-            });
+                });
         },
 
         _initializeSidebar: function () {
@@ -162,14 +154,14 @@ define(function (require) {
 
         save: function () {
             if (!this.attributes.models.jam) {
-                console.log("[Production_controller.js > save] STATUS : No Jam loaded : ", this.views.recorder.collection);
+                // console.log("[Production_controller.js > save] STATUS : No Jam loaded : ", this.views.recorder.collection);
                 this.createNewJam();
             } else {
                 // Actualise / create the jam
                 // Save the video
                 // Add the video to the jam
                 // Reload the page
-                console.log("[Production_controller.js > save] STATUS : ", this.attributes.selectedIds);
+                // console.log("[Production_controller.js > save] STATUS : ", this.attributes.selectedIds);
                 this.saveVideos().then(function () {
                     Backbone.history.loadUrl();
                 });
@@ -177,14 +169,10 @@ define(function (require) {
         },
 
         saveVideos: function () {
-            return this.views.recorder.collection.save({
-                jamId: this.attributes.jamId
-            });
+            return this.views.recorder.collection.save();
         },
 
         addNewVideo: function (options) {
-            console.log("NewVideo options : ", options);
-
             options.instrument = 5;
             options.active = true;
             options.volume = 10;
@@ -194,18 +182,9 @@ define(function (require) {
             return newModel;
         },
 
-        addSelectedId:  function (model) {
-            this.attributes.selectedIds[model.cid] = {};
-            this.attributes.selectedIds[model.cid].video = document.getElementById("video-player-" + model.get('_cid'));
-            this.attributes.selectedIds[model.cid].audio = document.getElementById("audio-player-" + model.get('_cid'));
-        },
-
-        removeVideo: function (model) {
-            model.destroy({
-                jamId: this.attributes.jamId
-            });
-            this.views.recorder.collection.remove(model);
-            delete this.attributes.selectedIds[model.cid];
+        removeVideo: function (video) {
+            video.destroy();
+            this.views.recorder.collection.remove(video);
         },
 
         addComments: function (str) {
@@ -247,15 +226,14 @@ define(function (require) {
                 user_facebook_id: AppData.user.get('facebook_id'),
                 name: this.views.recorder.ui.edit_jam_name.val()
             })
-            .save(null, {})
-            .then(function (model) {
-                _this.attributes.jamId = model.id;
-                return _this.saveVideos();
-            })
-            .then(function () {
-                console.log("Arguments : ", arguments);
-                Backbone.history.navigate('jam/' + _this.attributes.jamId, true);
-            });
+                .save(null, {})
+                .then(function (model) {
+                    _this.attributes.jamId = model.id;
+                    return _this.saveVideos();
+                })
+                .then(function () {
+                    Backbone.history.navigate('jam/' + _this.attributes.jamId, true);
+                });
         },
 
         onClose: function () {

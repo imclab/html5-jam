@@ -99,7 +99,7 @@ define(function (require) {
                             }
                         });
 
-                        console.log("[PlayerManager > stopRecorder] VIDEO AND AUDIO LOADED");
+                        // console.log("[PlayerManager > stopRecorder] VIDEO AND AUDIO LOADED");
                         _this.recorder.isRecording = false;
                         vent.trigger("video:new", options);
                     });
@@ -145,7 +145,6 @@ define(function (require) {
             this.recorderBlob = obj;
             this._initializeRecordRTC();
         }
-
     });
 
     return PlayerManager;

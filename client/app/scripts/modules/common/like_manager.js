@@ -9,28 +9,14 @@ define(function (require) {
             likeJam: function (jamId) {
                 new Like({
                     jamId: jamId
-                }).save({}, {
-                    success: function (xhr) {
-                        console.log('::success::', xhr);
-                    },
-                    error: function (err) {
-                        console.log("We have an error :", err);
-                    }
-                });
+                }).save();
             },
 
             dislikeJam: function (jamId) {
                 new Like({
                     id: '',
                     jamId: jamId
-                }).destroy({
-                    success: function (xhr) {
-                        console.log('::success::', xhr);
-                    },
-                    error: function (err) {
-                        console.log("We have an error :", err);
-                    }
-                });
+                }).destroy();
             }
         };
     };
