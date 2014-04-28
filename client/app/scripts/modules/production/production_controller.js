@@ -168,8 +168,8 @@ define(function (require) {
             }
         },
 
-        saveVideos: function (options) {
-            return this.views.recorder.collection.save(options);
+        saveVideos: function () {
+            return this.views.recorder.collection.save({jamId: this.attributes.jamId});
         },
 
         addNewVideo: function (options) {
@@ -229,7 +229,7 @@ define(function (require) {
                 .save(null, {})
                 .then(function (model) {
                     _this.attributes.jamId = model.id;
-                    return _this.saveVideos({jamId : model.id});
+                    return _this.saveVideos();
                 })
                 .then(function () {
                     Backbone.history.navigate('jam/' + _this.attributes.jamId, true);
