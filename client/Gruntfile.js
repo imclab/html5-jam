@@ -59,18 +59,52 @@ module.exports = function (grunt) {
                 // change this to '0.0.0.0' to access the server from outside
                 hostname: '0.0.0.0'
             },
-            proxies : [
-                {
-                    context: '/api',
-                    host: '0.0.0.0',
-                    port: 3000,
-                    https: false,
-                    changeOrigin: true,
-                    rewrite: {
-                        '^/api': ''
+
+            local: {
+                proxies: [
+                    {
+                        context: '/api',
+                        host: '0.0.0.0',
+                        port: 3000,
+                        https: false,
+                        changeOrigin: true,
+                        rewrite: {
+                            '^/api': ''
+                        }
                     }
-                }
-            ],
+                ]
+            },
+
+            prod: {
+                proxies: [
+                    {
+                        context: '/api',
+                        host: 'warnode.com',
+                        port: 8080,
+                        https: false,
+                        changeOrigin: true,
+                        rewrite: {
+                            '^/api': ''
+                        }
+                    }
+                ]
+            },
+
+            dev: {
+                proxies: [
+                    {
+                        context: '/api',
+                        host: 'warnode.com',
+                        port: 8081,
+                        https: false,
+                        changeOrigin: true,
+                        rewrite: {
+                            '^/api': ''
+                        }
+                    }
+                ]
+            },
+
             livereload: {
                 options: {
                     middleware: function (connect) {
@@ -447,14 +481,48 @@ module.exports = function (grunt) {
         'jst'
     ]);
 
-    grunt.registerTask('server', function (target) {
+    grunt.registerTask('dev', function (target) {
         if (target === 'dist') {
             return grunt.task.run(['build', 'connect:dist:keepalive']);
         }
 
         grunt.task.run([
             'clean:server',
-            'configureProxies',
+            'configureProxies:dev',
+            'compass:server',
+            'createTemplateJs',
+            'concurrent:server',
+            'autoprefixer:server',
+            'connect:livereload',
+            'watch'
+        ]);
+    });
+
+    grunt.registerTask('prod', function (target) {
+        if (target === 'dist') {
+            return grunt.task.run(['build', 'connect:dist:keepalive']);
+        }
+
+        grunt.task.run([
+            'clean:server',
+            'configureProxies:prod',
+            'compass:server',
+            'createTemplateJs',
+            'concurrent:server',
+            'autoprefixer:server',
+            'connect:livereload',
+            'watch'
+        ]);
+    });
+
+    grunt.registerTask('local', function (target) {
+        if (target === 'dist') {
+            return grunt.task.run(['build', 'connect:dist:keepalive']);
+        }
+
+        grunt.task.run([
+            'clean:server',
+            'configureProxies:local',
             'compass:server',
             'createTemplateJs',
             'concurrent:server',

@@ -30,7 +30,7 @@ define(function (require) {
             // console.log('::SYNC:: Options [Video] : ', options);
 
             if (method === 'create') {
-                options.url = '/api/jams/' + this.get("jamId") + '/videos';
+                options.url = '/api/jams/' + options.jamId + '/videos';
             } else if (method === 'delete') {
                 options.url = '/api/jams/' + this.get("jamId") + '/videos/' + this.id;
             } else if (method === 'read') {
