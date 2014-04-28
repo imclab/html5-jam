@@ -21,7 +21,6 @@ module.exports.init = function (app) {
 	app.get('/auth/facebook/callback', passport.authenticate('facebook', { 
 		failureRedirect: config.client.baseUrl + config.client.port 
 	}), function (req, res) {
-        res.redirect('/'); return;
 		res.redirect(config.client.baseUrl + config.client.port + '#?token=' + Utils.encrypt(req.user.facebook_token));
 	});
 
