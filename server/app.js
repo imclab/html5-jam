@@ -28,6 +28,13 @@ app.configure(function () {
 });
 
 // production configuration
+app.configure('development', function () {
+	config.server.port ++;
+	config.db.name +='-dev';
+	config.db.enableLogging = true;
+});
+
+// production configuration
 app.configure('production', function () {
 	config.db.enableLogging = false;
 });
