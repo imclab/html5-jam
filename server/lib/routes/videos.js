@@ -27,6 +27,12 @@ module.exports.init = function (app) {
 
 
 	/**
+	 * 	Get audio stream
+	 */
+	app.get('/jams/:jamId/audios/:videoId', authorization.requiresAuthentication, videos.getAudioStream);
+
+
+	/**
 	 *	Delete Video from jam
 	 */
 	 app.delete('/jams/:jamId/videos/:videoId', authorization.requiresAuthentication, videos.deleteVideoFromJam);

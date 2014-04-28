@@ -30,7 +30,7 @@ exports.createNewJam = function (req, res, next) {
 		.success(function (newJam) {
 
 			// create jam folder
-			Utils.createFolder('' + newJam.dataValues.id);
+			Utils.createFolder(newJam.dataValues.id);
 
 			Like.create({ userId: req.user.id, jamId: newJam.id });
 			user.addJam(newJam)
@@ -138,7 +138,7 @@ exports.getJamDetails = function (req, res, next) {
 			}
 		})
 		.success(function (result) {
-			jam.doILikeIt = result > 0;
+			jam.doILikeIt = (result > 0 ? 'true' : 'false');
 
 			// get jam's videos
 			Jam.daoFactoryManager.sequelize.query('SELECT v.id, v.jamId, v.instrument, v.createdAt, v.userId, u.name as ownerName, u.facebook_id as ownerFacebookId, u.picture_url as ownerPictureUrl, AVG(n.value) AS note'
@@ -181,7 +181,7 @@ exports.getJamFeeds = function (req, res, next) {
 	}
 
 	// get  user info
-	Comment.daoFactoryManager.sequelize.query('SELECT j.*, u.name as ownerName, u.facebook_id as ownerFacebookId, u.picture_url as ownerPictureUrl, COUNT(l.id) as nbLikes, IF (l.userId=?, 1, 0) as doILikeIt'
+	Comment.daoFactoryManager.sequelize.query('SELECT j.*, u.name as ownerName, u.facebook_id as ownerFacebookId, u.picture_url as ownerPictureUrl, COUNT(l.id) as nbLikes, IF (l.userId=?, "true", "false") as doILikeIt'
 	+ ' FROM jams j LEFT JOIN users u ON u.id=j.userId LEFT OUTER JOIN likes l ON l.jamId=j.id ' + (feedsType == 'friendsJams' ? 'LEFT JOIN friends f ON j.userId=f.friendId' : '')
 	+ ' WHERE j.privacy=0 ' + (feedsType == 'friendsJams' ? 'AND f.userId=' + req.user.id : '') + ' GROUP BY j.id ORDER BY ' + orderBy + ' LIMIT ' + (page == 1 ? 0 : ((page - 1) * pagination + 1)) + ',' + pagination
 		, null, { raw: true }, [req.user.id, req.user.id])

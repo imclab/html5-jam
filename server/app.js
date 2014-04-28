@@ -8,7 +8,6 @@ var errors = require('./lib/errors');
 
 // enable CORS
 var enableCORS = function(req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', config.client.baseUrl + config.server.port);
     res.setHeader('Access-Control-Allow-Origin', config.client.baseUrl + config.client.port);
     res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With, Set-Cookie');
@@ -25,6 +24,14 @@ app.configure(function () {
     app.use(passport.initialize());
     app.use(app.router);
 	app.use(errors.dispatch);
+});
+
+// production configuration
+app.configure('development', function () {
+	config.server.port ++;
+	config.server.uploads += '_dev';
+	config.db.name +='_dev';
+	config.db.enableLogging = true;
 });
 
 // production configuration

@@ -11,16 +11,16 @@ String.prototype.replaceAll = function (find, replace) {
 
 module.exports = {
 
-	writeFileToDisk: function (fileName, data, callback) {
-		fs.writeFile(__dirname.replaceAll('lib', '') + 'uploads/videos/' + fileName, data, callback);
+	writeFileToDisk: function (filePath, data, callback) {
+		fs.writeFile(__dirname.replaceAll('lib', '') + config.server.uploads + filePath, data, callback);
 	},
 
-	readFileFromDisk: function (fileName, callback) {
-		fs.readFile(__dirname.replaceAll('lib', '') + 'uploads/videos/' + fileName, callback);
+	readFileFromDisk: function (filePath, callback) {
+		fs.readFile(__dirname.replaceAll('lib', '') + config.server.uploads + filePath, callback);
 	},
 
-	deleteFileFromDisk: function (fileName, callback) {
-		fs.unlink(__dirname.replaceAll('lib', '') + 'uploads/videos/' + fileName, callback);
+	deleteFileFromDisk: function (filePath, callback) {
+		fs.unlink(__dirname.replaceAll('lib', '') + config.server.uploads + filePath, callback);
 	},
 
 	encrypt: function (data) {
@@ -34,7 +34,7 @@ module.exports = {
 	},
 
 	createFolder: function (path) {
-		var path = __dirname.replaceAll('lib', '') + 'uploads/videos/' + path;
+		var path = __dirname.replaceAll('lib', '') + config.server.uploads + path;
 		console.log("Creating folder :".debug + path);
 		fs.mkdir(path);
 	}
