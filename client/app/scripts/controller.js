@@ -7,7 +7,7 @@ define(function (require) {
     var vent = require('modules/common/vent');
     var Const = require('modules/common/constants');
 
-    var LoadingView = require("modules/common/views/loading_view");
+    var LoadingView = require('modules/common/views/loading_view');
     var AuthManager = require('modules/common/auth_manager');
     var AppData = require('modules/common/app_data');
     var CookieManager = require('modules/common/cookie_manager');
