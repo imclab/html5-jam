@@ -47,10 +47,10 @@ define(function (require) {
 
             if (this.attributes.mode !== 'create') {
                 this.getJamFromServer().then(function () {
-                    vent.trigger('recorder:initMediaCapture');
+                    vent.trigger('recorder:initMediaCapture', this.attributes.mediaStream);
                 });
             } else {
-                vent.trigger('recorder:initMediaCapture');
+                vent.trigger('recorder:initMediaCapture', this.attributes.mediaStream);
             }
         },
 
@@ -82,8 +82,9 @@ define(function (require) {
             this.views = {};
             this.attributes = {};
             this.attributes.models = {};
+            this.attributes.mediastream = AppData.getMediaStream();
 
-            _.extend(this.attributes, new PlayerManager());
+            _.extend(this.attributes, new PlayerManager(options));
 
             this.attributes.mode = options.mode || "show";
         },
@@ -106,6 +107,8 @@ define(function (require) {
 
             this.listenTo(vent, 'videoplayer:add', this.addSelectedId);
             this.listenTo(vent, 'videoplayer:remove', this.removeSelectedId);
+
+            this.listenTo(vent, 'mediastream:save', this.saveMediaStream);
         },
 
         addSelectedId:  function (controller, id) {
@@ -236,6 +239,11 @@ define(function (require) {
                 });
         },
 
+        saveMediaStream: function (objMediaStream) {
+            console.log("Media Stream : ", objMediaStream);
+            AppData.saveMediaStream(objMediaStream);
+        },
+
         onClose: function () {
             this.closeManager();
             BaseController.prototype.onClose.call(this);
@@ -249,7 +257,6 @@ define(function (require) {
 
             delete this.attributes.recorder;
             delete this.attributes.recorderPreview;
-            delete this.attributes.recorderBlob;
             delete this.attributes.selectedIds;
         },
 

@@ -6,6 +6,7 @@ define(function (require) {
     var App = {
         user: undefined,
         userId: -1,
+        mediaStream: undefined,
 
         fetchUser: function (options) {
             options = options || {};
@@ -24,6 +25,38 @@ define(function (require) {
             }
 
             return (this.user.get("id") === idParam);
+        },
+
+        createFakeUser: function () {
+            this.user = new User({
+                facebook_id: '12345678910',
+                email: 'jesuisunfake@gmail.com',
+                jams: [],
+                name: 'Jesuis Unfake',
+                picture_url: '',
+                id: 1337,
+                vignette_one: null,
+                vignette_three: null,
+                vignette_two: null,
+                createdAt: '2014-02-19 00:00:00',
+                doIFollowHim: false
+            });
+        },
+
+        saveMediaStream: function (dataValue) {
+            if (!this.mediaStream) {
+                this.mediaStream = dataValue;
+            } else {
+                console.log("STORAGE ERROR ::: mediaStream is already set");
+            }
+        },
+
+        getMediaStream: function () {
+            return this.mediaStream;
+        },
+
+        flushMediaStream: function () {
+            delete this.mediaStream;
         }
 
     };
