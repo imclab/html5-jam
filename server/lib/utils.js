@@ -50,7 +50,7 @@ module.exports = {
 	mergeAudioVideo: function (filePath) {
 		console.log("Merging audio and video :".debug + filePath);
 		var exec = child_process.exec;
-		var path = __dirname.replaceAll('lib', '') + filePath;
+		var path = __dirname.replaceAll('lib', '') + config.server.uploads + filePath;
 		console.log('bite ' +  filePath)
 		exec("ffmpeg -i " + path + ".webm -i " + path + ".wav -map 0:0 -map 1:0 " + path + ".webm", puts);
 	}
