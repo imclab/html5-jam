@@ -26,6 +26,15 @@ app.configure(function () {
 	app.use(errors.dispatch);
 });
 
+// add colors to console !
+colors.setTheme({
+  error: 'red',
+  api: 'cyan',
+  success: 'green',
+  info: 'yellow',
+  debug: 'grey'
+});
+
 // production configuration
 app.configure('development', function () {
 	config.server.port ++;
