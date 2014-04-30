@@ -49,10 +49,10 @@ define(function (require) {
 
             if (this.attributes.mode !== 'create') {
                 this.getJamFromServer().then(function () {
-                    vent.trigger('recorder:initMediaCapture', self.attributes.mediaStream);
+                    vent.trigger('recorder:initMediaCapture');
                 });
             } else {
-                vent.trigger('recorder:initMediaCapture', self.attributes.mediaStream);
+                vent.trigger('recorder:initMediaCapture');
             }
         },
 
@@ -84,7 +84,6 @@ define(function (require) {
             this.views = {};
             this.attributes = {};
             this.attributes.models = {};
-            this.attributes.mediastream = AppData.getMediaStream();
 
             _.extend(this.attributes, options.playerManager);
 
@@ -109,8 +108,6 @@ define(function (require) {
 
             this.listenTo(vent, 'videoplayer:add', this.addSelectedId);
             this.listenTo(vent, 'videoplayer:remove', this.removeSelectedId);
-
-            this.listenTo(vent, 'mediastream:save', this.saveMediaStream);
         },
 
         addSelectedId:  function (controller, id) {
@@ -239,11 +236,6 @@ define(function (require) {
                 .then(function () {
                     Backbone.history.navigate('jam/' + _this.attributes.jamId, true);
                 });
-        },
-
-        saveMediaStream: function (objMediaStream) {
-            console.log("Media Stream : ", objMediaStream);
-            AppData.saveMediaStream(objMediaStream);
         },
 
         onClose: function () {

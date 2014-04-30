@@ -41,22 +41,6 @@ define(function (require) {
                 createdAt: '2014-02-19 00:00:00',
                 doIFollowHim: false
             });
-        },
-
-        saveMediaStream: function (dataValue) {
-            if (!this.mediaStream) {
-                this.mediaStream = dataValue;
-            } else {
-                console.log("STORAGE ERROR ::: mediaStream is already set");
-            }
-        },
-
-        getMediaStream: function () {
-            return this.mediaStream;
-        },
-
-        flushMediaStream: function () {
-            delete this.mediaStream;
         }
 
     };

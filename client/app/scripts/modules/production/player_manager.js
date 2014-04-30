@@ -116,9 +116,7 @@ define(function (require) {
             }
         },
 
-        initializeMediaCapture: function (mediaStream) {
-            this.recorderBlob = this.recorderBlob || mediaStream || null;
-
+        initializeMediaCapture: function () {
             this.recorderPreview = document.getElementById('preview');
             this.recorderPreview.muted = true;
 
@@ -155,7 +153,6 @@ define(function (require) {
 
         _setRecorderBlob: function (obj) {
             this.recorderBlob = obj;
-            vent.trigger('mediastream:save', obj);
             this._initializeRecordRTC();
         }
     });
