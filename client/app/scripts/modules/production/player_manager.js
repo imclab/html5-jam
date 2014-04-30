@@ -6,25 +6,31 @@ define(function (require) {
     var vent = require('modules/common/vent');
     var Backbone = require('backbone');
 
+    var Const = {
+        NONE: "none",
+        PENDING: "pending",
+        VALIDATED: "validated",
+        REFUSED: "refused"
+    };
+
     var PlayerManager = function (options) {
         options = options || {};
 
         this.recorder = options.recorder || {audio: undefined, video: undefined, isRecording: false};
         this.selectedIds = options.selectedIds || {};
 
+        this.mediaRequest = Const.NONE;
+
         this.initialize.apply(this, arguments);
     };
 
     _.extend(PlayerManager.prototype, Backbone.Events, {
 
-        initialize: function (options) {
-            if (options.call === 0) {
-                // TODO : if vent isn't already bind
-                this.listenTo(vent, 'recorder:play', this.playAllSelected);
-                this.listenTo(vent, 'recorder:stop', this.stop);
-                this.listenTo(vent, 'recorder:record', this.record);
-                this.listenTo(vent, 'recorder:initMediaCapture', this.initializeMediaCapture);
-            }
+        initialize: function () {
+            this.listenTo(vent, 'recorder:play', this.playAllSelected);
+            this.listenTo(vent, 'recorder:stop', this.stop);
+            this.listenTo(vent, 'recorder:record', this.record);
+            this.listenTo(vent, 'recorder:initMediaCapture', this.initializeMediaCapture);
         },
 
         playAllSelected: function () {
@@ -119,15 +125,19 @@ define(function (require) {
             if (this.recorderBlob) {
                 this.recorderPreview.src = window.URL.createObjectURL(this.recorderBlob);
                 this.recorderPreview.play();
-            } else {
+            } else if (this.mediaRequest === Const.REFUSED || this.mediaRequest === Const.NONE) {
                 var self = this;
+                this.mediaRequest = Const.PENDING;
                 navigator.getUserMedia({audio: true, video: true}, function (media) {
+                    self.mediaRequest = Const.VALIDATED;
+                    console.log("[Production_controller.js > _initializeMediaCapture] SUCCESS");
                     self.recorderPreview.src = window.URL.createObjectURL(media);
                     self.recorderPreview.play();
 
                     self._setRecorderBlob(media);
                 }, function () {
-                    console.log("[Production_controller.js > _initializeMediaCapture] ERROR : Failed to get the blob.");
+                    self.mediaRequest = Const.REFUSED;
+                    console.log("[Production_controller.js > _initializeMediaCapture] ERROR : Failed to get the blob");
                 });
             }
         },

@@ -8,6 +8,7 @@ define(function (require) {
 
     var LoadingView = require('modules/common/views/loading_view');
     var AuthManager = require('modules/common/auth_manager');
+    var PlayerManager = require('modules/production/player_manager');
     var AppData = require('modules/common/app_data');
     var CookieManager = require('modules/common/cookie_manager');
 
@@ -81,7 +82,8 @@ define(function (require) {
             this.handleConnection(_.bind(function () {
                 var options = {
                     mode: 'edit',
-                    jamId: jamId
+                    jamId: jamId,
+                    playerManager: this.attributes.playermanager
                 };
                 this.handleTopbar();
                 this._createController("production", options).then(_.bind(this._showController, this, "production", options));
@@ -92,7 +94,8 @@ define(function (require) {
             this.handleConnection(_.bind(function () {
                 var options = {
                     mode: 'show',
-                    jamId: jamId
+                    jamId: jamId,
+                    playerManager: this.attributes.playermanager
                 };
                 this.handleTopbar();
                 this._createController("production", options).then(_.bind(this._showController, this, "production", options));
@@ -103,7 +106,7 @@ define(function (require) {
             this.handleConnection(_.bind(function () {
                 var options = {
                     mode: 'create',
-                    call: this.attributes.call++
+                    playerManager: this.attributes.playermanager
                 };
                 this.handleTopbar();
                 this._createController("production", options).then(_.bind(this._showController, this, "production", options));
@@ -202,6 +205,7 @@ define(function (require) {
             this.attributes.models = {};
             this.attributes.call = 0;
             this.attributes.authmanager = new AuthManager();
+            this.attributes.playermanager = new PlayerManager();
         },
 
         _bindEvents: function () {

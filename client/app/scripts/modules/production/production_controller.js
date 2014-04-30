@@ -45,12 +45,14 @@ define(function (require) {
 
             BaseController.prototype.show.call(this);
 
+            var self = this;
+
             if (this.attributes.mode !== 'create') {
                 this.getJamFromServer().then(function () {
-                    vent.trigger('recorder:initMediaCapture', this.attributes.mediaStream);
+                    vent.trigger('recorder:initMediaCapture', self.attributes.mediaStream);
                 });
             } else {
-                vent.trigger('recorder:initMediaCapture', this.attributes.mediaStream);
+                vent.trigger('recorder:initMediaCapture', self.attributes.mediaStream);
             }
         },
 
@@ -84,7 +86,7 @@ define(function (require) {
             this.attributes.models = {};
             this.attributes.mediastream = AppData.getMediaStream();
 
-            _.extend(this.attributes, new PlayerManager(options));
+            _.extend(this.attributes, options.playerManager);
 
             this.attributes.mode = options.mode || "show";
         },
