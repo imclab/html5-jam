@@ -54,7 +54,7 @@ module.exports = {
 		var exec = child_process.exec;
 		var path = __dirname.replaceAll('lib', '') + config.server.uploads + filePath;
 		logger.log('debug', 'Merging audio and video : ' + path);
-		exec("ffmpeg -i " + path + ".webm -i " + path + ".wav -map 0:0 -map 1:0 " + path + ".webm", puts);
+		exec("ffmpeg -y -i " + path + ".webm -i " + path + ".wav -map 0:0 -map 1:0 " + path + ".webm", puts);
 	}
 
 };
