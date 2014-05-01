@@ -9,7 +9,7 @@ winston.remove(winston.transports.Console);
 winston.add(winston.transports.Console, { level: config.server.logs.console, colorize: true });
 
 // file logs
-winston.add(winston.transports.File, { level: config.server.logs.file, 'timestamp': true, filename: 'node.log' });
+winston.add(winston.transports.File, { level: config.server.logs.file, 'timestamp': true, filename: config.server.logs.fileName });
 
 
 module.exports = winston;
