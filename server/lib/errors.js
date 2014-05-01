@@ -1,11 +1,14 @@
-"use strict"
+'use strict'
+
+var logger = require('winston');
+
 module.exports = {
 
 	dispatch: function (err, req, res, next) {
 		var message = err.message;
 		var status = err.status || 500;
 		if (status == 500) {
-			console.log(err.error || err);
+			logger.error(err.error || err);
 		}
 		res.json({ message: message }, status);
 	},

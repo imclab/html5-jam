@@ -1,5 +1,6 @@
 "use strict";
 
+var logger = require('winston');
 var Sequelize = require('sequelize');
 var Errors = require('../errors');
 var Models = require('../models');

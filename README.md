@@ -14,7 +14,7 @@ create databases htmljam and htmljam_dev;
 
 html5-jam/server$ npm install
 <br>
-start server : html5-jam/server$ NODE_ENV=development node app.js
+start local server : run start_local_server.sh
 
 ###Client
 

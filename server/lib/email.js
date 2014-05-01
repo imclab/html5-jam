@@ -1,5 +1,6 @@
 "use strict";
 var nodemailer = require('nodemailer');
+var logger = require('winston');
 var config = require('../config');
 var utils = require('./utils');
 
@@ -56,9 +57,9 @@ module.exports = {
 		// send mail with defined transport object
 		smtpTransport.sendMail(mailOptions, function (error, response){
 		    if (error) {
-		        console.log(error);
+		        logger.error(error);
 		    } else {
-		        console.log("Message sent: ".green + response.message);
+		        logger.info("Mail sent: " + response.message);
 		    }
 
 		    smtpTransport.close(); // shut down the connection pool, no more messages
