@@ -16,6 +16,12 @@ var enableCORS = function(req, res, next) {
     next();
 };
 
+// setup database
+var db = require('./lib/db');
+
+// setup models
+require('./lib/models').init(db);
+
 // setup express server
 var app = express();
 app.use(cookieParser());
@@ -30,11 +36,7 @@ require('./lib/routes').init(app);
 // error handling middleware
 app.use(errors.dispatch);
 
-// setup database
-var db = require('./lib/db');
 
-// setup models
-require('./lib/models').init(db);
 
 // setup security
 require('./lib/security').init();
