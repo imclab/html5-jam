@@ -12,19 +12,19 @@ create databases htmljam and htmljam_dev;
 
 ###Server
 
-html5-jam/server$ npm install
+#####Installation 
+> npm install
 <br>
-start local server : run start_local_server.sh
+#####Start local server
+> bash start_local_server.sh
 
 ###Client
 
-$ npm install -g bower
+#####Installation 
+> npm install -g bower | npm install -g grunt | npm install -g grunt-cli
 <br>
-$ npm install -g grunt
+> npm install | bower install
 <br>
-$ npm install -g grunt-cli
-<br>
-html5-jam/client$ npm install | bower install
-<br>
-start client : html5-jam/client$ grunt server
+#####Start local server
+> grunt dev
  
