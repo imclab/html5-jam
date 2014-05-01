@@ -26,10 +26,19 @@ app.configure(function () {
 	app.use(errors.dispatch);
 });
 
+// add colors to console !
+colors.setTheme({
+  error: 'red',
+  api: 'cyan',
+  success: 'green',
+  info: 'yellow',
+  debug: 'grey'
+});
+
 // production configuration
 app.configure('development', function () {
 	config.server.port ++;
-	config.server.uploads += '_dev';
+	config.server.uploads = 'uploads_dev/';
 	config.db.name +='_dev';
 	config.db.enableLogging = true;
 });

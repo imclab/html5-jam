@@ -4,6 +4,7 @@ html5-jam
 ###Stuff to install
 
 install nodejs, npm, mysql-server
+install ffmpeg (on 14.04 and above : sudo add-apt-repository ppa:jon-severinsson/ffmpeg && sudo apt-get update -qq)
 
 ###Database
 

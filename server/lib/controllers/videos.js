@@ -46,6 +46,9 @@ exports.addVideoToJam = function (req, res, next) {
 						if (err) {
 							return next(new Errors.Error(err, 'Server error'));
 						} else {
+							// merge audio and video
+							Utils.mergeAudioVideo(req.params.jamId + '/' + newVideo.id);
+
 							// add relation
 							jam.addVideos(newVideo)
 							.success(function () {
@@ -144,48 +147,6 @@ exports.getVideoStream = function (req, res, next) {
 					return next(new Errors.BadRequest('Video not found'));
 				} else {
 					res.writeHead(200, {'Content-Type': 'video/mpeg' });
-					res.end(file, 'binary');
-				}
-			});
-		})
-		.error(function (error) {
-			return next(new Errors.Error(error, 'Server error'));
-		});
-	})
-	.error(function (error) {
-		return next(new Errors.Error(error, 'Server error'));
-	});
-
-};
-
-exports.getAudioStream = function (req, res, next) {
-
-	// get jam
-	Jam.find({ 
-		where: Sequelize.and(
-			{ id: req.params.jamId }, 
-			Sequelize.or(
-				{ privacy: 0 }, 
-				{ userId: req.user.id }
-			)
-		) 
-	})
-	.success(function (jam) {
-		if (jam == null) { return next(new Errors.BadRequest('Jam not found')); }
-
-		jam.getVideos({
-			where: {
-				id: req.params.videoId
-			}
-		})
-		.success(function (videos) {
-			if (videos == null || videos.length == 0) { return next(new Errors.BadRequest('Video not found')); }
-
-			Utils.readFileFromDisk(req.params.jamId + '/' + req.params.videoId + '.wav', function (error, file) {
-				if (error) {
-					return next(new Errors.BadRequest('Audio not found'));
-				} else {
-					res.writeHead(200, {'Content-Type': 'audio/wav' });
 					res.end(file, 'binary');
 				}
 			});
