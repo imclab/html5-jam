@@ -38,7 +38,6 @@ define(function (require) {
                 this.views.content.render();
                 this.views.jamlist.collection.add(AppData.user.get('jams'));
             } else {
-                console.log("An other one");
                 this.views.content.model = new User();
                 this.views.content.model.fetch({
                     url: 'api/users/' + options.profilId

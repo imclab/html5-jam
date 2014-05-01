@@ -17,7 +17,6 @@ define(function (require) {
         controllerNames: ["login", "home", "production", "login", "friendlist", "profil"],
 
         initialize: function (options) {
-            AppData.createFakeUser();
             this.regions = options.regions || {};
             this._initializeAttributes();
             this._bindEvents();

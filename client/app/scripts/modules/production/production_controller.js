@@ -20,7 +20,6 @@ define(function (require) {
 
     var AppData = require('modules/common/app_data');
 
-    var PlayerManager = require('modules/production/player_manager');
     var LikeManager = require('modules/common/like_manager');
     var KeyboardManager = require('modules/common/keyboard_manager');
 
@@ -45,11 +44,12 @@ define(function (require) {
 
             BaseController.prototype.show.call(this);
 
-            var self = this;
-
             if (this.attributes.mode !== 'create') {
                 this.getJamFromServer().then(function () {
                     vent.trigger('recorder:initMediaCapture');
+                }, function () {
+                    console.log("Error fetching JAM : JAM NOT FOUND");
+                    Backbone.history.navigate('/', true);
                 });
             } else {
                 vent.trigger('recorder:initMediaCapture');
@@ -191,7 +191,7 @@ define(function (require) {
 
         addComments: function (str) {
             if (this.attributes.jamId === null) {
-                alert("Save the jam before adding comments !");
+                console.log("Save the jam before adding comments !");
                 return;
             } else if (str === null || str.length === 0) {
                 return;
