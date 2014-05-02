@@ -1,6 +1,6 @@
 "use strict";
 
-var express = require('express');
+var multipart = require('connect-multiparty');
 var authorization = require('./middlewares/authorization');
 var videos = require('../controllers/videos');
 
@@ -11,7 +11,7 @@ module.exports.init = function (app) {
 	/**
 	 *	Add Video to jam
 	 */
-	 app.post('/jams/:jamId/videos', express.multipart(), authorization.requiresAuthentication, videos.addVideoToJam);
+	 app.post('/jams/:jamId/videos', multipart(), authorization.requiresAuthentication, videos.addVideoToJam);
 
 
 	 /**

@@ -1,5 +1,6 @@
 "use strict";
 var Sequelize = require('sequelize');
+var logger = require('winston');
 var config = require('../config');
 
 // init Sequelize db connection
@@ -12,9 +13,9 @@ var sequelize = new Sequelize(config.db.name, config.db.user, config.db.password
 sequelize.authenticate()
 .complete(function (err) {
     if (!!err) {
-      console.log('Unable to connect to the database:'.red, err);
+      logger.error('Unable to connect to the database:', err);
     } else {
-      console.log('Connection to the database has been established successfully'.green);
+      logger.info('Connection to the database has been established successfully');
     }
 });
 
