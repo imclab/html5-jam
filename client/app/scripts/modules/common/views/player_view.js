@@ -26,16 +26,16 @@ define(function (require) {
         onShow: function () {
             this.controller = {};
             this.controller.video = document.getElementById('video-player-' + this.model.get('_cid'));
-            this.controller.audio = document.getElementById('audio-player-' + this.model.get('_cid'));
         },
 
         play: function () {
+            this.controller.video.pause();
+            this.controller.video.currentTime = 0;
             this.controller.video.play();
-            this.controller.audio.play();
         },
 
         mute: function () {
-            this.controller.audio.muted = !this.controller.audio.muted;
+            this.controller.video.muted = !this.controller.video.muted;
             this.ui.muteBtn.toggleClass('btn-success btn-warning');
             this.ui.muteBtnIcon.toggleClass('glyphicon-volume-off glyphicon-volume-up');
         },
