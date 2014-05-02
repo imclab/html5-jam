@@ -20,7 +20,6 @@ define(function (require) {
 
     var AppData = require('modules/common/app_data');
 
-    var PlayerManager = require('modules/production/player_manager');
     var LikeManager = require('modules/common/like_manager');
     var KeyboardManager = require('modules/common/keyboard_manager');
 
@@ -48,6 +47,9 @@ define(function (require) {
             if (this.attributes.mode !== 'create') {
                 this.getJamFromServer().then(function () {
                     vent.trigger('recorder:initMediaCapture');
+                }, function () {
+                    console.log("Error fetching JAM : JAM NOT FOUND");
+                    Backbone.history.navigate('/', true);
                 });
             } else {
                 vent.trigger('recorder:initMediaCapture');
@@ -83,7 +85,7 @@ define(function (require) {
             this.attributes = {};
             this.attributes.models = {};
 
-            _.extend(this.attributes, new PlayerManager());
+            _.extend(this.attributes, options.playerManager);
 
             this.attributes.mode = options.mode || "show";
         },
@@ -134,6 +136,7 @@ define(function (require) {
                 .then(function (response) {
                     // console.log("[ProductionController > JAM:" + self.attributes.jamId + "] Fetching from server : jam.cid=" + self.attributes.models.jam.cid);
                     _.each(response.videos, function (video) {
+                        console.log("Video : ", _.clone(video));
                         video.jamId = self.attributes.jamId;
                         if (video.active) {
                             // Add to videos list
@@ -189,7 +192,7 @@ define(function (require) {
 
         addComments: function (str) {
             if (this.attributes.jamId === null) {
-                alert("Save the jam before adding comments !");
+                console.log("Save the jam before adding comments !");
                 return;
             } else if (str === null || str.length === 0) {
                 return;
@@ -249,7 +252,6 @@ define(function (require) {
 
             delete this.attributes.recorder;
             delete this.attributes.recorderPreview;
-            delete this.attributes.recorderBlob;
             delete this.attributes.selectedIds;
         },
 
