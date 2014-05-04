@@ -41,12 +41,6 @@ define(function (require) {
 
         stop: function () {
             _.each(this.selectedIds, function (key) {
-                // if (key.video && key.audio) {
-                //     key.video.pause();
-                //     key.audio.pause();
-                //     key.video.currentTime = 0;
-                //     key.audio.currentTime = 0;
-                // }
                 key.pause();
                 key.currentTime = 0;
             });

@@ -14,13 +14,7 @@ define(function (require) {
         onShow: function () {
             PlayerView.prototype.onShow.call(this);
 
-            vent.trigger("videoplayer:add", this.controller, this.model.cid);
-        },
-
-        onClose: function () {
-            PlayerView.prototype.onClose.call(this);
-
-            vent.trigger("videoplayer:remove", this.model.cid);
+            vent.trigger("videoplayer:add", this.controller);
         }
 
     });
@@ -32,13 +26,7 @@ define(function (require) {
         onShow: function () {
             PlayerView.prototype.onShow.call(this);
 
-            vent.trigger("videoplayer:add", this.controller, this.model.cid);
-        },
-
-        onClose: function () {
-            PlayerView.prototype.onClose.call(this);
-
-            vent.trigger("videoplayer:remove", this.model.cid);
+            vent.trigger("videoplayer:add", this.controller);
         }
 
     });

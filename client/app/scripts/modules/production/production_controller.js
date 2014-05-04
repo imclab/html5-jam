@@ -110,14 +110,13 @@ define(function (require) {
             this.listenTo(vent, 'videoplayer:remove', this.removeSelectedId);
         },
 
-        addSelectedId:  function (controller, id) {
+        addSelectedId:  function (controller) {
             _.extend(this.attributes.selectedIds, controller);
-
-            console.log("SelectedIds : ", this.attributes.selectedIds);
         },
 
         removeSelectedId: function (id) {
-            delete this.attributes.selectedIds;
+            delete this.attributes.selectedIds["video_" + id];
+            delete this.attributes.selectedIds["audio_" + id];
         },
 
         getJamFromServer: function () {
