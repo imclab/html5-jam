@@ -17,6 +17,7 @@ define(function (require) {
         controllerNames: ["login", "home", "production", "login", "friendlist", "profil"],
 
         initialize: function (options) {
+            AppData.createFakeUser();
             this.regions = options.regions || {};
             this._initializeAttributes();
             this._bindEvents();
@@ -201,8 +202,6 @@ define(function (require) {
         _initializeAttributes: function () {
             this.controllers = {};
             this.attributes = {};
-            this.attributes.models = {};
-            this.attributes.call = 0;
             this.attributes.authmanager = new AuthManager();
             this.attributes.playermanager = new PlayerManager();
         },
@@ -227,6 +226,3 @@ define(function (require) {
 // TODO :
 // Gestion des images
 // Donner au jam l'url de l'image diret => soit c'est un facebook id, soit un URL vers l'image
-
-// Pour faire joujou sans connexion :
-// http://0.0.0.0:8888/#?token=8310ee3e4f0353b5c11dc69630833901715bbbc8b698aa32a168d00811c90377b5bc894f942fca64fb4eeb1a71a5dbcb4475a9d63bef9442b7a797483307d0f9468326058894d8826811dc07afd4165232960aee809a6162c3e5fb613ec32fc4689e7cf8110b0540047579b878ba2ed4e36af956292a834117c273022efdbb6bb4443d25ddb31ad52802269849e7fda8e5b0d3fde0cc647093cb5e90a7d6935e5a5d3a81523df1c5b566978a7d34109c4fc55156cafe5c1a8aaa94c7f978cd5c5fa19e4c182f9b164f840af12883a1e5

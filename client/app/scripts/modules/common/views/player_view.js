@@ -8,8 +8,6 @@ define(function (require) {
 
     var PlayerView = Marionette.ItemView.extend({
 
-        template: 'common/video_player',
-
         className: 'video-player',
 
         events: {
@@ -20,22 +18,34 @@ define(function (require) {
 
         ui: {
             muteBtn : '.mute-video',
-            muteBtnIcon : '.mute-video span'
+            muteBtnIcon : '.mute-video span',
+            videoContainer : '.video-container',
+            audioContainer : '.audio-container'
         },
 
         onShow: function () {
             this.controller = {};
-            this.controller.video = document.getElementById('video-player-' + this.model.get('_cid'));
-            this.controller.audio = document.getElementById('audio-player-' + this.model.get('_cid'));
+            this.key = "";
+
+            if (this.ui.videoContainer.length > 0) {
+                this.key = "video_" + this.model.cid;
+                this.controller["video_" + this.model.cid] = document.getElementById('video-player-' + this.model.cid);
+            }
+
+            if (this.ui.audioContainer.length > 0) {
+                this.key = "audio_" + this.model.cid;
+                this.controller["audio_" + this.model.cid] = document.getElementById('audio-player-' + this.model.cid);
+            }
         },
 
         play: function () {
-            this.controller.video.play();
-            this.controller.audio.play();
+            _.each(this.controller, function (key) {
+                key.play();
+            });
         },
 
         mute: function () {
-            this.controller.audio.muted = !this.controller.audio.muted;
+            this.controller[this.key].muted = !this.controller[this.key].muted;
             this.ui.muteBtn.toggleClass('btn-success btn-warning');
             this.ui.muteBtnIcon.toggleClass('glyphicon-volume-off glyphicon-volume-up');
         },

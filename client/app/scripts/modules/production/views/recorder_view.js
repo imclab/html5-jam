@@ -4,16 +4,16 @@ define(function (require) {
     "use strict";
 
     var Marionette = require("marionette");
-    var VideoCollection = require("modules/common/collections/videos");
     var vent = require("modules/common/vent");
-    var PlayerView = require("modules/production/views/recorder_player_view");
+    var _ = require("underscore");
+
+    var VideoCollection = require("modules/common/collections/videos");
+    var PlayerView = require("modules/production/views/production_player_view");
     var Jam = require('modules/common/models/jam');
 
     var RecorderView = Marionette.CompositeView.extend({
 
         tagName: "div",
-
-        itemView: PlayerView,
 
         itemViewContainer: ".videos-container",
 
@@ -43,6 +43,22 @@ define(function (require) {
             likeButton: 'button.likeButton',
             nbLikes: 'span.nbLikes',
             preview: '#preview'
+        },
+
+        /**
+         * Override the Marionette.CompositeView.prototype.getItemView
+         * It define the view that an entering model in the collection will use
+         *
+         * @method getItemView
+         * @param  {[javascript object]} model entering model
+         */
+        getItemView: function (model) {
+            // If model have a path attributes define, it comes from the server
+            if (model.get("path")) {
+                return PlayerView.VideoPlayer;
+            }
+
+            return PlayerView.MixPlayer;
         },
 
         create: function () {

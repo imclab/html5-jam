@@ -111,11 +111,13 @@ define(function (require) {
         },
 
         addSelectedId:  function (controller, id) {
-            this.attributes.selectedIds[id] = controller;
+            _.extend(this.attributes.selectedIds, controller);
+
+            console.log("SelectedIds : ", this.attributes.selectedIds);
         },
 
         removeSelectedId: function (id) {
-            delete this.attributes.selectedIds[id];
+            delete this.attributes.selectedIds;
         },
 
         getJamFromServer: function () {

@@ -2,6 +2,7 @@
 /*global navigator*/
 /*global window*/
 define(function (require) {
+    "use strict";
 
     var vent = require('modules/common/vent');
     var Backbone = require('backbone');
@@ -18,7 +19,6 @@ define(function (require) {
 
         this.recorder = options.recorder || {audio: undefined, video: undefined, isRecording: false};
         this.selectedIds = options.selectedIds || {};
-
         this.mediaRequest = Const.NONE;
 
         this.initialize.apply(this, arguments);
@@ -35,19 +35,20 @@ define(function (require) {
 
         playAllSelected: function () {
             _.each(this.selectedIds, function (key) {
-                key.video.play();
-                key.audio.play();
+                key.play();
             });
         },
 
         stop: function () {
             _.each(this.selectedIds, function (key) {
-                if (key.video && key.audio) {
-                    key.video.pause();
-                    key.audio.pause();
-                    key.video.currentTime = 0;
-                    key.audio.currentTime = 0;
-                }
+                // if (key.video && key.audio) {
+                //     key.video.pause();
+                //     key.audio.pause();
+                //     key.video.currentTime = 0;
+                //     key.audio.currentTime = 0;
+                // }
+                key.pause();
+                key.currentTime = 0;
             });
 
             if (this.recorder.isRecording) {
