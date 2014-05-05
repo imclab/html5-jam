@@ -11,6 +11,7 @@ define(function (require) {
             // instrument: '',
             // active: '',
             // volume: '',
+            path: '',
             audio: {},
             video: {},
             video_blob: '',

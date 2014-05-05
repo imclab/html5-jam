@@ -7,21 +7,9 @@ define(function (require) {
     var vent = require('modules/common/vent');
     var PlayerView = require('modules/common/views/player_view');
 
-    var MixPlayer = PlayerView.extend({
-
-        template: 'production/mix_player',
-
-        onShow: function () {
-            PlayerView.prototype.onShow.call(this);
-
-            vent.trigger("videoplayer:add", this.controller);
-        }
-
-    });
-
     var VideoPlayer = PlayerView.extend({
 
-        template: 'production/video_player',
+        template: 'production/recorder_player',
 
         onShow: function () {
             PlayerView.prototype.onShow.call(this);
@@ -39,7 +27,7 @@ define(function (require) {
 
     return {
         VideoPlayer: VideoPlayer,
-        MixPlayer: MixPlayer,
+        MixPlayer: VideoPlayer,
         SidePlayer: SidePlayer
     };
 });

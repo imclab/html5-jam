@@ -14,10 +14,10 @@ define(function (require) {
 
     var MainController = Marionette.Controller.extend({
 
-        controllerNames: ["login", "home", "production", "login", "friendlist", "profil"],
+        controllerNames: ["login", "home", "production", "friendlist", "profil"],
 
         initialize: function (options) {
-            AppData.createFakeUser();
+            // AppData.createFakeUser();
             this.regions = options.regions || {};
             this._initializeAttributes();
             this._bindEvents();
