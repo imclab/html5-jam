@@ -117,7 +117,7 @@ define(function (require) {
             this.listenTo(vent, 'videoplayer:remove', this.removeSelectedId);
         },
 
-        addSelectedId:  function (controller) {
+        addSelectedId: function (controller) {
             _.extend(this.attributes.selectedIds, controller);
         },
 
@@ -165,14 +165,8 @@ define(function (require) {
 
         save: function () {
             if (!this.attributes.models.jam) {
-                // console.log("[Production_controller.js > save] STATUS : No Jam loaded : ", this.views.recorder.collection);
                 return this.createNewJam();
             } else {
-                // Actualise / create the jam
-                // Save the video
-                // Add the video to the jam
-                // Reload the page
-                // console.log("[Production_controller.js > save] STATUS : ", this.attributes.selectedIds);
                 return this.saveVideos().then(function () {
                     Backbone.history.loadUrl();
                 });
