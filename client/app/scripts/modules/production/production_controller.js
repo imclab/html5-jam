@@ -91,7 +91,14 @@ define(function (require) {
         },
 
         _bindEvents: function () {
-            this.listenTo(vent, 'recorder:save', this.save);
+            this.listenTo(vent, 'recorder:save', function () {
+                var _this = this;
+                this.save().then(function () {
+                    _.each(_this.attributes.selectedIds, function (value, key, full) {
+                        delete _this.attributes.selectedIds[key];
+                    });
+                });
+            });
 
             this.listenTo(vent, 'player:remove', this.removeVideo);
 
@@ -110,12 +117,13 @@ define(function (require) {
             this.listenTo(vent, 'videoplayer:remove', this.removeSelectedId);
         },
 
-        addSelectedId:  function (controller, id) {
-            this.attributes.selectedIds[id] = controller;
+        addSelectedId: function (controller) {
+            _.extend(this.attributes.selectedIds, controller);
         },
 
         removeSelectedId: function (id) {
-            delete this.attributes.selectedIds[id];
+            delete this.attributes.selectedIds["video_" + id];
+            delete this.attributes.selectedIds["audio_" + id];
         },
 
         getJamFromServer: function () {
@@ -136,7 +144,7 @@ define(function (require) {
                 .then(function (response) {
                     // console.log("[ProductionController > JAM:" + self.attributes.jamId + "] Fetching from server : jam.cid=" + self.attributes.models.jam.cid);
                     _.each(response.videos, function (video) {
-                        console.log("Video : ", _.clone(video));
+                        // console.log("Video : ", _.clone(video));
                         video.jamId = self.attributes.jamId;
                         if (video.active) {
                             // Add to videos list
@@ -157,15 +165,9 @@ define(function (require) {
 
         save: function () {
             if (!this.attributes.models.jam) {
-                // console.log("[Production_controller.js > save] STATUS : No Jam loaded : ", this.views.recorder.collection);
-                this.createNewJam();
+                return this.createNewJam();
             } else {
-                // Actualise / create the jam
-                // Save the video
-                // Add the video to the jam
-                // Reload the page
-                // console.log("[Production_controller.js > save] STATUS : ", this.attributes.selectedIds);
-                this.saveVideos().then(function () {
+                return this.saveVideos().then(function () {
                     Backbone.history.loadUrl();
                 });
             }
@@ -225,7 +227,7 @@ define(function (require) {
         createNewJam: function () {
             var _this = this;
 
-            new Jam({
+            return new Jam({
                 user_facebook_id: AppData.user.get('facebook_id'),
                 name: this.views.recorder.ui.edit_jam_name.val()
             })

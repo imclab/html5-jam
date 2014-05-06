@@ -4,18 +4,20 @@ define(function (require) {
     "use strict";
 
     var Marionette = require("marionette");
-    var VideoCollection = require("modules/common/collections/videos");
     var vent = require("modules/common/vent");
-    var PlayerView = require("modules/production/views/recorder_player_view");
+    var _ = require("underscore");
+
+    var VideoCollection = require("modules/common/collections/videos");
+    var PlayerView = require("modules/production/views/production_player_view");
     var Jam = require('modules/common/models/jam');
 
     var RecorderView = Marionette.CompositeView.extend({
 
         tagName: "div",
 
-        itemView: PlayerView,
-
         itemViewContainer: ".videos-container",
+
+        itemView: PlayerView,
 
         template: "production/recorder",
 
@@ -25,6 +27,15 @@ define(function (require) {
 
             this.model = new Jam();
             this.collection = new VideoCollection();
+
+            this.listenTo(this.collection, "add", function () {
+                // TODO Get the controller here
+                // vent.trigger("videoplayer:add", this.controller);
+            });
+
+            this.listenTo(this.collection, "remove", function (model) {
+                vent.trigger("videoplayer:remove", model.cid);
+            });
         },
 
         events: {
