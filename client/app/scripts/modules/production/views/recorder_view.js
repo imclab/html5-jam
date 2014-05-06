@@ -17,6 +17,8 @@ define(function (require) {
 
         itemViewContainer: ".videos-container",
 
+        itemView: PlayerView,
+
         template: "production/recorder",
 
         initialize: function (options) {
@@ -52,22 +54,6 @@ define(function (require) {
             likeButton: 'button.likeButton',
             nbLikes: 'span.nbLikes',
             preview: '#preview'
-        },
-
-        /**
-         * Override the Marionette.CompositeView.prototype.getItemView
-         * It define the view that an entering model in the collection will use
-         *
-         * @method getItemView
-         * @param  {[javascript object]} model entering model
-         */
-        getItemView: function (model) {
-            // If model have a path attributes define, it comes from the server
-            if (model.get("path")) {
-                return PlayerView.VideoPlayer;
-            }
-
-            return PlayerView.MixPlayer;
         },
 
         create: function () {

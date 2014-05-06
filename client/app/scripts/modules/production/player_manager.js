@@ -34,6 +34,7 @@ define(function (require) {
         },
 
         playAllSelected: function () {
+            console.log("Play pushed : ", this.selectedIds);
             _.each(this.selectedIds, function (key) {
                 key.play();
             });
