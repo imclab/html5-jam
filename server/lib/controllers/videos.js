@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var logger = require('winston');
 var Sequelize = require('sequelize');
@@ -36,13 +36,13 @@ exports.addVideoToJam = function (req, res, next) {
 		Video.create({ instrument: postData.instrument, userId: req.user.id, active: postData.active, volume: postData.volume })
 		.success(function (newVideo) {
 			// save the video file to disk
-		    var videoFileBuffer = new Buffer(postData.video.contents.split(',').pop(), "base64");
+		    var videoFileBuffer = new Buffer(postData.video.contents.split(',').pop(), 'base64');
 			Utils.writeFileToDisk(req.params.jamId + '/' + newVideo.id + '.webm', videoFileBuffer, function (err) {
 				if (err) {
 					return next(new Errors.Error(err, 'Server error'));
 				} else {
 					// save the audio file to disk
-				    var audioFileBuffer = new Buffer(postData.audio.contents.split(',').pop(), "base64");
+				    var audioFileBuffer = new Buffer(postData.audio.contents.split(',').pop(), 'base64');
 					Utils.writeFileToDisk(req.params.jamId + '/' + newVideo.id + '.wav', audioFileBuffer, function (err) {
 						if (err) {
 							return next(new Errors.Error(err, 'Server error'));
@@ -147,8 +147,26 @@ exports.getVideoStream = function (req, res, next) {
 				if (error) {
 					return next(new Errors.BadRequest('Video not found'));
 				} else {
-					res.writeHead(200, {'Content-Type': 'video/mpeg' });
-					res.end(file, 'binary');
+					var range = req.headers.range;
+
+					if (range) {
+						// partial content request
+						var length = file.length;
+						var positions = range.replace(/bytes=/, '').split('-');
+						var start = parseInt(positions[0], 10);
+						var end = positions[1] ? parseInt(positions[1], 10) : length - 1;
+						var chunksize = end - start + 1;
+					  res.writeHead(206, { 	
+					  	'Content-Range': 'bytes ' + start + '-' + end + '/' + length, 
+              'Accept-Ranges': 'bytes',
+              'Content-Length': chunksize,
+              'Content-Type':'video/webm'
+            });
+					  res.end(file.slice(start, end + 1), 'binary');
+					} else {
+						res.writeHead(200, {'Content-Type': 'video/mpeg' });
+						res.end(file, 'binary');	
+					}
 				}
 			});
 		})

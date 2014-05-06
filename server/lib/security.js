@@ -11,18 +11,20 @@ exports.init = function () {
 
 	// Use facebook strategy
 	passport.use(new FacebookStrategy({
-		    clientID: config.facebook.clientID,
-		    clientSecret: config.facebook.clientSecret,
-		    callbackURL: "http://warnode.com:" + config.server.port + "/auth/facebook/callback"
-	 	}, 	function (accessToken, refreshToken, profile, done) {
-		        users.login(profile, accessToken, done);
-		    }
-		));
-		passport.serializeUser(function (user, done) {
-		    return done(null, user);
-		});
-		passport.deserializeUser(function (user, done) {
-		    return done(null, user);
+    clientID: config.facebook.clientID,
+    clientSecret: config.facebook.clientSecret,
+    callbackURL: "http://warnode.com:" + config.server.port + "/auth/facebook/callback"
+	},  function (accessToken, refreshToken, profile, done) {
+			users.login(profile, accessToken, done);
+		}
+	));
+
+	passport.serializeUser(function (user, done) {
+    return done(null, user);
+	});
+	
+	passport.deserializeUser(function (user, done) {
+  	return done(null, user);
 	});
 
 };

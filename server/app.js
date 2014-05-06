@@ -8,7 +8,7 @@ var logger = require('./lib/logger');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-// enable CORS
+// enable CORS middleware
 var enableCORS = function(req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', config.client.baseUrl + config.client.port);
     res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
@@ -35,8 +35,6 @@ require('./lib/routes').init(app);
 
 // error handling middleware
 app.use(errors.dispatch);
-
-
 
 // setup security
 require('./lib/security').init();
