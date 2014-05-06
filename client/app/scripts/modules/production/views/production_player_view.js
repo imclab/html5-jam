@@ -45,6 +45,8 @@ define(function (require) {
 
         play: function () {
             _.each(this.controller, function (key) {
+                key.pause();
+                key.currentTime = 0;
                 key.play();
             });
         },

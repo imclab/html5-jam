@@ -29,6 +29,8 @@ define(function (require) {
         },
 
         play: function () {
+            this.controller.pause();
+            this.controller.currentTime = 0;
             this.controller.play();
         },
 
