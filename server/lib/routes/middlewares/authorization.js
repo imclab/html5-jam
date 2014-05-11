@@ -13,15 +13,17 @@ var users = require('../../controllers/users');
 exports.requiresAuthentication = function(req, res, next) {
 
     // testing purpose
- //    users.getUserById(100, function (user, err) {
- //    	if (user != null) {
-	// 		req.user = user;
-	// 		return next();
-	// 	} else {
-	// 		return next(new Errors.Unauthorized('User does not exist'));
-	// 	}
- //    });
-	// return;
+    if (process.env.NODE_ENV == 'development' && req.query.debug != null) {
+	    users.getUserById(1, function (user, err) {
+	    	if (user != null) {
+				req.user = user;
+				return next();
+			} else {
+				return next(new Errors.Unauthorized('User does not exist'));
+			}
+	    });
+		return;
+	}
 	
 
 	if (req.cookies != null && req.cookies.jam_token != null) {
