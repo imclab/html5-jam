@@ -164,6 +164,7 @@ exports.getVideoStream = function (req, res, next) {
             });
 					  res.end(file.slice(start, end + 1), 'binary');
 					} else {
+						// whole video request
 						res.writeHead(200, {'Content-Type': 'video/mpeg' });
 						res.end(file, 'binary');	
 					}
