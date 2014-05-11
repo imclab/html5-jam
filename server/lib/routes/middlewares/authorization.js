@@ -14,7 +14,7 @@ exports.requiresAuthentication = function(req, res, next) {
 
     // testing purpose
     if (process.env.NODE_ENV == 'development' && req.query.debug != null) {
-	    users.getUserById(100, function (user, err) {
+	    users.getUserById(1, function (user, err) {
 	    	if (user != null) {
 				req.user = user;
 				return next();
