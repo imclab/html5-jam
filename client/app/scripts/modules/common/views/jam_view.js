@@ -11,10 +11,14 @@ define(function (require) {
 
         template: "common/jam",
 
-        events: {
-            "click h3" : "redirection",
+        prototypeEvents: {
+            "click div" : "redirection",
             "click .likes" : "like",
             "click .ownerName" : "goToOwnerProfile"
+        },
+
+        events: function () {
+            return _.extend({}, this.prototypeEvents, this.customEvents);
         },
 
         redirection: function () {

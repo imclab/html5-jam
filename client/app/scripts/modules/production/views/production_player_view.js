@@ -27,34 +27,26 @@ define(function (require) {
         },
 
         onShow: function () {
-            this.controller = {};
-            this.key = "";
-
-            if (this.ui.videoContainer.length > 0) {
-                this.key = "video_" + this.model.cid;
-                this.controller["video_" + this.model.cid] = document.getElementById('video-player-' + this.model.cid);
-            }
-
-            if (this.ui.audioContainer.length > 0) {
-                this.key = "audio_" + this.model.cid;
-                this.controller["audio_" + this.model.cid] = document.getElementById('audio-player-' + this.model.cid);
-            }
-
-            vent.trigger("videoplayer:add", this.controller);
+            vent.trigger("videoplayer:add", this.model.has('path'), this.model.cid);
         },
 
         play: function () {
-            _.each(this.controller, function (key) {
-                key.pause();
-                key.currentTime = 0;
-                key.play();
-            });
+            vent.trigger("videoplayer:play", this.model.has('path'), this.model.cid);
         },
 
         mute: function () {
-            this.controller[this.key].muted = !this.controller[this.key].muted;
+            vent.trigger("videoplayer:mute", this.model.has('path'), this.model.cid);
+
             this.ui.muteBtn.toggleClass('btn-success btn-warning');
             this.ui.muteBtnIcon.toggleClass('glyphicon-volume-off glyphicon-volume-up');
+        },
+
+        serializeData: function () {
+            var data = Marionette.ItemView.prototype.serializeData.call(this);
+
+            return _.extend(data, {
+                path: data.path || ""
+            });
         },
 
         _remove: function () {

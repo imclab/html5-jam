@@ -8,10 +8,6 @@ define(function (require) {
 
         defaults: {
             description: '',
-            // instrument: '',
-            // active: '',
-            // volume: '',
-            path: '',
             audio: {},
             video: {},
             video_blob: '',
@@ -26,9 +22,9 @@ define(function (require) {
         },
 
         sync: function (method, model, options) {
-            // console.log('::SYNC:: Method  [Video] : ', method);
-            // console.log('::SYNC:: Model [Video] : ', model);
-            // console.log('::SYNC:: Options [Video] : ', options);
+            console.log('::SYNC:: Method  [Video] : ', method);
+            console.log('::SYNC:: Model [Video] : ', model);
+            console.log('::SYNC:: Options [Video] : ', options);
 
             if (method === 'create') {
                 options.url = '/api/jams/' + options.jamId + '/videos';
@@ -36,6 +32,8 @@ define(function (require) {
                 options.url = '/api/jams/' + this.get("jamId") + '/videos/' + this.id;
             } else if (method === 'read') {
                 options.url = '/api/jams/' + this.get("jamId") + '/videos/' + this.id;
+            } else if (method === 'update') {
+                return;
             }
 
             return Backbone.sync(method, model, options);

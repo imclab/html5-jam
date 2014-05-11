@@ -28,11 +28,6 @@ define(function (require) {
             this.model = new Jam();
             this.collection = new VideoCollection();
 
-            this.listenTo(this.collection, "add", function () {
-                // TODO Get the controller here
-                // vent.trigger("videoplayer:add", this.controller);
-            });
-
             this.listenTo(this.collection, "remove", function (model) {
                 vent.trigger("videoplayer:remove", model.cid);
             });
@@ -73,8 +68,6 @@ define(function (require) {
 
         record: function () {
             vent.trigger("recorder:record");
-
-            this.ui.onStage.removeClass("hide");
         },
 
         save: function () {

@@ -31,10 +31,45 @@ define(function (require) {
             this.listenTo(vent, 'recorder:stop', this.stop);
             this.listenTo(vent, 'recorder:record', this.record);
             this.listenTo(vent, 'recorder:initMediaCapture', this.initializeMediaCapture);
+            this.listenTo(vent, 'recorder:empty', this.emptySelectedIds);
+
+            this.listenTo(vent, 'videoplayer:remove', this.removeSelectedId);
+            this.listenTo(vent, 'videoplayer:add', this.addSelectedId);
+
+            this.listenTo(vent, 'videoplayer:play', this.playIndividual);
+            this.listenTo(vent, 'videoplayer:mute', this.muteIndividual);
+
         },
 
+        playIndividual: function (isPath, cid) {
+            if (isPath) {
+                this.selectedIds["video_" + cid].pause();
+                this.selectedIds["video_" + cid].currentTime = 0;
+                this.selectedIds["video_" + cid].play();
+            } else {
+                this.selectedIds["video_" + cid].pause();
+                this.selectedIds["audio_" + cid].pause();
+
+                this.selectedIds["video_" + cid].currentTime = 0;
+                this.selectedIds["audio_" + cid].currentTime = 0;
+
+                this.selectedIds["video_" + cid].play();
+                this.selectedIds["audio_" + cid].play();
+            }
+        },
+
+        muteIndividual: function (isPath, cid) {
+            var _mute = !this.selectedIds["video_" + cid].muted;
+            if (isPath) {
+                this.selectedIds["video_" + cid].muted = _mute;
+            } else {
+                this.selectedIds["video_" + cid].muted = _mute;
+                this.selectedIds["audio_" + cid].muted = _mute;
+            }
+        },
+ 
         playAllSelected: function () {
-            console.log("Play pushed : ", this.selectedIds);
+            // console.log("Play pushed : ", this.selectedIds);
             _.each(this.selectedIds, function (key) {
                 key.play();
             });
@@ -60,7 +95,7 @@ define(function (require) {
         },
 
         _startRecording: function (options) {
-            if (options) {
+            if (options && this.mediaRequest === Const.VALIDATED) {
                 if (options.video === true) {
                     this.recorder.video.startRecording();
                 }
@@ -68,10 +103,13 @@ define(function (require) {
                 if (options.audio === true) {
                     this.recorder.audio.startRecording();
                 }
-            }
 
-            this.recorder.isRecording = true;
-            $('.recbtn').addClass('btn-warning').removeClass('btn-danger');
+                this.recorder.isRecording = true;
+                $('.recbtn').addClass('btn-warning').removeClass('btn-danger');
+                $('.onStage').removeClass('hide');
+            } else {
+                console.log("Allow the browser to access your video capture device.")
+            }
         },
 
         _stopRecording: function () {
@@ -134,6 +172,29 @@ define(function (require) {
                     console.log("[Production_controller.js > _initializeMediaCapture] ERROR : Failed to get the blob");
                 });
             }
+        },
+
+        addSelectedId: function (isPath, cid) {
+            // CREATE DOM CONTROLLER
+            if (isPath) {
+                // CREATE ONLY VIDEO
+                this.selectedIds["video_" + cid] = document.getElementById('video-player-' + cid);
+            } else {
+                // CREATE BOTH VIDEO AND AUDIO
+                this.selectedIds["video_" + cid] = document.getElementById('video-player-' + cid);
+                this.selectedIds["audio_" + cid] = document.getElementById('audio-player-' + cid);
+            }
+        },
+
+        removeSelectedId: function (id) {
+            delete this.selectedIds["video_" + id];
+            delete this.selectedIds["audio_" + id];
+        },
+
+        emptySelectedIds: function () {
+            _.each(this.selectedIds, _.bind(function (value, key, full) {
+                delete this.selectedIds[key];
+            }, this));
         },
 
         _initializeRecordRTC: function () {
