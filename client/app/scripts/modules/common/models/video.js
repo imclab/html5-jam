@@ -12,13 +12,6 @@ define(function (require) {
             video: {},
             video_blob: '',
             audio_blob: '',
-            _cid: ''
-        },
-
-        initialize: function () {
-            this.set({
-                _cid: this.cid
-            });
         },
 
         sync: function (method, model, options) {
@@ -33,7 +26,7 @@ define(function (require) {
             } else if (method === 'read') {
                 options.url = '/api/jams/' + this.get("jamId") + '/videos/' + this.id;
             } else if (method === 'update') {
-                return;
+                options.url = '/api/jams/' + this.get("jamId") + '/videos/' + this.id;
             }
 
             return Backbone.sync(method, model, options);

@@ -16,7 +16,8 @@ define(function (require) {
         events: {
             'click .delete-video' : '_remove',
             'click .play-video' : 'play',
-            'click .mute-video' : 'mute'
+            'click .mute-video' : 'mute',
+            'click .active-video' : 'active'
         },
 
         ui: {
@@ -34,6 +35,12 @@ define(function (require) {
             vent.trigger("videoplayer:play", this.model.has('path'), this.model.cid);
         },
 
+        active: function () {
+            this.model.set("active", 0);
+            this.model.save();
+            vent.trigger('player:unactive', this.model);
+        },
+
         mute: function () {
             vent.trigger("videoplayer:mute", this.model.has('path'), this.model.cid);
 
@@ -45,6 +52,7 @@ define(function (require) {
             var data = Marionette.ItemView.prototype.serializeData.call(this);
 
             return _.extend(data, {
+                _cid: this.model.cid,
                 path: data.path || ""
             });
         },

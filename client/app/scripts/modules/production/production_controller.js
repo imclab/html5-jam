@@ -108,6 +108,9 @@ define(function (require) {
             this.listenTo(vent, 'jam:create', this.createNewJam);
             this.listenTo(vent, 'jam:like', this.likeJam);
             this.listenTo(vent, 'jam:dislike', this.dislikeJam);
+
+            this.listenTo(vent, 'player:unactive', this.unactiveVideo);
+            this.listenTo(vent, 'player:active', this.activeVideo);
         },
 
         getJamFromServer: function () {
@@ -128,9 +131,9 @@ define(function (require) {
                 .then(function (response) {
                     // console.log("[ProductionController > JAM:" + self.attributes.jamId + "] Fetching from server : jam.cid=" + self.attributes.models.jam.cid);
                     _.each(response.videos, function (video) {
-                        // console.log("Video : ", _.clone(video));
+                        console.log("Video : ", _.clone(video));
                         video.jamId = self.attributes.jamId;
-                        if (video.active) {
+                        if (video.active > 0) {
                             // Add to videos list
                             self.views.recorder.collection.add(video);
                         } else {
@@ -229,6 +232,20 @@ define(function (require) {
                 .then(function () {
                     Backbone.history.navigate('jam/' + _this.attributes.jamId, true);
                 });
+        },
+
+        unactiveVideo: function (model) {
+            this.views.sidebar.collection.add(model);
+            this.views.recorder.collection.remove(model);
+
+        },
+
+        activeVideo: function (model) {
+            this.views.recorder.collection.add(model);
+            this.views.sidebar.collection.remove(model);
+
+            // this.views.sidebar.render();
+            // this.views.recorder.render();
         },
 
         onClose: function () {

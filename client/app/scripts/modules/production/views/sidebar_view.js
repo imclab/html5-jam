@@ -7,7 +7,7 @@ define(function (require) {
     var VideoModel = require('modules/common/models/video');
     var VideoCollection = require('modules/common/collections/videos');
 
-    var SideBarElement = Marionette.CompositeView.extend({
+    var SideBarElement = Marionette.ItemView.extend({
         template: 'production/sidebar_element',
 
         className: 'video-player',
@@ -15,7 +15,8 @@ define(function (require) {
         events: {
             'click .delete-video' : '_remove',
             'click .play-video' : 'play',
-            'click .mute-video' : 'mute'
+            'click .mute-video' : 'mute',
+            'click .active-video' : 'active'
         },
 
         ui: {
@@ -34,6 +35,12 @@ define(function (require) {
             this.controller.play();
         },
 
+        active: function () {
+            this.model.set("active", 1);
+            this.model.save();
+            vent.trigger('player:active', this.model);
+        },
+
         mute: function () {
             this.controller.muted = !this.controller.muted;
             this.ui.muteBtn.toggleClass('btn-success btn-warning');
@@ -43,6 +50,14 @@ define(function (require) {
         _remove: function () {
             vent.trigger('player:remove', this.model);
             this.remove();
+        },
+
+        serializeData: function () {
+            var data = Marionette.ItemView.prototype.serializeData.call(this);
+
+            return _.extend(data, {
+                _cid: this.model.cid
+            });
         }
     });
 
