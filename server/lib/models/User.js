@@ -8,10 +8,7 @@ module.exports = function(sequelize, DataTypes) {
         email: DataTypes.STRING,
         picture_url: DataTypes.STRING,
         facebook_id: DataTypes.STRING,
-        facebook_token: DataTypes.STRING,
-        vignette_one: DataTypes.INTEGER,
-        vignette_two: DataTypes.INTEGER,
-        vignette_three: DataTypes.INTEGER
+        facebook_token: DataTypes.STRING
     },
     {
     	tableName: 'users'
