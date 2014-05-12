@@ -12,15 +12,12 @@ define(function (require) {
     var ProfilJamView = JamView.extend({
         template: 'profil/profil_jam',
 
-        initialize: function () {
-            JamView.prototype.initialize.call(this);
-
-            _.extend(this.events, {
-                "click button.deleteJam": "deleteJam"
-            });
+        customEvents: {
+            "click button.deleteJam": "deleteJam"
         },
 
-        deleteJam: function () {
+        deleteJam: function (e) {
+            e.stopPropagation();
             this.model.destroy({
                 success: function () {
                     console.log("Jam destroy Arguments : ", arguments);

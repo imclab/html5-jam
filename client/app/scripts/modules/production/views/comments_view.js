@@ -28,7 +28,8 @@ define(function (require) {
         template: 'production/comments',
 
         events: {
-            "click .sendbtn" : "sendComment"
+            "click .sendbtn" : "sendComment",
+            "keypress input[type='text']" : "sendCommentOnKeypress"
         },
 
         ui: {
@@ -39,9 +40,15 @@ define(function (require) {
             this.collection = new CommentCollection();
         },
 
+        sendCommentOnKeypress: function (e) {
+            if (e.keyCode === 13) {
+                this.sendComment();
+            }
+        },
+
         sendComment: function () {
             if (this.ui.textarea.text !== "") {
-                vent.trigger('comment:new', this.ui.textarea.val());
+                 vent.trigger('comment:new', this.ui.textarea.val());
             }
         },
 

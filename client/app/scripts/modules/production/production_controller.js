@@ -21,7 +21,6 @@ define(function (require) {
     var AppData = require('modules/common/app_data');
 
     var LikeManager = require('modules/common/like_manager');
-    var KeyboardManager = require('modules/common/keyboard_manager');
 
     var RecorderController = BaseController.extend({
 
@@ -29,7 +28,6 @@ define(function (require) {
             BaseController.prototype.initialize.call(this, options);
 
             this._initializeAttributes(options);
-            this._initializeControls();
             this._bindEvents();
         },
 
@@ -94,9 +92,7 @@ define(function (require) {
             this.listenTo(vent, 'recorder:save', function () {
                 var _this = this;
                 this.save().then(function () {
-                    _.each(_this.attributes.selectedIds, function (value, key, full) {
-                        delete _this.attributes.selectedIds[key];
-                    });
+                    vent.trigger("recorder:empty");
                 });
             });
 
@@ -113,17 +109,8 @@ define(function (require) {
             this.listenTo(vent, 'jam:like', this.likeJam);
             this.listenTo(vent, 'jam:dislike', this.dislikeJam);
 
-            this.listenTo(vent, 'videoplayer:add', this.addSelectedId);
-            this.listenTo(vent, 'videoplayer:remove', this.removeSelectedId);
-        },
-
-        addSelectedId: function (controller) {
-            _.extend(this.attributes.selectedIds, controller);
-        },
-
-        removeSelectedId: function (id) {
-            delete this.attributes.selectedIds["video_" + id];
-            delete this.attributes.selectedIds["audio_" + id];
+            this.listenTo(vent, 'player:unactive', this.unactiveVideo);
+            this.listenTo(vent, 'player:active', this.activeVideo);
         },
 
         getJamFromServer: function () {
@@ -144,9 +131,9 @@ define(function (require) {
                 .then(function (response) {
                     // console.log("[ProductionController > JAM:" + self.attributes.jamId + "] Fetching from server : jam.cid=" + self.attributes.models.jam.cid);
                     _.each(response.videos, function (video) {
-                        // console.log("Video : ", _.clone(video));
+                        console.log("Video : ", _.clone(video));
                         video.jamId = self.attributes.jamId;
-                        if (video.active) {
+                        if (video.active > 0) {
                             // Add to videos list
                             self.views.recorder.collection.add(video);
                         } else {
@@ -179,7 +166,7 @@ define(function (require) {
 
         addNewVideo: function (options) {
             options.instrument = 5;
-            options.active = true;
+            options.active = 0;
             options.volume = 10;
 
             var newModel = new VideoModel(options);
@@ -226,10 +213,16 @@ define(function (require) {
 
         createNewJam: function () {
             var _this = this;
+            var _name = this.views.recorder.ui.edit_jam_name.val();
+
+            if (_name==="") {
+                console.log("Enter a name to your Jam");
+                return new $.Deferred().fail();
+            }
 
             return new Jam({
                 user_facebook_id: AppData.user.get('facebook_id'),
-                name: this.views.recorder.ui.edit_jam_name.val()
+                name: _name
             })
                 .save(null, {})
                 .then(function (model) {
@@ -239,6 +232,20 @@ define(function (require) {
                 .then(function () {
                     Backbone.history.navigate('jam/' + _this.attributes.jamId, true);
                 });
+        },
+
+        unactiveVideo: function (model) {
+            this.views.sidebar.collection.add(model);
+            this.views.recorder.collection.remove(model);
+
+        },
+
+        activeVideo: function (model) {
+            this.views.recorder.collection.add(model);
+            this.views.sidebar.collection.remove(model);
+
+            // this.views.sidebar.render();
+            // this.views.recorder.render();
         },
 
         onClose: function () {
@@ -254,17 +261,11 @@ define(function (require) {
 
             delete this.attributes.recorder;
             delete this.attributes.recorderPreview;
-            delete this.attributes.selectedIds;
-        },
-
-        _initializeControls: function () {
-            this.initKeyboardManager();
         }
 
     });
 
     _.extend(RecorderController.prototype, LikeManager);
-    _.extend(RecorderController.prototype, KeyboardManager);
 
     return RecorderController;
 

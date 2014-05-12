@@ -8,33 +8,24 @@ define(function (require) {
 
         defaults: {
             description: '',
-            // instrument: '',
-            // active: '',
-            // volume: '',
-            path: '',
             audio: {},
             video: {},
             video_blob: '',
             audio_blob: '',
-            _cid: ''
-        },
-
-        initialize: function () {
-            this.set({
-                _cid: this.cid
-            });
         },
 
         sync: function (method, model, options) {
-            // console.log('::SYNC:: Method  [Video] : ', method);
-            // console.log('::SYNC:: Model [Video] : ', model);
-            // console.log('::SYNC:: Options [Video] : ', options);
+            console.log('::SYNC:: Method  [Video] : ', method);
+            console.log('::SYNC:: Model [Video] : ', model);
+            console.log('::SYNC:: Options [Video] : ', options);
 
             if (method === 'create') {
                 options.url = '/api/jams/' + options.jamId + '/videos';
             } else if (method === 'delete') {
                 options.url = '/api/jams/' + this.get("jamId") + '/videos/' + this.id;
             } else if (method === 'read') {
+                options.url = '/api/jams/' + this.get("jamId") + '/videos/' + this.id;
+            } else if (method === 'update') {
                 options.url = '/api/jams/' + this.get("jamId") + '/videos/' + this.id;
             }
 
