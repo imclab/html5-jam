@@ -35,8 +35,8 @@ exports.requiresAuthentication = function(req, res, next) {
 				next();
 			}
 		});
-    } else {
-        return next(new Errors.Unauthorized('User is not logged in'));
-    }
+  } else {
+      return next(new Errors.Unauthorized('User is not logged in'));
+  }
 
 };
