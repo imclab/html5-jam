@@ -48,7 +48,7 @@ define(function (require) {
         },
 
         _remove: function () {
-            vent.trigger('player:remove', this.model);
+            this.model.destroy();
             this.remove();
         },
 

@@ -1,0 +1,17 @@
+<div class="video col-xs-4">
+    <% if (path !== "") { %>
+        <video class="video-container" id="video-player-<%= _cid %>" src="<%= path %>" <% if (active>=1) %>preload="auto"<% } %>></video>
+    <% } else { %>
+        <video class="video-container" id="video-player-<%= _cid %>" src="<%= video_blob %>" <% if (active>=1) %>preload="auto"<% } %>></video>
+        <audio class="audio-container" id="audio-player-<%= _cid %>" src="<%= audio_blob %>" <% if (active>=1) %>preload="auto"<% } %>></audio>
+    <% } %>
+
+    <div class="play-video"><span class="glyphicon glyphicon-play-circle"></span></div>
+
+    <div class="menu">
+        <button class="mute-video btn-xs btn-info" title="Mute Video"><span class="glyphicon glyphicon-volume-up"></span></button>
+        <button class="delete-video btn-xs btn-danger" title="Remove Video"><span class="glyphicon glyphicon-remove"></span></button>
+        <button class="active-video btn-xs" title="Active Video"><span class="glyphicon glyphicon-<% if (active<1) { %>un<% } %>checked"></span></button>
+    </div>
+
+</div>

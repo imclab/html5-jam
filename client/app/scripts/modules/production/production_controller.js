@@ -96,8 +96,6 @@ define(function (require) {
                 });
             });
 
-            this.listenTo(vent, 'player:remove', this.removeVideo);
-
             this.listenTo(vent, 'comment:new', this.addComments);
             this.listenTo(vent, 'comment:remove', this.removeComment);
 
@@ -172,11 +170,6 @@ define(function (require) {
             var newModel = new VideoModel(options);
             this.views.recorder.collection.add(newModel);
             return newModel;
-        },
-
-        removeVideo: function (video) {
-            video.destroy();
-            this.views.recorder.collection.remove(video);
         },
 
         addComments: function (str) {
