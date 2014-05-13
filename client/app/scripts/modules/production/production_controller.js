@@ -129,7 +129,7 @@ define(function (require) {
                 .then(function (response) {
                     // console.log("[ProductionController > JAM:" + self.attributes.jamId + "] Fetching from server : jam.cid=" + self.attributes.models.jam.cid);
                     _.each(response.videos, function (video) {
-                        console.log("Video : ", _.clone(video));
+                        // console.log("Video : ", _.clone(video));
                         video.jamId = self.attributes.jamId;
                         if (video.active > 0) {
                             // Add to videos list

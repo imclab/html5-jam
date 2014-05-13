@@ -8,7 +8,7 @@ define(function (require) {
     var _ = require("underscore");
 
     var VideoCollection = require("modules/common/collections/videos");
-    var PlayerView = require("modules/production/views/production_player_view");
+    var PlayerView = require("modules/production/views/recorder_player_view");
     var Jam = require('modules/common/models/jam');
 
     var RecorderView = Marionette.CompositeView.extend({
