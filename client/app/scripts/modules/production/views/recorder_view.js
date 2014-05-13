@@ -116,6 +116,10 @@ define(function (require) {
             this.ui.likeButton.addClass(options["class"]);
             this.ui.likeButton.html("<span class=\"glyphicon glyphicon-music\"></span>&nbsp;&nbsp;" + options.label);
             this.ui.nbLikes.text(this.model.get("nbLikes"));
+        },
+
+        onClose: function () {
+            vent.trigger("recorder:empty");
         }
 
     });
